@@ -1,0 +1,25 @@
+{
+  "name": "research-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npm run dev -w frontend"
+  },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VanCauwenbergIan/Research-Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VanCauwenbergIan/Research-Project/issues"
+  },
+  "homepage": "https://github.com/VanCauwenbergIan/Research-Project#readme"
+}
