@@ -1,3 +1,5 @@
+import { addTestCube } from './test'
+
 let htmlCanvas
 
 const loadScene = () => {
@@ -10,18 +12,21 @@ const loadScene = () => {
   // Create scene
   const scene = new THREE.Scene()
 
-  // Test cube
-  const geometry = new THREE.BoxGeometry(1, 1, 1)
-  const material = new THREE.MeshBasicMaterial({ color: 'red' })
-  const mesh = new THREE.Mesh(geometry, material)
-
-  scene.add(mesh)
-
   // Camera
   const camera = new THREE.PerspectiveCamera(55, sizes.width / sizes.height)
 
+  // camera.position.x = 1
+  // camera.position.y = 1
   camera.position.z = 3
   scene.add(camera)
+
+  // Test cube
+  addTestCube(scene, camera)
+
+  // Axes helper
+  const axesHelper = new THREE.AxesHelper()
+
+  scene.add(axesHelper)
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas })
