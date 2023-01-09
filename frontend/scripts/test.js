@@ -28,7 +28,7 @@ export const addTestCube = (scene, camera) => {
   // console.log(mesh.position.length())
   // console.log(mesh.position.distanceTo(camera.position))
 
-  // camera.lookAt(mesh.position)
+  camera.lookAt(mesh.position)
   return mesh
 }
 
@@ -66,19 +66,19 @@ export const addTestGroup = (scene) => {
 
 export const testAnimation = (camera, clock, mesh) => {
   // Clock
-  console.log(clock)
   const elapsedTime = clock.getElapsedTime()
   // => Speed is otherwise dependant on FPS
   // you can use PI or other math functions (like sin or cos) to create an animation based on the incrementation
 
   // Update objects
-  mesh.position.x = Math.cos(elapsedTime)
-  mesh.position.y = Math.sin(elapsedTime)
+  // mesh.position.x = Math.cos(elapsedTime)
+  // mesh.position.y = Math.sin(elapsedTime)
+  mesh.rotation.y = elapsedTime
 
   // camera.lookAt(mesh.position)
 }
 
 export const testAnimationGsap = (mesh) => {
-  gsap.to(mesh.position, { x: 2, duration: 1, delay: 1})
-  gsap.to(mesh.position, { x: 0, duration: 1, delay: 2})
+  gsap.to(mesh.position, { x: 2, duration: 1, delay: 1 })
+  gsap.to(mesh.position, { x: 0, duration: 1, delay: 2 })
 }
