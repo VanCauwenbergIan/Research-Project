@@ -1,6 +1,8 @@
 import {
   addTestCube,
   addTestGroup,
+  addTestTriangle,
+  addTestTriangles,
   testAnimation,
   testAnimationGsap,
 } from './test'
@@ -53,7 +55,9 @@ const loadScene = () => {
   // Controls.update()
 
   // Test cube(s)
-  Mesh = addTestCube(Scene, Camera)
+  // Mesh = addTestCube(Scene, Camera)
+  // Mesh = addTestTriangle(Scene)
+  Mesh = addTestTriangles(Scene)
   // addTestGroup(scene)
 
   // Axes helper
