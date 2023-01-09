@@ -15,8 +15,8 @@ let Renderer, Camera, Scene, AxesHelper, Clock, Controls
 let Mesh
 // Data
 const Sizes = {
-  width: 800,
-  height: 600,
+  width: window.innerWidth,
+  height: window.innerHeight,
 }
 const Cursor = {
   x: 0,
@@ -94,6 +94,31 @@ const getCursor = () => {
   })
 }
 
+const resizeScreen = () => {
+  window.addEventListener('resize', (e) => {
+    Sizes.width = window.innerWidth
+    Sizes.height = window.innerWidth
+
+    // Update camera
+    Camera.aspect = Sizes.width / Sizes.height
+    Camera.updateProjectionMatrix()
+
+    // Update renderer
+    Renderer.setSize(Sizes.width, Sizes.height)
+    Renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  })
+}
+
+const listenForFullscreen = () => {
+  window.addEventListener('dblclick', (e) => {
+    if (!document.fullscreenElement) {
+      htmlCanvas.requestFullscreen()
+    } else {
+      document.exitFullscreen()
+    }
+  })
+}
+
 export const init = () => {
   window.addEventListener('DOMContentLoaded', (e) => {
     console.log('DOM loaded!')
@@ -101,6 +126,8 @@ export const init = () => {
     htmlCanvas = document.querySelector('.webgl')
 
     getCursor()
+    resizeScreen()
+    listenForFullscreen()
     loadScene()
     // Animate using gsap
     // testAnimationGsap(Mesh)
