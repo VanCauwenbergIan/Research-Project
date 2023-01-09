@@ -2,8 +2,12 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 
 export const addTestCube = (scene, camera) => {
-  const geometry = new THREE.BoxGeometry(1, 1, 1)
-  const material = new THREE.MeshBasicMaterial({ color: 'red' })
+  const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
+
+  const material = new THREE.MeshBasicMaterial({
+    color: 'red',
+    wireframe: true,
+  })
   const mesh = new THREE.Mesh(geometry, material)
 
   // mesh.position.x = 0.7
@@ -62,6 +66,48 @@ export const addTestGroup = (scene) => {
   scene.add(group)
 
   return group
+}
+
+export const addTestTriangle = (scene) => {
+  const positionsArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0])
+  const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
+  const geometry = new THREE.BufferGeometry()
+
+  geometry.setAttribute('position', positionsAttribute)
+
+  const material = new THREE.MeshBasicMaterial({
+    color: 'red',
+    wireframe: true,
+  })
+  const mesh = new THREE.Mesh(geometry, material)
+
+  scene.add(mesh)
+
+  return mesh
+}
+
+export const addTestTriangles = (scene) => {
+  const geometry = new THREE.BufferGeometry()
+  const count = 50 * 100
+  const positionsArray = new Float32Array(count * 3 * 3)
+
+  for (let i = 0; i < count * 3 * 3; i++) {
+    positionsArray[i] = Math.random()
+  }
+
+  const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
+
+  geometry.setAttribute('position', positionsAttribute)
+
+  const material = new THREE.MeshBasicMaterial({
+    color: 'red',
+    wireframe: true,
+  })
+  const mesh = new THREE.Mesh(geometry, material)
+
+  scene.add(mesh)
+
+  return mesh
 }
 
 export const testAnimation = (camera, clock, mesh) => {
