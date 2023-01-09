@@ -1,7 +1,10 @@
+import * as THREE from 'three'
+import gsap from 'gsap'
+
 export const addTestCube = (scene, camera) => {
-  // const geometry = new THREE.BoxGeometry(1, 1, 1)
-  // const material = new THREE.MeshBasicMaterial({ color: 'red' })
-  // const mesh = new THREE.Mesh(geometry, material)
+  const geometry = new THREE.BoxGeometry(1, 1, 1)
+  const material = new THREE.MeshBasicMaterial({ color: 'red' })
+  const mesh = new THREE.Mesh(geometry, material)
 
   // mesh.position.x = 0.7
   // mesh.position.y = -0.6
@@ -16,17 +19,20 @@ export const addTestCube = (scene, camera) => {
   // mesh.rotation.reorder('YXZ')
   // mesh.rotation.x = Math.PI / 4
   // mesh.rotation.y = Math.PI / 4
-  // pi == half a rotation
+  // pi == half a unit
   // axes reorder can help you when you don't want certian rotations to "stack"
 
-  // scene.add(mesh)
+  scene.add(mesh)
 
   // mesh.position.normalize()
   // console.log(mesh.position.length())
   // console.log(mesh.position.distanceTo(camera.position))
 
   // camera.lookAt(mesh.position)
+  return mesh
+}
 
+export const addTestGroup = (scene) => {
   const group = new THREE.Group()
 
   const cube1 = new THREE.Mesh(
@@ -49,9 +55,30 @@ export const addTestCube = (scene, camera) => {
   group.add(cube2)
   group.add(cube3)
 
-  group.position.y = 1
-  group.scale.y = 2
-  group.rotation.y = 1
+  // group.position.y = 1
+  // group.scale.y = 2
+  // group.rotation.y = 1
 
   scene.add(group)
+
+  return group
+}
+
+export const testAnimation = (camera, clock, mesh) => {
+  // Clock
+  console.log(clock)
+  const elapsedTime = clock.getElapsedTime()
+  // => Speed is otherwise dependant on FPS
+  // you can use PI or other math functions (like sin or cos) to create an animation based on the incrementation
+
+  // Update objects
+  mesh.position.x = Math.cos(elapsedTime)
+  mesh.position.y = Math.sin(elapsedTime)
+
+  // camera.lookAt(mesh.position)
+}
+
+export const testAnimationGsap = (mesh) => {
+  gsap.to(mesh.position, { x: 2, duration: 1, delay: 1})
+  gsap.to(mesh.position, { x: 0, duration: 1, delay: 2})
 }
