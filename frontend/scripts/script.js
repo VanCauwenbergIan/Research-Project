@@ -8,6 +8,8 @@ import {
 } from './test'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as lil from 'lil-gui'
+import gsap from 'gsap'
 
 // DOM Objects
 let htmlCanvas
@@ -55,9 +57,9 @@ const loadScene = () => {
   // Controls.update()
 
   // Test cube(s)
-  // Mesh = addTestCube(Scene, Camera)
+  Mesh = addTestCube(Scene, Camera)
   // Mesh = addTestTriangle(Scene)
-  Mesh = addTestTriangles(Scene)
+  // Mesh = addTestTriangles(Scene)
   // addTestGroup(scene)
 
   // Axes helper
@@ -123,6 +125,37 @@ const listenForFullscreen = () => {
   })
 }
 
+const initUI = () => {
+  const gui = new lil.GUI({ width: 400 })
+
+  gui.hide()
+
+  const params = {
+    spin: () => {
+      gsap.to(Mesh.rotation, { y: Mesh.rotation.y + 10, duration: 1 })
+    },
+  }
+
+  // Readd shortcut for debug menu
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'h') {
+      if (gui._hidden) {
+        gui.show()
+      } else {
+        gui.hide()
+      }
+    }
+  })
+
+  gui.add(Mesh.position, 'x').min(-3).max(3).step(0.01).name('object distance')
+  gui.add(Mesh.position, 'y').min(-3).max(3).step(0.01).name('object elevation')
+  gui.add(Mesh.position, 'z').min(-3).max(3).step(0.01).name('object depth')
+  gui.add(Mesh, 'visible')
+  gui.add(Mesh.material, 'wireframe')
+  gui.addColor(Mesh.material, 'color')
+  gui.add(params, 'spin')
+}
+
 export const init = () => {
   window.addEventListener('DOMContentLoaded', (e) => {
     console.log('DOM loaded!')
@@ -133,6 +166,7 @@ export const init = () => {
     resizeScreen()
     listenForFullscreen()
     loadScene()
+    initUI()
     // Animate using gsap
     // testAnimationGsap(Mesh)
     // => animation frames independent of tick

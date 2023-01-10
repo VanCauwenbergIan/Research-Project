@@ -6,7 +6,7 @@ export const addTestCube = (scene, camera) => {
 
   const material = new THREE.MeshBasicMaterial({
     color: 'red',
-    wireframe: true,
+    // wireframe: true,
   })
   const mesh = new THREE.Mesh(geometry, material)
 
