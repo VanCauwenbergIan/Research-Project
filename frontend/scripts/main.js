@@ -1,4 +1,4 @@
 import '../index.css'
-import { init } from './script'
+import { init } from './testScript'
 
 init()

@@ -1,12 +1,14 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
 
-export const addTestCube = (scene, camera) => {
+export const addTestCube = (scene, camera, texture) => {
   const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
+  // console.log(geometry.attributes.uv)
 
   const material = new THREE.MeshBasicMaterial({
-    color: 'red',
+    // color: 'red',
     // wireframe: true,
+    map: texture,
   })
   const mesh = new THREE.Mesh(geometry, material)
 

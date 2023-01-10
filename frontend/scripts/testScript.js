@@ -5,7 +5,7 @@ import {
   addTestTriangles,
   testAnimation,
   testAnimationGsap,
-} from './test'
+} from './testUtils'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as lil from 'lil-gui'
@@ -15,8 +15,16 @@ import gsap from 'gsap'
 let htmlCanvas
 // Scene components
 let Renderer, Camera, Scene, AxesHelper, Clock, Controls
-// Objects
+// Object meshes
 let Mesh
+// Textures
+let ColorTexture,
+  AlphaTexture,
+  HeightTexture,
+  NormalTexture,
+  AOTexture,
+  MetalnessTexture,
+  RoughnessTexture
 // Data
 const Sizes = {
   width: window.innerWidth,
@@ -57,7 +65,7 @@ const loadScene = () => {
   // Controls.update()
 
   // Test cube(s)
-  Mesh = addTestCube(Scene, Camera)
+  Mesh = addTestCube(Scene, Camera, ColorTexture)
   // Mesh = addTestTriangle(Scene)
   // Mesh = addTestTriangles(Scene)
   // addTestGroup(scene)
@@ -156,6 +164,79 @@ const initUI = () => {
   gui.add(params, 'spin')
 }
 
+const loadTextures = () => {
+  const image = new Image()
+  // Load texture manually
+  // Texture = new THREE.Texture(image)
+
+  // image.onload = () => {
+  //   Texture.needsUpdate = true
+  // }
+  // image.src = '../assets/textures/door/color.jpg'
+  // Built-in loader
+  const loadingManager = new THREE.LoadingManager()
+
+  loadingManager.onStart = () => {
+    console.log('start')
+  }
+  loadingManager.onLoad = () => {
+    console.log('loaded')
+  }
+  loadingManager.onProgress = () => {
+    console.log('progress')
+  }
+  loadingManager.onError = () => {
+    console.log('error')
+  }
+
+  const textureLoader = new THREE.TextureLoader(loadingManager)
+
+  // Optional callback functions
+  // const onLoad = () => {
+  //   console.log('loaded')
+  // }
+  // const onProgress = () => {
+  //   console.log('progress')
+  // }
+  // const onError = () => {
+  //   console.log('error')
+  // }
+  // Can also be handled through a loading manager
+
+  ColorTexture = textureLoader.load(
+    '../assets/textures/minecraft.png',
+    // onLoad,
+    // onProgress,
+    // onError,
+  )
+  AlphaTexture = textureLoader.load('../assets/textures/door/alpha.jpg')
+  HeightTexture = textureLoader.load('../assets/textures/door/height.jpg')
+  NormalTexture = textureLoader.load('../assets/textures/door/normal.jpg')
+  AOTexture = textureLoader.load('../assets/textures/door/ambientOcclusion.jpg')
+  MetalnessTexture = textureLoader.load('../assets/textures/door/metalness.jpg')
+  RoughnessTexture = textureLoader.load('../assets/textures/door/roughness.jpg')
+  // you can reuse the same loader for multiple textures
+
+  // ColorTexture.repeat.x = 2
+  // ColorTexture.repeat.y = 3
+  // By default the last pixel of a texture gets repeated => fix:
+  // ColorTexture.wrapS = THREE.MirroredRepeatWrapping
+  // ColorTexture.wrapT = THREE.MirroredRepeatWrapping
+
+  // ColorTexture.offset.x = 0.5
+  // ColorTexture.offset.y = 0.5
+  // ColorTexture.rotation = Math.PI / 4
+  // ColorTexture.center.x = 0.5
+  // ColorTexture.center.y = 0.5
+
+  ColorTexture.generateMipmaps = false
+  ColorTexture.minFilter = THREE.NearestFilter
+  ColorTexture.magFilter = THREE.NearestFilter
+  // NearestFilter gives better performance
+  // Always consider compressing your textures (especially for distant objects) to decrease loading times
+  // A resolution of the power of 2 gives the best results with mitmapping
+}
+
 export const init = () => {
   window.addEventListener('DOMContentLoaded', (e) => {
     console.log('DOM loaded!')
@@ -165,6 +246,7 @@ export const init = () => {
     getCursor()
     resizeScreen()
     listenForFullscreen()
+    loadTextures()
     loadScene()
     initUI()
     // Animate using gsap
