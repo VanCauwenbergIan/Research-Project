@@ -1,4 +1,5 @@
 import {
+  add3DText,
   addTestCube,
   addTestGroup,
   addTestMeshes,
@@ -12,7 +13,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as lil from 'lil-gui'
 import gsap from 'gsap'
-import { PointLight } from 'three'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 
 // DOM Objects
 let htmlCanvas
@@ -72,22 +73,22 @@ const loadScene = () => {
 
   // Test cube(s)
   // Mesh = addTestCube(Scene, Camera, DoorColorTexture)
-  Meshes = addTestMeshes(
-    Scene,
-    DoorColorTexture,
-    DoorAlphaTexture,
-    MatcapTexture,
-    GradientTexture,
-    DoorAOTexture,
-    DoorHeightTexture,
-    DoorMetalnessTexture,
-    DoorRoughnessTexture,
-    DoorNormalTexture,
-    EnvironementMapTexture
-  )
+  // Meshes = addTestMeshes(
+  //   Scene,
+  //   DoorColorTexture,
+  //   DoorAlphaTexture,
+  //   MatcapTexture,
+  //   GradientTexture,
+  //   DoorAOTexture,
+  //   DoorHeightTexture,
+  //   DoorMetalnessTexture,
+  //   DoorRoughnessTexture,
+  //   DoorNormalTexture,
+  //   EnvironementMapTexture
+  // )
   // Mesh = addTestTriangle(Scene)
   // Mesh = addTestTriangles(Scene)
-  // addTestGroup(scene)
+  // addTestGroup(Scene)
 
   // Axes helper
   AxesHelper = new THREE.AxesHelper()
@@ -138,11 +139,11 @@ const initUI = () => {
 
   gui.hide()
 
-  // const params = {
-  //   spin: () => {
-  //     gsap.to(Mesh.rotation, { y: Mesh.rotation.y + 10, duration: 1 })
-  //   },
-  // }
+  const params = {
+    spin: () => {
+      gsap.to(Mesh.rotation, { y: Mesh.rotation.y + 10, duration: 1 })
+    },
+  }
 
   // Readd shortcut for debug menu
   window.addEventListener('keydown', (e) => {
@@ -164,14 +165,14 @@ const initUI = () => {
   // gui.add(params, 'spin')
 
   // they all share the same material in this case, so changing one will change them all
-  gui.add(Meshes.sphere.material, 'metalness').min(0).max(1).step(0.0001)
-  gui.add(Meshes.sphere.material, 'roughness').min(0).max(1).step(0.0001)
-  gui.add(Meshes.sphere.material, 'aoMapIntensity').min(0).max(10).step(0.0001)
-  gui
-    .add(Meshes.sphere.material, 'displacementScale')
-    .min(0)
-    .max(1)
-    .step(0.0001)
+  //   gui.add(Meshes.sphere.material, 'metalness').min(0).max(1).step(0.0001)
+  //   gui.add(Meshes.sphere.material, 'roughness').min(0).max(1).step(0.0001)
+  //   gui.add(Meshes.sphere.material, 'aoMapIntensity').min(0).max(10).step(0.0001)
+  //   gui
+  //     .add(Meshes.sphere.material, 'displacementScale')
+  //     .min(0)
+  //     .max(1)
+  //     .step(0.0001)
 }
 
 const loadTextures = () => {
@@ -282,10 +283,21 @@ const setupLights = () => {
   Scene.add(pointLight)
 }
 
+const loadFonts = () => {
+  const fontLoader = new FontLoader()
+
+  fontLoader.load(
+    '../assets/fonts/helvetiker_regular.typeface.json',
+    (font) => {
+      Mesh = add3DText(font, Scene, MatcapTexture)
+    },
+  )
+}
+
 const tick = () => {
   // Update objects manually
   // testAnimation(Camera, Clock, Mesh)
-  testAnimationMeshes(Clock, Meshes)
+  // testAnimationMeshes(Clock, Meshes)
 
   // Update camera
   // Custom controls
@@ -313,6 +325,7 @@ export const init = () => {
     listenForFullscreen()
     loadTextures()
     loadScene()
+    loadFonts()
     setupLights()
     initUI()
     // Animate using gsap
