@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import gsap from 'gsap'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 
 export const addTestCube = (scene, camera, texture) => {
   const geometry = new THREE.BoxGeometry(1, 1, 1, 2, 2, 2)
@@ -8,7 +9,7 @@ export const addTestCube = (scene, camera, texture) => {
   const material = new THREE.MeshBasicMaterial({
     // color: 'red',
     // wireframe: true,
-    map: texture,
+    // map: texture,
   })
   const mesh = new THREE.Mesh(geometry, material)
 
@@ -123,7 +124,7 @@ export const addTestMeshes = (
   materialMetalnessTexture,
   materialRoughnessTexture,
   materialNormalTexture,
-  environementMap
+  environementMap,
 ) => {
   // const material = new THREE.MeshBasicMaterial()
   // {color: 'red'}
@@ -204,6 +205,61 @@ export const addTestMeshes = (
   scene.add(sphere, plane, torus)
 
   return { sphere: sphere, plane: plane, torus: torus }
+}
+
+export const add3DText = (font, scene, texture) => {
+  const textGeometry = new TextGeometry('Hello world', {
+    font: font,
+    size: 0.5,
+    height: 0.2,
+    curveSegments: 5,
+    bevelEnabled: true,
+    bevelThickness: 0.03,
+    bevelSize: 0.02,
+    bevelOffset: 0,
+    bevelSegments: 4,
+  })
+
+  // Text isn't centered because of the bevel
+  // manual way to center
+  // textGeometry.computeBoundingBox()
+  // textGeometry.translate(
+  //   -(textGeometry.boundingBox.max.x - 0.02) / 2,
+  //   -(textGeometry.boundingBox.max.y - 0.02) / 2,
+  //   -(textGeometry.boundingBox.max.z - 0.03) / 2,
+  // )
+  // built-in method
+  textGeometry.center()
+
+  const material = new THREE.MeshMatcapMaterial()
+
+  // textMaterial.wireframe = true
+  material.matcap = texture
+
+  const text = new THREE.Mesh(textGeometry, material)
+
+  scene.add(text)
+
+  const torusGeometry = new THREE.TorusGeometry(0.3, 0.2, 20, 45)
+  // always reuse the material and geometry whenever possible
+
+  for (let i = 0; i <= 100; i++) {
+    const torus = new THREE.Mesh(torusGeometry, material)
+
+    torus.position.x = (Math.random() - 0.5) * 10
+    torus.position.y = (Math.random() - 0.5) * 10
+    torus.position.z = (Math.random() - 0.5) * 10
+
+    torus.rotation.x = Math.random() * Math.PI
+    torus.rotation.y = Math.random() * Math.PI
+
+    const scale = Math.random()
+
+    torus.scale.set(scale, scale, scale)
+    scene.add(torus)
+  }
+
+  return text
 }
 
 export const testAnimation = (camera, clock, mesh) => {
