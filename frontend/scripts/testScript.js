@@ -1,30 +1,36 @@
 import {
   addTestCube,
   addTestGroup,
+  addTestMeshes,
   addTestTriangle,
   addTestTriangles,
   testAnimation,
   testAnimationGsap,
+  testAnimationMeshes,
 } from './testUtils'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as lil from 'lil-gui'
 import gsap from 'gsap'
+import { PointLight } from 'three'
 
 // DOM Objects
 let htmlCanvas
 // Scene components
 let Renderer, Camera, Scene, AxesHelper, Clock, Controls
 // Object meshes
-let Mesh
+let Mesh, Meshes
 // Textures
-let ColorTexture,
-  AlphaTexture,
-  HeightTexture,
-  NormalTexture,
-  AOTexture,
-  MetalnessTexture,
-  RoughnessTexture
+let DoorColorTexture,
+  DoorAlphaTexture,
+  DoorHeightTexture,
+  DoorNormalTexture,
+  DoorAOTexture,
+  DoorMetalnessTexture,
+  DoorRoughnessTexture,
+  MatcapTexture,
+  GradientTexture,
+  EnvironementMapTexture
 // Data
 const Sizes = {
   width: window.innerWidth,
@@ -65,7 +71,20 @@ const loadScene = () => {
   // Controls.update()
 
   // Test cube(s)
-  Mesh = addTestCube(Scene, Camera, ColorTexture)
+  // Mesh = addTestCube(Scene, Camera, DoorColorTexture)
+  Meshes = addTestMeshes(
+    Scene,
+    DoorColorTexture,
+    DoorAlphaTexture,
+    MatcapTexture,
+    GradientTexture,
+    DoorAOTexture,
+    DoorHeightTexture,
+    DoorMetalnessTexture,
+    DoorRoughnessTexture,
+    DoorNormalTexture,
+    EnvironementMapTexture
+  )
   // Mesh = addTestTriangle(Scene)
   // Mesh = addTestTriangles(Scene)
   // addTestGroup(scene)
@@ -80,25 +99,6 @@ const loadScene = () => {
 
   // Clock
   Clock = new THREE.Clock()
-}
-
-const tick = () => {
-  // Update objects manually
-  // testAnimation(Camera, Clock, Mesh)
-
-  // Update camera
-  // Custom controls
-  // Camera.position.x = Math.sin(Cursor.x * Math.PI * 2) * 3
-  // Camera.position.y = Cursor.y * 5
-  // Camera.position.z = Math.cos(Cursor.x * Math.PI * 2) * 3
-  // Camera.lookAt(Mesh.position)
-  // Built-in controls
-  Controls.update()
-
-  //Render
-  Renderer.render(Scene, Camera)
-
-  window.requestAnimationFrame(tick)
 }
 
 const getCursor = () => {
@@ -138,11 +138,11 @@ const initUI = () => {
 
   gui.hide()
 
-  const params = {
-    spin: () => {
-      gsap.to(Mesh.rotation, { y: Mesh.rotation.y + 10, duration: 1 })
-    },
-  }
+  // const params = {
+  //   spin: () => {
+  //     gsap.to(Mesh.rotation, { y: Mesh.rotation.y + 10, duration: 1 })
+  //   },
+  // }
 
   // Readd shortcut for debug menu
   window.addEventListener('keydown', (e) => {
@@ -155,13 +155,23 @@ const initUI = () => {
     }
   })
 
-  gui.add(Mesh.position, 'x').min(-3).max(3).step(0.01).name('object distance')
-  gui.add(Mesh.position, 'y').min(-3).max(3).step(0.01).name('object elevation')
-  gui.add(Mesh.position, 'z').min(-3).max(3).step(0.01).name('object depth')
-  gui.add(Mesh, 'visible')
-  gui.add(Mesh.material, 'wireframe')
-  gui.addColor(Mesh.material, 'color')
-  gui.add(params, 'spin')
+  // gui.add(Mesh.position, 'x').min(-3).max(3).step(0.01).name('object distance')
+  // gui.add(Mesh.position, 'y').min(-3).max(3).step(0.01).name('object elevation')
+  // gui.add(Mesh.position, 'z').min(-3).max(3).step(0.01).name('object depth')
+  // gui.add(Mesh, 'visible')
+  // gui.add(Mesh.material, 'wireframe')
+  // gui.addColor(Mesh.material, 'color')
+  // gui.add(params, 'spin')
+
+  // they all share the same material in this case, so changing one will change them all
+  gui.add(Meshes.sphere.material, 'metalness').min(0).max(1).step(0.0001)
+  gui.add(Meshes.sphere.material, 'roughness').min(0).max(1).step(0.0001)
+  gui.add(Meshes.sphere.material, 'aoMapIntensity').min(0).max(10).step(0.0001)
+  gui
+    .add(Meshes.sphere.material, 'displacementScale')
+    .min(0)
+    .max(1)
+    .step(0.0001)
 }
 
 const loadTextures = () => {
@@ -190,6 +200,7 @@ const loadTextures = () => {
   }
 
   const textureLoader = new THREE.TextureLoader(loadingManager)
+  const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
 
   // Optional callback functions
   // const onLoad = () => {
@@ -203,19 +214,36 @@ const loadTextures = () => {
   // }
   // Can also be handled through a loading manager
 
-  ColorTexture = textureLoader.load(
-    '../assets/textures/minecraft.png',
+  DoorColorTexture = textureLoader.load(
+    '../assets/textures/door/color.jpg',
     // onLoad,
     // onProgress,
     // onError,
   )
-  AlphaTexture = textureLoader.load('../assets/textures/door/alpha.jpg')
-  HeightTexture = textureLoader.load('../assets/textures/door/height.jpg')
-  NormalTexture = textureLoader.load('../assets/textures/door/normal.jpg')
-  AOTexture = textureLoader.load('../assets/textures/door/ambientOcclusion.jpg')
-  MetalnessTexture = textureLoader.load('../assets/textures/door/metalness.jpg')
-  RoughnessTexture = textureLoader.load('../assets/textures/door/roughness.jpg')
+  DoorAlphaTexture = textureLoader.load('../assets/textures/door/alpha.jpg')
+  DoorHeightTexture = textureLoader.load('../assets/textures/door/height.jpg')
+  DoorNormalTexture = textureLoader.load('../assets/textures/door/normal.jpg')
+  DoorAOTexture = textureLoader.load(
+    '../assets/textures/door/ambientOcclusion.jpg',
+  )
+  DoorMetalnessTexture = textureLoader.load(
+    '../assets/textures/door/metalness.jpg',
+  )
+  DoorRoughnessTexture = textureLoader.load(
+    '../assets/textures/door/roughness.jpg',
+  )
+  MatcapTexture = textureLoader.load('../assets/textures/matcaps/8.png')
+  GradientTexture = textureLoader.load('../assets/textures/gradients/5.jpg')
   // you can reuse the same loader for multiple textures
+
+  EnvironementMapTexture = cubeTextureLoader.load([
+    '../assets/textures/environmentMaps/3/px.jpg',
+    '../assets/textures/environmentMaps/3/nx.jpg',
+    '../assets/textures/environmentMaps/3/py.jpg',
+    '../assets/textures/environmentMaps/3/ny.jpg',
+    '../assets/textures/environmentMaps/3/pz.jpg',
+    '../assets/textures/environmentMaps/3/nz.jpg',
+  ])
 
   // ColorTexture.repeat.x = 2
   // ColorTexture.repeat.y = 3
@@ -229,12 +257,49 @@ const loadTextures = () => {
   // ColorTexture.center.x = 0.5
   // ColorTexture.center.y = 0.5
 
-  ColorTexture.generateMipmaps = false
-  ColorTexture.minFilter = THREE.NearestFilter
-  ColorTexture.magFilter = THREE.NearestFilter
-  // NearestFilter gives better performance
+  DoorColorTexture.generateMipmaps = false
+  DoorColorTexture.minFilter = THREE.NearestFilter
+  DoorColorTexture.magFilter = THREE.NearestFilter
+  // NearestFilter gives better performance + you can disable mipmaps for less vram usage
   // Always consider compressing your textures (especially for distant objects) to decrease loading times
   // A resolution of the power of 2 gives the best results with mitmapping
+
+  GradientTexture.generateMipmaps = false
+  GradientTexture.minFilter = THREE.NearestFilter
+  GradientTexture.magFilter = THREE.NearestFilter
+}
+
+const setupLights = () => {
+  const ambientLights = new THREE.AmbientLight(0xffffff, 0.5)
+
+  Scene.add(ambientLights)
+
+  const pointLight = new THREE.PointLight(0xffffff, 0.5)
+
+  pointLight.position.x = 2
+  pointLight.position.y = 3
+  pointLight.position.z = 4
+  Scene.add(pointLight)
+}
+
+const tick = () => {
+  // Update objects manually
+  // testAnimation(Camera, Clock, Mesh)
+  testAnimationMeshes(Clock, Meshes)
+
+  // Update camera
+  // Custom controls
+  // Camera.position.x = Math.sin(Cursor.x * Math.PI * 2) * 3
+  // Camera.position.y = Cursor.y * 5
+  // Camera.position.z = Math.cos(Cursor.x * Math.PI * 2) * 3
+  // Camera.lookAt(Mesh.position)
+  // Built-in controls
+  Controls.update()
+
+  //Render
+  Renderer.render(Scene, Camera)
+
+  window.requestAnimationFrame(tick)
 }
 
 export const init = () => {
@@ -248,6 +313,7 @@ export const init = () => {
     listenForFullscreen()
     loadTextures()
     loadScene()
+    setupLights()
     initUI()
     // Animate using gsap
     // testAnimationGsap(Mesh)

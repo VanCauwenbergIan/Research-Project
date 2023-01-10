@@ -112,6 +112,100 @@ export const addTestTriangles = (scene) => {
   return mesh
 }
 
+export const addTestMeshes = (
+  scene,
+  materialTexture,
+  materialAlphaTexture,
+  materialMatcapTexture,
+  materialGradientTexture,
+  materialAOTexture,
+  materialHeightTexture,
+  materialMetalnessTexture,
+  materialRoughnessTexture,
+  materialNormalTexture,
+  environementMap
+) => {
+  // const material = new THREE.MeshBasicMaterial()
+  // {color: 'red'}
+  // material.color.set('magenta')
+  // material.color = new THREE.Color('purple')
+  // material.wireframe = true
+  // material.opacity = 0.5
+  // material.transparent = true
+  // material.map = materialTexture
+  // material.alphaMap = materialAlphaTexture
+  // material.side = THREE.DoubleSide
+  // render both sides at the cost of performance
+
+  // const material = new THREE.MeshNormalMaterial()
+  // material.flatShading = true
+
+  // const material = new THREE.MeshMatcapMaterial()
+  // material.map = materialMatcapTexture
+
+  // const material = new THREE.MeshDepthMaterial()
+
+  // const material = new THREE.MeshLambertMaterial()
+
+  // better result with a performance tradeoff
+  // const material = new THREE.MeshPhongMaterial()
+  // material.shininess = 100
+  // material.specular = new THREE.Color('blue')
+
+  // const material = new THREE.MeshToonMaterial()
+  // material.gradientMap = materialGradientTexture
+
+  const material = new THREE.MeshStandardMaterial()
+  material.metalness = 0.7
+  material.roughness = 0.2
+  // don't use in combination with the map or use default values (0,1)
+  // material.map = materialTexture
+  // material.aoMap = materialAOTexture
+  // material.aoMapIntensity = 1
+  // material.displacementMap = materialHeightTexture
+  // material.displacementScale = 0.05
+  // material.metalnessMap = materialMetalnessTexture
+  // material.roughnessMap = materialRoughnessTexture
+  // material.normalMap = materialNormalTexture
+  // material.normalScale.set(0.5, 0.5)
+  // material.alphaMap = materialAlphaTexture
+  // material.transparent = true
+  material.envMap = environementMap
+
+  const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 64, 64), material)
+
+  sphere.position.x = -1.5
+  sphere.geometry.setAttribute(
+    'uv2',
+    new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2),
+  )
+
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1, 100, 100),
+    material,
+  )
+
+  plane.geometry.setAttribute(
+    'uv2',
+    new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2),
+  )
+
+  const torus = new THREE.Mesh(
+    new THREE.TorusGeometry(0.3, 0.2, 64, 128),
+    material,
+  )
+
+  torus.position.x = 1.5
+  torus.geometry.setAttribute(
+    'uv2',
+    new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2),
+  )
+
+  scene.add(sphere, plane, torus)
+
+  return { sphere: sphere, plane: plane, torus: torus }
+}
+
 export const testAnimation = (camera, clock, mesh) => {
   // Clock
   const elapsedTime = clock.getElapsedTime()
@@ -129,4 +223,16 @@ export const testAnimation = (camera, clock, mesh) => {
 export const testAnimationGsap = (mesh) => {
   gsap.to(mesh.position, { x: 2, duration: 1, delay: 1 })
   gsap.to(mesh.position, { x: 0, duration: 1, delay: 2 })
+}
+
+export const testAnimationMeshes = (clock, meshes) => {
+  const elapsedTime = clock.getElapsedTime()
+
+  meshes.sphere.rotation.y = 0.1 * elapsedTime
+  meshes.plane.rotation.y = 0.1 * elapsedTime
+  meshes.torus.rotation.y = 0.1 * elapsedTime
+
+  meshes.sphere.rotation.x = 0.15 * elapsedTime
+  meshes.plane.rotation.x = 0.15 * elapsedTime
+  meshes.torus.rotation.x = 0.15 * elapsedTime
 }
