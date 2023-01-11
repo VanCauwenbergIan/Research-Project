@@ -262,6 +262,20 @@ export const add3DText = (font, scene, texture) => {
   return text
 }
 
+export const addBackdropForModels = (scene) => {
+  const geometry = new THREE.PlaneGeometry(10, 10)
+  const material = new THREE.MeshStandardMaterial({
+    color: '#444444',
+    metalness: 0,
+    roughness: 0.5,
+  })
+  const floor = new THREE.Mesh(geometry, material)
+
+  floor.receiveShadow = true
+  floor.rotation.x = -Math.PI * 0.5
+  scene.add(floor)
+}
+
 export const testAnimation = (camera, clock, mesh) => {
   // Clock
   const elapsedTime = clock.getElapsedTime()

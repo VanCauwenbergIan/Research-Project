@@ -1,4 +1,6 @@
 import '../index.css'
-import { init } from './testScript'
+import { initTest } from './testScript'
 
-init()
+;(() => {
+  initTest()
+})()

@@ -1,5 +1,6 @@
 import {
   add3DText,
+  addBackdropForModels,
   addTestCube,
   addTestGroup,
   addTestMeshes,
@@ -14,11 +15,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as lil from 'lil-gui'
 import gsap from 'gsap'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 // DOM Objects
 let htmlCanvas
 // Scene components
-let Renderer, Camera, Scene, AxesHelper, Clock, Controls
+let Renderer, Camera, Scene, AxesHelper, Clock, Controls, Mixer
 // Object meshes
 let Mesh, Meshes
 // Textures
@@ -41,6 +44,7 @@ const Cursor = {
   x: 0,
   y: 0,
 }
+let PreviousTime = 0
 
 const loadScene = () => {
   const aspectRatio = Sizes.width / Sizes.height
@@ -60,13 +64,16 @@ const loadScene = () => {
   // )
   // you have many more cameras like a stereroCamera => keep in mind for VR
 
-  // Camera.position.x = 2
-  // Camera.position.y = 2
+  Camera.position.x = 2
+  Camera.position.y = 2
   Camera.position.z = 2
   Scene.add(Camera)
 
   // Controls
   Controls = new OrbitControls(Camera, htmlCanvas)
+  Controls.target.x = 0
+  Controls.target.y = 0.75
+  Controls.target.z = 0
   Controls.enableDamping = true
   // Controls.target.y = 1
   // Controls.update()
@@ -96,7 +103,9 @@ const loadScene = () => {
 
   // Renderer
   Renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas })
+  Renderer.shadowMap.type = THREE.PCFSoftShadowMap
   Renderer.setSize(Sizes.width, Sizes.height)
+  Renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
   // Clock
   Clock = new THREE.Clock()
@@ -271,16 +280,31 @@ const loadTextures = () => {
 }
 
 const setupLights = () => {
-  const ambientLights = new THREE.AmbientLight(0xffffff, 0.5)
+  // without light you won't be able to see some models
+  const ambientLights = new THREE.AmbientLight(0xffffff, 0.8)
 
   Scene.add(ambientLights)
 
-  const pointLight = new THREE.PointLight(0xffffff, 0.5)
+  // const pointLight = new THREE.PointLight(0xffffff, 0.5)
 
-  pointLight.position.x = 2
-  pointLight.position.y = 3
-  pointLight.position.z = 4
-  Scene.add(pointLight)
+  // pointLight.position.x = 2
+  // pointLight.position.y = 3
+  // pointLight.position.z = 4
+  // Scene.add(pointLight)
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
+
+  directionalLight.castShadow = true
+  directionalLight.shadow.mapSize.set(1024, 1024)
+  directionalLight.shadow.camera.far = 15
+  directionalLight.shadow.camera.left = -7
+  directionalLight.shadow.camera.top = 7
+  directionalLight.shadow.camera.right = 7
+  directionalLight.shadow.camera.bottom = -7
+  directionalLight.position.x = 5
+  directionalLight.position.y = 5
+  directionalLight.position.z = 5
+  Scene.add(directionalLight)
 }
 
 const loadFonts = () => {
@@ -294,10 +318,75 @@ const loadFonts = () => {
   )
 }
 
+const loadModels = () => {
+  addBackdropForModels(Scene)
+
+  // every format has a different loader
+  const dracoLoader = new DRACOLoader()
+
+  // Draco is a compressed version of gltf that is run in Web Assembly
+  dracoLoader.setDecoderPath('../libs/draco/')
+  // But not always a win-win since you need to load the class and decoder...
+
+  const gltfLoader = new GLTFLoader()
+
+  // provide the draco loader to the gltf loader
+  gltfLoader.setDRACOLoader(dracoLoader)
+  // const onLoad = () => {
+  //   console.log('loaded')
+  // }
+  // const onProgress = () => {
+  //   console.log('progress')
+  // }
+  // const onError = () => {
+  //   console.log('error')
+  // }
+
+  gltfLoader.load('../assets/models/Donut/donut.glb', (gltf) => {
+    // Activating model animations
+    // Mixer = new THREE.AnimationMixer(gltf.scene)
+    // const action = Mixer.clipAction(gltf.animations[2])
+
+    // action.play()
+    // also needs an update each frame => tick
+
+    // console.log(gltf)
+    // There are multiple ways of adding a third party model depending on the specific file format (gltf, glb, gltf embedded, ...)
+    // 1) Add the whole scene inside our scene
+    // gltf.scene.scale.set(0.025, 0.025, 0.025)
+    // If you don't see a model or error it's likely so big that you're inside of it
+    Scene.add(gltf.scene)
+    // 2) Add only the childeren to the scene
+    // Scene.add(gltf.scene.children[0])
+    // only works when there's only one child however...
+    // while (gltf.scene.children.length > 0) {
+    //   Scene.add(gltf.scene.children[0])
+    // }
+    // OR
+    // const childeren = [...gltf.scene.children]
+    // for (const child of childeren) {
+    //   Scene.add(child)
+    // }
+    // every time you add a child to your scene it gets automatically removed from the model's scene
+    // 3) Add only the mesh => wrong scale, position, rotation, ...
+    // 4) Open the model in 3d software and clean it
+  })
+}
+
 const tick = () => {
   // Update objects manually
   // testAnimation(Camera, Clock, Mesh)
   // testAnimationMeshes(Clock, Meshes)
+
+  // Update mixer
+  // const elapsedTime = Clock.getElapsedTime()
+  // const deltaTime = elapsedTime - PreviousTime
+
+  // PreviousTime = elapsedTime
+
+  // if (Mixer) {
+  //   Mixer.update(deltaTime)
+  // }
 
   // Update camera
   // Custom controls
@@ -314,7 +403,7 @@ const tick = () => {
   window.requestAnimationFrame(tick)
 }
 
-export const init = () => {
+export const initTest = () => {
   window.addEventListener('DOMContentLoaded', (e) => {
     console.log('DOM loaded!')
     console.log(THREE)
@@ -325,8 +414,9 @@ export const init = () => {
     listenForFullscreen()
     loadTextures()
     loadScene()
-    loadFonts()
     setupLights()
+    loadModels()
+    // loadFonts()
     initUI()
     // Animate using gsap
     // testAnimationGsap(Mesh)
