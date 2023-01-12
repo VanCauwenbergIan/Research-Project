@@ -7,12 +7,12 @@ export default class ModelLoader {
     this.scene = scene
   }
 
-  addModel(path) {
+  addModel(path, name) {
     return new Promise((resolve) =>
       this.instance.load(
         path,
         (gltf) => {
-          resolve(this.onLoad(gltf, this.scene))
+          resolve(this.onLoad(gltf, this.scene, name))
         },
         this.onProgress,
         this.onError,
@@ -20,8 +20,9 @@ export default class ModelLoader {
     )
   }
 
-  onLoad(model, scene) {
+  onLoad(model, scene, name) {
     this.generateGeometry(model.scene)
+    model.scene.name = name
     scene.add(model.scene)
 
     return model.scene

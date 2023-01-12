@@ -49,11 +49,56 @@ export const onMouseMove = (
 
     if (intersects.length > 0) {
       let object = intersects[0].object
+
       while (object.parent.parent !== null) {
         object = object.parent
       }
       if (object.isDraggable) {
         currentlyDraggable.push(object)
+      }
+    }
+  })
+}
+
+export const onMouseDown = (raycaster, pointer, camera, scene, sizes, box) => {
+  window.addEventListener('mousedown', (e) => {
+    pointer.x = (e.clientX / sizes.width) * 2 - 1
+    pointer.y = -(e.clientY / sizes.height) * 2 + 1
+    raycaster.setFromCamera(pointer, camera)
+    raycaster.firstHitOnly = true
+
+    let intersects = raycaster.intersectObjects(scene.children)
+
+    if (intersects.length > 0) {
+      let object = intersects[0].object
+
+      while (object.parent.parent !== null) {
+        object = object.parent
+      }
+      if (object.name === 'psu') {
+        box.addPSUBox()
+      }
+    }
+  })
+}
+
+export const onMouseUp = (raycaster, pointer, camera, scene, sizes, box) => {
+  window.addEventListener('mouseup', (e) => {
+    pointer.x = (e.clientX / sizes.width) * 2 - 1
+    pointer.y = -(e.clientY / sizes.height) * 2 + 1
+    raycaster.setFromCamera(pointer, camera)
+    raycaster.firstHitOnly = true
+
+    let intersects = raycaster.intersectObjects(scene.children)
+
+    if (intersects.length > 0) {
+      let object = intersects[0].object
+
+      while (object.parent.parent !== null) {
+        object = object.parent
+      }
+      if (object.name === 'psu') {
+        box.removeBox()
       }
     }
   })

@@ -2,7 +2,14 @@ import '../index.css'
 import { initTest } from './Tests/testScript'
 import * as THREE from 'three'
 import Camera from './Cameras/perspectiveCamera'
-import { addHelpers, onDrag, onMouseMove, onScreenChange } from './Utils/utils'
+import {
+  addHelpers,
+  onMouseDown,
+  onDrag,
+  onMouseMove,
+  onScreenChange,
+  onMouseUp,
+} from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
 import DirectionalLight from './Lights/directionalLight'
@@ -13,13 +20,14 @@ import {
   disposeBoundsTree,
   acceleratedRaycast,
 } from 'three-mesh-bvh'
+import SnappingBox from './Utils/snappingBox'
 
 // DOM elements
 let htmlCanvas
 // Scene components
 let scene, renderer, camera
 // Objects
-let pcCase, psu
+let pcCase, psu, snappingBox
 //Data
 const sizes = {
   width: window.innerWidth,
@@ -29,6 +37,8 @@ const currentlyDraggable = []
 let raycaster, pointer
 // Controls
 let orbitControls, dragControls
+// Bounding boxes
+let caseBB, psuBB
 
 const initScene = () => {
   // Scene
@@ -74,11 +84,13 @@ const loadModels = () => {
   gltfLoader
     .addModel(
       '../assets/models/PC/Cases/computer_case_based_off_of_nzxt_510b.glb',
+      'case',
     )
     .then((result) => {
       pcCase = result
-      const box = new THREE.Box3().setFromObject(pcCase)
-      const center = box.getCenter(new THREE.Vector3())
+      caseBB = new THREE.Box3().setFromObject(pcCase)
+
+      const center = caseBB.getCenter(new THREE.Vector3())
 
       pcCase.position.x += pcCase.position.x - center.x
       pcCase.position.y += pcCase.position.y - center.y
@@ -86,16 +98,17 @@ const loadModels = () => {
     })
 
   gltfLoader
-    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb')
+    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb', 'psu')
     .then((result) => {
       psu = result
+      psuBB = new THREE.Box3().setFromObject(psu)
       psu.position.set(0, -2, 3)
       psu.scale.set(0.55, 0.55, 0.55)
       psu.rotation.y = Math.PI * 1.5
       psu.rotation.z = Math.PI
       psu.isDraggable = true
 
-      console.log(psu.parent)
+      console.log(psu)
     })
 }
 
@@ -134,6 +147,7 @@ const loadRaycaster = () => {
   raycaster = new THREE.Raycaster()
   raycaster.firstHitOnly = true
   pointer = new THREE.Vector2()
+  snappingBox = new SnappingBox(scene)
   onMouseMove(
     raycaster,
     pointer,
@@ -142,14 +156,28 @@ const loadRaycaster = () => {
     sizes,
     currentlyDraggable,
   )
+  onMouseDown(raycaster, pointer, camera.instance, scene, sizes, snappingBox)
+  onMouseUp(raycaster, pointer, camera.instance, scene, sizes, snappingBox)
 }
 
 const tick = () => {
   //Render
   renderer.render(scene, camera.instance)
 
+  // Update movable object bounding boxes
+  updateBoundingBoxes()
+
   // Loop
   window.requestAnimationFrame(tick)
+}
+
+const updateBoundingBoxes = () => {
+  if (snappingBox) {
+    snappingBox.updateBoundingBox()
+  }
+  if (caseBB && psuBB) {
+    psuBB = new THREE.Box3().setFromObject(psu)
+  }
 }
 
 ;(() => {
