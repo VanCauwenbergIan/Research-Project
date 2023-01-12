@@ -1,3 +1,12 @@
+import * as THREE from 'three'
+
+export const addHelpers = (scene) => {
+  const axesHelper = new THREE.AxesHelper()
+  // const gridHelper = new THREE.GridHelper()
+
+  scene.add(axesHelper)
+}
+
 export const onScreenChange = (sizes, camera, renderer) => {
   window.addEventListener('resize', () => {
     sizes.width = window.innerWidth
@@ -25,7 +34,6 @@ export const onMouseMove = (
   camera,
   scene,
   sizes,
-  draggableObjects,
   currentlyDraggable,
 ) => {
   window.addEventListener('mousemove', (e) => {
@@ -35,15 +43,19 @@ export const onMouseMove = (
     pointer.y = -(e.clientY / sizes.height) * 2 + 1
     raycaster.setFromCamera(pointer, camera)
     raycaster.firstHitOnly = true
+    // raycaster is too performance intensive on large objects without bvh
 
     let intersects = raycaster.intersectObjects(scene.children)
 
     if (intersects.length > 0) {
-      const object = intersects[0].object
-      console.log('hello')
-
-      // currentlyDraggable.push(object)
+      let object = intersects[0].object
+      while (object.parent.parent !== null) {
+        object = object.parent
+      }
+      if (object.isDraggable) {
+        currentlyDraggable.push(object)
+      }
     }
-    // raycaster is too performance intesnive on large objects
   })
 }
+
