@@ -1,15 +1,15 @@
 import { OrbitControls as OrbitControlsThree } from 'three/examples/jsm/controls/OrbitControls'
+import Controls from './controls'
 
-export default class OrbitControls {
+export default class OrbitControls extends Controls {
   instance
 
   constructor(params, camera, canvas) {
+    super(camera, canvas)
     this.targetX = params.x || 0
     this.targetY = params.y || 0
     this.targetZ = params.z || 0
     this.dampening = params.dampening || false
-    this.camera = camera
-    this.canvas = canvas
     this.addControls()
   }
 

@@ -19,7 +19,6 @@ export default class DirectionalLight extends Light {
     this.instance = new THREE.DirectionalLight(this.color, this.intensity)
     this.instance.position.set(this.x, this.y, this.z)
     this.scene.add(this.instance)
-    console.log(this.scene)
   }
 
   setShadowsMap(widthMap, heightMap = widthMap) {

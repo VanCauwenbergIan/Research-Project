@@ -2,34 +2,39 @@ import '../index.css'
 import { initTest } from './Tests/testScript'
 import * as THREE from 'three'
 import Camera from './Cameras/perspectiveCamera'
-import { listenToScreenChanges } from './Utils/utils'
+import { onDrag, onMouseMove, onScreenChange } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
 import DirectionalLight from './Lights/directionalLight'
 import OrbitControls from './Controls/orbitControls'
+import DragControls from './Controls/dragControls'
+import {
+  computeBoundsTree,
+  disposeBoundsTree,
+  acceleratedRaycast,
+} from 'three-mesh-bvh'
 
 // DOM elements
 let htmlCanvas
 // Scene components
 let scene, renderer, camera
 // Object Meshes
-let pcCase
+let pcCase, psu
 //Data
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 }
-const cursor = {
-  x: 0,
-  y: 0,
-}
+const draggableObjects = []
+const currentlyDraggable = []
+let raycaster, pointer
 
 const initScene = () => {
   // Scene
   scene = new THREE.Scene()
 
   // Renderer
-  renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas })
+  renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas, antialias: true })
   renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.setSize(sizes.width, sizes.height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -39,6 +44,7 @@ const initScene = () => {
   loadCamera()
   loadModels()
   loadLights()
+  loadRaycaster()
   loadControls()
 }
 
@@ -69,14 +75,21 @@ const loadModels = () => {
     )
     .then((result) => {
       pcCase = result
-      // pcCase.scale.set(0.25, 0.25, 0.25)
-      // camera.instance.lookAt(pcCase.position)
       const box = new THREE.Box3().setFromObject(pcCase)
       const center = box.getCenter(new THREE.Vector3())
 
       pcCase.position.x += pcCase.position.x - center.x
       pcCase.position.y += pcCase.position.y - center.y
       pcCase.position.z += pcCase.position.z - center.z
+    })
+
+  gltfLoader
+    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb')
+    .then((result) => {
+      psu = result
+      draggableObjects.push(psu)
+
+      console.log(psu)
     })
 }
 
@@ -89,8 +102,39 @@ const loadLights = () => {
   )
 }
 
+const loadRaycaster = () => {
+  // Add bvh extensions to THREE
+  THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree
+  THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree
+  THREE.Mesh.prototype.raycast = acceleratedRaycast
+
+  raycaster = new THREE.Raycaster()
+  raycaster.firstHitOnly = true
+  pointer = new THREE.Vector2()
+  onMouseMove(
+    raycaster,
+    pointer,
+    camera.instance,
+    scene,
+    sizes,
+    draggableObjects,
+    currentlyDraggable,
+  )
+}
+
 const loadControls = () => {
-  new OrbitControls({ dampening: true }, camera.instance, htmlCanvas)
+  const orbitControls = new OrbitControls(
+    { dampening: true },
+    camera.instance,
+    htmlCanvas,
+  )
+  const dragControls = new DragControls(
+    currentlyDraggable,
+    camera.instance,
+    htmlCanvas,
+  )
+
+  onDrag(orbitControls.instance, dragControls.instance)
 }
 
 const tick = () => {
@@ -108,7 +152,7 @@ const tick = () => {
 
     // initTest()
     initScene()
-    listenToScreenChanges(sizes, camera, renderer)
+    onScreenChange(sizes, camera, renderer)
     tick()
   })
 })()
