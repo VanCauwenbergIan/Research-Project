@@ -1,9 +1,5 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import {
-  computeBoundsTree,
-  disposeBoundsTree,
-  acceleratedRaycast,
-} from 'three-mesh-bvh'
+import * as THREE from 'three'
 
 export default class ModelLoader {
   constructor(scene) {
@@ -27,7 +23,6 @@ export default class ModelLoader {
   onLoad(model, scene) {
     this.generateGeometry(model.scene)
     scene.add(model.scene)
-    console.log(model.scene)
 
     return model.scene
   }

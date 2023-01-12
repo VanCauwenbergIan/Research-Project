@@ -2,7 +2,7 @@ import '../index.css'
 import { initTest } from './Tests/testScript'
 import * as THREE from 'three'
 import Camera from './Cameras/perspectiveCamera'
-import { onDrag, onMouseMove, onScreenChange } from './Utils/utils'
+import { addHelpers, onDrag, onMouseMove, onScreenChange } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
 import DirectionalLight from './Lights/directionalLight'
@@ -18,16 +18,17 @@ import {
 let htmlCanvas
 // Scene components
 let scene, renderer, camera
-// Object Meshes
+// Objects
 let pcCase, psu
 //Data
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 }
-const draggableObjects = []
 const currentlyDraggable = []
 let raycaster, pointer
+// Controls
+let orbitControls, dragControls
 
 const initScene = () => {
   // Scene
@@ -41,11 +42,12 @@ const initScene = () => {
   renderer.setClearColor(0x333333, 1)
   renderer.physicallyCorrectLights = true
 
+  addHelpers(scene)
   loadCamera()
   loadModels()
   loadLights()
-  loadRaycaster()
   loadControls()
+  loadRaycaster()
 }
 
 const loadCamera = () => {
@@ -87,9 +89,13 @@ const loadModels = () => {
     .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb')
     .then((result) => {
       psu = result
-      draggableObjects.push(psu)
+      psu.position.set(0, -2, 3)
+      psu.scale.set(0.55, 0.55, 0.55)
+      psu.rotation.y = Math.PI * 1.5
+      psu.rotation.z = Math.PI
+      psu.isDraggable = true
 
-      console.log(psu)
+      console.log(psu.parent)
     })
 }
 
@@ -100,6 +106,23 @@ const loadLights = () => {
     { color: 0xffffff, intensity: 10, x: -14, y: 2.5, z: 11.2 },
     scene,
   )
+}
+
+const loadControls = () => {
+  orbitControls = new OrbitControls(
+    { dampening: true },
+    camera.instance,
+    htmlCanvas,
+  )
+  dragControls = new DragControls(
+    currentlyDraggable,
+    camera.instance,
+    htmlCanvas,
+  )
+
+  dragControls.instance.transformGroup = true
+
+  onDrag(orbitControls.instance, dragControls.instance)
 }
 
 const loadRaycaster = () => {
@@ -117,24 +140,8 @@ const loadRaycaster = () => {
     camera.instance,
     scene,
     sizes,
-    draggableObjects,
     currentlyDraggable,
   )
-}
-
-const loadControls = () => {
-  const orbitControls = new OrbitControls(
-    { dampening: true },
-    camera.instance,
-    htmlCanvas,
-  )
-  const dragControls = new DragControls(
-    currentlyDraggable,
-    camera.instance,
-    htmlCanvas,
-  )
-
-  onDrag(orbitControls.instance, dragControls.instance)
 }
 
 const tick = () => {
