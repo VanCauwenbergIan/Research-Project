@@ -11,14 +11,15 @@ export default class DirectionalLight extends Light {
     this.z = params.z
     this.scene = scene
     this.addLight()
-    this.addShadowsMap(1024)
+    this.setShadowsMap(1024)
     this.setShadowsCamera(15, -7, 7, 7, -7)
   }
 
   addLight() {
     this.instance = new THREE.DirectionalLight(this.color, this.intensity)
     this.instance.position.set(this.x, this.y, this.z)
-    this.scene.add(instance)
+    this.scene.add(this.instance)
+    console.log(this.scene)
   }
 
   setShadowsMap(widthMap, heightMap = widthMap) {

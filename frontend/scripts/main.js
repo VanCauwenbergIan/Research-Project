@@ -3,9 +3,9 @@ import { initTest } from './Tests/testScript'
 import * as THREE from 'three'
 import Camera from './Cameras/perspectiveCamera'
 import { listenToScreenChanges } from './Utils/utils'
-import GTLFLoader from './Models/gltfLoader'
+import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
-import { DirectionalLight } from 'three'
+import DirectionalLight from './Lights/directionalLight'
 import OrbitControls from './Controls/orbitControls'
 
 // DOM elements
@@ -30,10 +30,11 @@ const initScene = () => {
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas })
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.setSize(sizes.width, sizes.height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setClearColor(0x333333, 1)
+  renderer.physicallyCorrectLights = true
 
   loadCamera()
   loadModels()
@@ -81,9 +82,9 @@ const loadModels = () => {
 
 const loadLights = () => {
   // Add basic light to see models
-  new AmbientLight({ color: 0xffffff, intensity: 8 }, scene)
+  new AmbientLight({ color: 0xffffff, intensity: 2 }, scene)
   new DirectionalLight(
-    { color: 0xffffff, intensity: 1, x: -14, y: 2.5, z: 11.2 },
+    { color: 0xffffff, intensity: 10, x: -14, y: 2.5, z: 11.2 },
     scene,
   )
 }
