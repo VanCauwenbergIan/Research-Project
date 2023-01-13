@@ -5,9 +5,10 @@ export class LoadingManager {
   instance
   overlay
 
-  constructor(scene, domElement) {
+  constructor(scene, domLoader, gui) {
     this.scene = scene
-    this.domElement = domElement
+    this.domLoader = domLoader
+    this.gui = gui
     this.addLoader()
   }
 
@@ -42,7 +43,7 @@ export class LoadingManager {
     this.scene.add(this.overlay)
     this.instance = new THREE.LoadingManager(
       () => this.onLoad(this.overlay),
-      (url, done, togo) => this.onProgress(url, done, togo, this.domElement),
+      (url, done, togo) => this.onProgress(url, done, togo, this.domLoader),
       this.onError,
     )
   }
@@ -51,12 +52,19 @@ export class LoadingManager {
     gsap.delayedCall(0.5, () => {
       gsap.to(overlay.material.uniforms.uAlpha, { duration: 3, value: 0 })
 
-      this.domElement.style.transform = 'scaleX(0)'
-      this.domElement.classList.remove('origin-top-left')
-      this.domElement.classList.add('origin-top-right')
-      this.domElement.classList.remove('duration-500')
-      this.domElement.classList.add('duration-[1500]')
-      this.domElement.classList.add('ease-in-out')
+      // Loader
+      this.domLoader.style.transform = 'scaleX(0)'
+      this.domLoader.classList.remove('origin-top-left')
+      this.domLoader.classList.add('origin-top-right')
+      this.domLoader.classList.remove('duration-500')
+      this.domLoader.classList.add('duration-[1500]')
+      this.domLoader.classList.add('ease-in-out')
+
+      gsap.delayedCall(1.5, () => {
+        // Open menus
+        this.gui.style.visibility = 'visible'
+        gsap.to(this.gui, { duration: 1.5, opacity: 1 })
+      })
     })
   }
 

@@ -25,7 +25,7 @@ import SnappingBox from './Utils/snappingBox'
 import { LoadingManager } from './Loaders/loadingManager'
 
 // DOM elements
-let htmlCanvas, htmlLoader, htmlMenu
+let htmlCanvas, htmlLoader, htmlMainMenu, htmlHeader, htmlFooter, htmlGUI
 // Scene components
 let scene, renderer, camera, loadingManager
 // Objects
@@ -47,14 +47,14 @@ const initScene = () => {
   scene = new THREE.Scene()
 
   // Loader
-  loadingManager = new LoadingManager(scene, htmlLoader)
+  loadingManager = new LoadingManager(scene, htmlLoader, htmlGUI)
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas, antialias: true })
   renderer.shadowMap.type = THREE.PCFShadowMap
   renderer.setSize(sizes.width, sizes.height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.setClearColor(0x333333, 1)
+  renderer.setClearColor(0xccd7d6, 1)
   renderer.physicallyCorrectLights = true
 
   addHelpers(scene)
@@ -197,6 +197,10 @@ const updateBoundingBoxes = () => {
     console.log('DOM loaded')
     htmlCanvas = document.querySelector('.webgl')
     htmlLoader = document.querySelector('.loading-bar')
+    htmlGUI = document.querySelector('.gui')
+    htmlMainMenu = htmlGUI.querySelector('.gui-main-menu')
+    htmlHeader = htmlGUI.querySelector('.gui-header')
+    htmlFooter = htmlGUI.querySelector('.gui-footer')
 
     // initTest()
     initScene()
