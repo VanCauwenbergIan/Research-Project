@@ -5,6 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RP - PC Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body class="overflow-hidden">
     <div id="app">
@@ -12,15 +18,18 @@
       <div
         class="loading-bar absolute top-1/2 w-full h-[2px] bg-white scale-x-0 origin-top-left transition-transform duration-500"
       ></div>
-      <div class="gui opacity-0" style="visibility: hidden">
+      <div
+        class="gui font-roboto opacity-0 text-primary_dark"
+        style="visibility: hidden"
+      >
         <header
           class="gui-header bg-primary_light absolute top-0 left-0 m-10 rounded-2xl p-5"
         >
-          <h1>PC Builder</h1>
-          <p>Price:</p>
+          <h1 class="text-secondary font-black text-xl">PC Builder</h1>
+          <p class="text-lg">Price:</p>
         </header>
         <main
-          class="gui-main-menu absolute top-0 right-0 h-full max-h-[calc(100vh-80px)] bg-primary_light [ p-5 overflow-y-auto m-10 rounded-2xl"
+          class="gui-main-menu absolute top-0 right-0 h-full max-h-[calc(100vh-80px)] bg-primary_light p-5 overflow-y-auto m-10 rounded-2xl"
         ></main>
         <footer
           class="gui-footer absolute bottom-0 flex w-full justify-center pointer-events-none"

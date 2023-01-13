@@ -57,7 +57,7 @@ const initScene = () => {
   renderer.setClearColor(0xccd7d6, 1)
   renderer.physicallyCorrectLights = true
 
-  addHelpers(scene)
+  // addHelpers(scene)
   loadCamera()
   loadModels()
   loadLights()
