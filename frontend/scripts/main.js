@@ -29,7 +29,7 @@ let htmlCanvas, htmlLoader, htmlMainMenu, htmlHeader, htmlFooter, htmlGUI
 // Scene components
 let scene, renderer, camera, loadingManager
 // Objects
-let pcCase, psu, snappingBox
+let pcCase, psu, motherboard, snappingBox
 //Data
 const sizes = {
   width: window.innerWidth,
@@ -40,7 +40,7 @@ let raycaster, pointer
 // Controls
 let orbitControls, dragControls
 // Bounding boxes
-let caseBB, psuBB
+let caseBB, psuBB, motherboardBB
 
 const initScene = () => {
   // Scene
@@ -90,6 +90,7 @@ const loadModels = () => {
     .addModel(
       '../assets/models/PC/Cases/computer_case_based_off_of_nzxt_510b.glb',
       'case',
+      true,
     )
     .then((result) => {
       pcCase = result
@@ -101,9 +102,8 @@ const loadModels = () => {
       pcCase.position.y += pcCase.position.y - center.y
       pcCase.position.z += pcCase.position.z - center.z
     })
-
   gltfLoader
-    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb', 'psu')
+    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb', 'psu', true)
     .then((result) => {
       psu = result
       psuBB = new THREE.Box3().setFromObject(psu)
@@ -112,6 +112,18 @@ const loadModels = () => {
       psu.rotation.y = Math.PI * 1.5
       psu.rotation.z = Math.PI
       psu.isDraggable = true
+    })
+  gltfLoader
+    .addModel(
+      '../assets/models/PC/Motherboards/motherboard_am4.glb',
+      'motherboard'
+    )
+    .then((result) => {
+      motherboard = result
+      motherboardBB = new THREE.Box3().setFromObject(motherboard)
+      motherboard.scale.set(0.49, 0.49, 0.49)
+      motherboard.rotation.x = Math.PI / 2
+      motherboard.isDraggable = true
     })
 }
 
