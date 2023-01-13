@@ -9,6 +9,7 @@ import {
   onMouseMove,
   onScreenChange,
   onMouseUp,
+  checkCollision,
 } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
@@ -107,8 +108,6 @@ const loadModels = () => {
       psu.rotation.y = Math.PI * 1.5
       psu.rotation.z = Math.PI
       psu.isDraggable = true
-
-      console.log(psu)
     })
 }
 
@@ -174,14 +173,23 @@ const tick = () => {
 const updateBoundingBoxes = () => {
   if (snappingBox) {
     snappingBox.updateBoundingBox()
-  }
-  if (caseBB && psuBB) {
-    psuBB = new THREE.Box3().setFromObject(psu)
+
+    if (caseBB && psuBB) {
+      psuBB = new THREE.Box3().setFromObject(psu)
+
+      checkCollision(
+        snappingBox,
+        psuBB,
+        psu,
+        dragControls.instance,
+        orbitControls.instance,
+      )
+    }
   }
 }
 
 ;(() => {
-  window.addEventListener('DOMContentLoaded', (e) => {
+  window.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded')
     htmlCanvas = document.querySelector('.webgl')
 

@@ -75,7 +75,7 @@ export const onMouseDown = (raycaster, pointer, camera, scene, sizes, box) => {
       while (object.parent.parent !== null) {
         object = object.parent
       }
-      if (object.name === 'psu') {
+      if (object.name === 'psu' && object.isDraggable) {
         box.addPSUBox()
       }
     }
@@ -104,3 +104,47 @@ export const onMouseUp = (raycaster, pointer, camera, scene, sizes, box) => {
   })
 }
 
+export const checkCollision = (
+  snappingBox,
+  bb2,
+  model,
+  dragControls,
+  orbitControls,
+) => {
+  const bb1 = snappingBox.boundingBox
+
+  if (bb2.intersectsBox(bb1) && !orbitControls.enabled) {
+    const center = bb1.getCenter(new THREE.Vector3())
+    const sizeBB = bb1.getSize(new THREE.Vector3())
+    const sizeModel = bb2.getSize(new THREE.Vector3())
+
+    dragControls.deactivate()
+    model.isDraggable = false
+    snappingBox.removeBox()
+
+    console.log(center)
+
+    if (center.x >= 0) {
+      model.position.x = center.x + (sizeBB.x - sizeModel.x) / 2
+    } else {
+      model.position.x = center.x - (sizeBB.x - sizeModel.x) / 2
+    }
+    if (center.y >= 0) {
+      model.position.y = center.y + (sizeBB.y - sizeModel.y) / 2
+    } else {
+      model.position.y = center.y - (sizeBB.y - sizeModel.y) / 2
+    }
+    if (center.z >= 0) {
+      model.position.z = center.z + (sizeBB.z - sizeModel.z) / 2
+    } else {
+      model.position.z = center.z - (sizeBB.z - sizeModel.z) / 2
+    }
+
+    // console.log(model.position)
+
+    window.addEventListener('mouseup', () => {
+      orbitControls.enabled = true
+      window.removeEventListener('mouseup', this)
+    })
+  }
+}
