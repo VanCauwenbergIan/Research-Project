@@ -122,8 +122,6 @@ export const checkCollision = (
     model.isDraggable = false
     snappingBox.removeBox()
 
-    console.log(center)
-
     if (center.x >= 0) {
       model.position.x = center.x + (sizeBB.x - sizeModel.x) / 2
     } else {
@@ -139,8 +137,6 @@ export const checkCollision = (
     } else {
       model.position.z = center.z - (sizeBB.z - sizeModel.z) / 2
     }
-
-    // console.log(model.position)
 
     window.addEventListener('mouseup', () => {
       orbitControls.enabled = true
