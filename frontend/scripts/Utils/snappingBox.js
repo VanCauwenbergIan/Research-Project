@@ -10,12 +10,16 @@ export default class SnappingBox {
     let geometry = new THREE.BoxGeometry(1, 1, 1)
     let material = new THREE.MeshBasicMaterial({
       color: 0xef6b50,
-      transparent: true,
       opacity: 0.5,
+      side: THREE.DoubleSide,
+      transparent: true,
+      // wireframe: true,
     })
+    // bug with transparency => change render order
 
     this.mesh = new THREE.Mesh(geometry, material)
     this.mesh.name = 'snappingBox'
+    this.mesh.renderOrder = -1
     this.boundingBox = new THREE.Box3().setFromObject(this.mesh)
     console.log(this.boundingBox)
   }

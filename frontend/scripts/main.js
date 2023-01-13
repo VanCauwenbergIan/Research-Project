@@ -70,8 +70,8 @@ const loadCamera = () => {
   camera = new Camera(
     {
       fov: 50,
-      near: 0.01,
-      far: 1000,
+      near: 0.1,
+      far: 100,
       x: 4.4,
       y: 1.8,
       z: 7.2,
