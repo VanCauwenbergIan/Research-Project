@@ -8,10 +8,28 @@
   </head>
   <body class="overflow-hidden">
     <div id="app">
-      <canvas class="webgl fixed top-0 left-0 outline-none"> </canvas>
+      <canvas class="webgl fixed top-0 left-0 outline-none"></canvas>
       <div
         class="loading-bar absolute top-1/2 w-full h-[2px] bg-white scale-x-0 origin-top-left transition-transform duration-500"
       ></div>
+      <div class="gui hidden opacity-0">
+        <header
+          class="gui-header bg-[#fefefe] absolute top-0 left-0 m-10 rounded-2xl p-5"
+        >
+          <h1>PC Builder</h1>
+          <p>Price:</p>
+        </header>
+        <main
+          class="gui-main-menu absolute top-0 right-0 h-full max-h-[calc(100vh-80px)] bg-[#fefefe] p-5 overflow-y-auto m-10 rounded-2xl"
+        ></main>
+        <footer
+          class="gui-footer absolute bottom-0 flex w-full justify-center pointer-events-none"
+        >
+          <p class="bg-[#fefefe] p-5 my-10 pointer-events-auto rounded-2xl">
+            Choose a...
+          </p>
+        </footer>
+      </div>
     </div>
     <script type="module" src="/scripts/main.js"></script>
   </body>
