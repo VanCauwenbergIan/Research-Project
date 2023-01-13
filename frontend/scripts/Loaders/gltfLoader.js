@@ -1,9 +1,8 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import * as THREE from 'three'
 
 export default class ModelLoader {
-  constructor(scene) {
-    this.instance = new GLTFLoader()
+  constructor(scene, loadingManager) {
+    this.instance = new GLTFLoader(loadingManager)
     this.scene = scene
   }
 

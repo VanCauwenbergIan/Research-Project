@@ -22,11 +22,12 @@ import {
   acceleratedRaycast,
 } from 'three-mesh-bvh'
 import SnappingBox from './Utils/snappingBox'
+import { LoadingManager } from './Loaders/loadingManager'
 
 // DOM elements
-let htmlCanvas
+let htmlCanvas, htmlLoader, htmlMenu
 // Scene components
-let scene, renderer, camera
+let scene, renderer, camera, loadingManager
 // Objects
 let pcCase, psu, snappingBox
 //Data
@@ -44,6 +45,9 @@ let caseBB, psuBB
 const initScene = () => {
   // Scene
   scene = new THREE.Scene()
+
+  // Loader
+  loadingManager = new LoadingManager(scene, htmlLoader)
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ canvas: htmlCanvas, antialias: true })
@@ -80,7 +84,7 @@ const loadCamera = () => {
 }
 
 const loadModels = () => {
-  const gltfLoader = new GTLFLoader(scene)
+  const gltfLoader = new GTLFLoader(scene, loadingManager.instance)
 
   gltfLoader
     .addModel(
@@ -192,6 +196,7 @@ const updateBoundingBoxes = () => {
   window.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded')
     htmlCanvas = document.querySelector('.webgl')
+    htmlLoader = document.querySelector('.loading-bar')
 
     // initTest()
     initScene()
