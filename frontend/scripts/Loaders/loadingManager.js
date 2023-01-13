@@ -62,8 +62,8 @@ export class LoadingManager {
 
       gsap.delayedCall(1.5, () => {
         // Open menus
-        this.gui.classList.remove('hidden')
-        gsap.to(this.gui, { duration: 3, opacity: 1 })
+        this.gui.style.visibility = 'visible'
+        gsap.to(this.gui, { duration: 1.5, opacity: 1 })
       })
     })
   }
