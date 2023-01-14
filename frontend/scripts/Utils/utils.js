@@ -1,11 +1,8 @@
 import * as THREE from 'three'
 
-export const addHelpers = (scene) => {
-  const axesHelper = new THREE.AxesHelper()
-  // const gridHelper = new THREE.GridHelper()
-
-  scene.add(axesHelper)
-}
+/**
+ * Event listeners
+ */
 
 export const onScreenChange = (sizes, camera, renderer) => {
   window.addEventListener('resize', () => {
@@ -39,70 +36,46 @@ export const onMouseMove = (
   window.addEventListener('mousemove', (e) => {
     // reassigning the array won't be noticed by three.js
     currentlyDraggable.length = 0
-    pointer.x = (e.clientX / sizes.width) * 2 - 1
-    pointer.y = -(e.clientY / sizes.height) * 2 + 1
+    refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera)
-    raycaster.firstHitOnly = true
-    // raycaster is too performance intensive on large objects without bvh
 
-    let intersects = raycaster.intersectObjects(scene.children)
+    let object = getFirstIntersect(raycaster, scene)
 
-    if (intersects.length > 0) {
-      let object = intersects[0].object
-
-      while (object.parent.parent !== null) {
-        object = object.parent
-      }
-      if (object.isDraggable) {
-        currentlyDraggable.push(object)
-      }
+    if (object && object.isDraggable) {
+      currentlyDraggable.push(object)
     }
   })
 }
 
 export const onMouseDown = (raycaster, pointer, camera, scene, sizes, box) => {
   window.addEventListener('mousedown', (e) => {
-    pointer.x = (e.clientX / sizes.width) * 2 - 1
-    pointer.y = -(e.clientY / sizes.height) * 2 + 1
+    refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera)
-    raycaster.firstHitOnly = true
 
-    let intersects = raycaster.intersectObjects(scene.children)
+    let object = getFirstIntersect(raycaster, scene)
 
-    if (intersects.length > 0) {
-      let object = intersects[0].object
-
-      while (object.parent.parent !== null) {
-        object = object.parent
-      }
-      if (object.name === 'psu' && object.isDraggable) {
-        box.addPSUBox()
-      }
+    if (object && object.name === 'psu' && object.isDraggable) {
+      box.addPSUBox()
     }
   })
 }
 
 export const onMouseUp = (raycaster, pointer, camera, scene, sizes, box) => {
   window.addEventListener('mouseup', (e) => {
-    pointer.x = (e.clientX / sizes.width) * 2 - 1
-    pointer.y = -(e.clientY / sizes.height) * 2 + 1
+    refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera)
-    raycaster.firstHitOnly = true
 
-    let intersects = raycaster.intersectObjects(scene.children)
+    let object = getFirstIntersect(raycaster, scene)
 
-    if (intersects.length > 0) {
-      let object = intersects[0].object
-
-      while (object.parent.parent !== null) {
-        object = object.parent
-      }
-      if (object.name === 'psu') {
-        box.removeBox()
-      }
+    if (object && object.name === 'psu') {
+      box.removeBox()
     }
   })
 }
+
+/**
+ * General purpose functions
+ */
 
 export const checkCollision = (
   snappingBox,
@@ -143,4 +116,74 @@ export const checkCollision = (
       window.removeEventListener('mouseup', this)
     })
   }
+}
+
+export const initMenuItems = (menu, canvas, event) => {
+  for (const child of menu.children) {
+    child.setAttribute('draggable', true)
+    child.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', child.id)
+    })
+  }
+
+  canvas.addEventListener('dragover', (e) => {
+    e.preventDefault()
+  })
+  canvas.addEventListener('dragenter', (e) => {
+    e.preventDefault()
+  })
+  canvas.addEventListener('drop', (e) => {
+    e.preventDefault()
+
+    let data = e.dataTransfer.getData('text/plain')
+
+    event.chosenModel = data
+    canvas.dispatchEvent(event)
+  })
+}
+
+export const convertMouseToVector3 = (pointer, camera) => {
+  // convert x and y (-1,1) of mouse to 3d coordinates in world space
+  const vector = new THREE.Vector3()
+  const position = new THREE.Vector3()
+
+  vector.set(pointer.x, pointer.y, 0.5)
+  vector.unproject(camera)
+  vector.sub(camera.position).normalize()
+
+  const distance = -camera.position.z / vector.z
+
+  position.copy(camera.position).add(vector.multiplyScalar(distance))
+
+  return vector
+}
+
+const refreshMouse = (pointer, sizes, e) => {
+  pointer.x = (e.clientX / sizes.width) * 2 - 1
+  pointer.y = -(e.clientY / sizes.height) * 2 + 1
+}
+
+const getFirstIntersect = (raycaster, scene) => {
+  let intersects = raycaster.intersectObjects(scene.children)
+
+  if (intersects.length > 0) {
+    let object = intersects[0].object
+
+    while (object.parent.parent !== null) {
+      object = object.parent
+    }
+
+    return object
+  }
+}
+
+/**
+ * Debugging only
+ */
+
+export const addHelpers = (scene) => {
+  const axesHelper = new THREE.AxesHelper()
+  // const gridHelper = new THREE.GridHelper()
+
+  scene.add(axesHelper)
 }
