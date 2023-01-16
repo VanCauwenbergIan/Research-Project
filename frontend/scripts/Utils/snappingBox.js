@@ -21,7 +21,6 @@ export default class SnappingBox {
     this.mesh.name = 'snappingBox'
     this.mesh.renderOrder = -1
     this.boundingBox = new THREE.Box3().setFromObject(this.mesh)
-    console.log(this.boundingBox)
   }
 
   updateBoundingBox() {

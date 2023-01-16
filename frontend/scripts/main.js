@@ -10,6 +10,8 @@ import {
   onScreenChange,
   onMouseUp,
   checkCollision,
+  initMenuItems,
+  convertMouseToVector3,
 } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
@@ -29,18 +31,20 @@ let htmlCanvas, htmlLoader, htmlMainMenu, htmlHeader, htmlFooter, htmlGUI
 // Scene components
 let scene, renderer, camera, loadingManager
 // Objects
-let pcCase, psu, snappingBox
+let pcCase, psu, motherboard, motherboard2, snappingBox
 //Data
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
 }
-const currentlyDraggable = []
+let currentlyDraggable = []
 let raycaster, pointer
 // Controls
 let orbitControls, dragControls
 // Bounding boxes
-let caseBB, psuBB
+let caseBB, psuBB, motherboardBB, motherboardBB2
+// Events
+const newModelDraggedIn = new Event('model-dragged-in')
 
 const initScene = () => {
   // Scene
@@ -63,6 +67,25 @@ const initScene = () => {
   loadLights()
   loadControls()
   loadRaycaster()
+
+  initMenuItems(htmlMainMenu, htmlCanvas, newModelDraggedIn)
+
+  htmlCanvas.addEventListener('model-dragged-in', (e) => {
+    // for testing
+    console.log(e.chosenModel)
+
+    const currentOptions = [motherboard, motherboard2]
+    const chosenObject = currentOptions.find(
+      (option) => option.name === e.chosenModel,
+    )
+
+    console.log(chosenObject)
+    const newPosition = convertMouseToVector3(pointer, camera.instance)
+    console.log(newPosition)
+
+    chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
+    scene.add(chosenObject)
+  })
 }
 
 const loadCamera = () => {
@@ -90,6 +113,7 @@ const loadModels = () => {
     .addModel(
       '../assets/models/PC/Cases/computer_case_based_off_of_nzxt_510b.glb',
       'case',
+      true,
     )
     .then((result) => {
       pcCase = result
@@ -101,9 +125,8 @@ const loadModels = () => {
       pcCase.position.y += pcCase.position.y - center.y
       pcCase.position.z += pcCase.position.z - center.z
     })
-
   gltfLoader
-    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb', 'psu')
+    .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb', 'psu', true)
     .then((result) => {
       psu = result
       psuBB = new THREE.Box3().setFromObject(psu)
@@ -112,6 +135,30 @@ const loadModels = () => {
       psu.rotation.y = Math.PI * 1.5
       psu.rotation.z = Math.PI
       psu.isDraggable = true
+    })
+  gltfLoader
+    .addModel(
+      '../assets/models/PC/Motherboards/motherboard_am4.glb',
+      'motherboard',
+    )
+    .then((result) => {
+      motherboard = result
+      motherboardBB = new THREE.Box3().setFromObject(motherboard)
+      motherboard.scale.set(0.49, 0.49, 0.49)
+      motherboard.rotation.x = Math.PI / 2
+      motherboard.isDraggable = true
+    })
+  gltfLoader
+    .addModel(
+      '../assets//models/PC/Motherboards/maximus_vi_formula.glb',
+      'motherboard2',
+    )
+    .then((result) => {
+      motherboard2 = result
+      motherboardBB2 = new THREE.Box3().setFromObject(motherboard2)
+      motherboard2.scale.set(0.6, 0.6, 0.6)
+      motherboard2.rotation.y = Math.PI * 1.5
+      motherboard2.isDraggable = true
     })
 }
 
@@ -149,6 +196,7 @@ const loadRaycaster = () => {
 
   raycaster = new THREE.Raycaster()
   raycaster.firstHitOnly = true
+  // raycaster is too performance intensive on large objects without bvh
   pointer = new THREE.Vector2()
   snappingBox = new SnappingBox(scene)
   onMouseMove(
