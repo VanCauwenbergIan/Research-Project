@@ -19,7 +19,7 @@ export class ComponentsResolver {
   }
 
   @Query(() => Component, { name: 'component' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.componentsService.findOne(id);
   }
 
@@ -29,7 +29,7 @@ export class ComponentsResolver {
   }
 
   @Mutation(() => Component)
-  removeComponent(@Args('id', { type: () => Int }) id: number) {
+  removeComponent(@Args('id', { type: () => String }) id: string) {
     return this.componentsService.remove(id);
   }
 }

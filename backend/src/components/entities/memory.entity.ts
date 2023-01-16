@@ -1,5 +1,6 @@
 import { Field, Int, registerEnumType } from '@nestjs/graphql';
 import { Column } from 'typeorm';
+import { Component } from './component.entity';
 
 export enum MemoryTypes {
   ddr3 = 'DDR3',
@@ -11,7 +12,7 @@ registerEnumType(MemoryTypes, {
   name: 'MemoryTypes',
 });
 
-export class Memory {
+export class Memory extends Component {
   @Field(() => MemoryTypes)
   @Column()
   generation: MemoryTypes;

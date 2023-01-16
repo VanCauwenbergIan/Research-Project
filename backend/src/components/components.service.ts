@@ -5,22 +5,22 @@ import { UpdateComponentInput } from './dto/update-component.input';
 @Injectable()
 export class ComponentsService {
   create(createComponentInput: CreateComponentInput) {
-    return 'This action adds a new component';
+    console.log('This action adds a new component');
   }
 
   findAll() {
-    return `This action returns all components`;
+    console.log(`This action returns all components`);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} component`;
+  findOne(id: string) {
+    console.log(`This action returns a #${id} component`);
   }
 
-  update(id: number, updateComponentInput: UpdateComponentInput) {
-    return `This action updates a #${id} component`;
+  update(id: string, updateComponentInput: UpdateComponentInput) {
+    console.log(`This action updates a #${id} component`);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} component`;
+  remove(id: string) {
+    console.log(`This action removes a #${id} component`);
   }
 }

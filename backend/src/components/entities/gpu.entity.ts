@@ -2,7 +2,7 @@ import { Field, Float, Int } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 import { Component } from './component.entity';
 
-enum VramTypes {
+export enum VramTypes {
   gddr5 = 'GDDR5',
   gddr6 = 'GDDR5',
 }

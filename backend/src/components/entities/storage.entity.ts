@@ -2,12 +2,12 @@ import { Field, Int } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 import { Component } from './component.entity';
 
-enum StorageTypes {
+export enum StorageTypes {
   ssd = 'SSD',
   hdd = 'HDD',
 }
 
-enum StorageFormats {
+export enum StorageFormats {
   sata = 'SATA',
   pcie = 'PCIe',
   m2 = 'M2',

@@ -24,7 +24,7 @@ export class Component {
   @Column({ nullable: true })
   imageUrl?: string;
 
-  @Field()
   @Field({ defaultValue: true })
+  @Column()
   active: boolean;
 }
