@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+  mongodb:
+    image: mongo
+    restart: on-failure:5
+    ports:
+      - 27200:27017
+    environment:
+      MONGO_INITDB_DATABASE: api
+    volumes:
+      - dbvolume:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: on-failure:5
+    ports:
+      - 8200:8081
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+    depends_on:
+      - mongodb
+    
+volumes:
+  dbvolume:

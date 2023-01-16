@@ -155,7 +155,7 @@ export const convertMouseToVector3 = (pointer, camera) => {
 
   position.copy(camera.position).add(vector.multiplyScalar(distance))
 
-  return vector
+  return position
 }
 
 const refreshMouse = (pointer, sizes, e) => {
