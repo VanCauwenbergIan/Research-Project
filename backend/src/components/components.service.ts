@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateComponentInput } from './dto/create-component.input';
 import { UpdateComponentInput } from './dto/update-component.input';
 
+
+
 @Injectable()
 export class ComponentsService {
   create(createComponentInput: CreateComponentInput) {

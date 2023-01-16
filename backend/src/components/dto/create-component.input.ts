@@ -1,9 +1,13 @@
 import { Field, Float, InputType } from '@nestjs/graphql';
+import { ObjectTypes } from '../entities/component.entity';
 
 @InputType()
 export class CreateComponentInput {
   @Field()
   name: string;
+
+  @Field(() => ObjectTypes)
+  objectType: ObjectTypes;
 
   @Field()
   manufacturer: string;

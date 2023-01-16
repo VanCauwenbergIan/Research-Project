@@ -1,35 +1,72 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  createUnionType,
+} from '@nestjs/graphql';
+import {
+  ClientMessage,
+  ComponentOutputUnion,
+} from 'src/bootstrap/entities/clientMessage';
 import { ComponentsService } from './components.service';
+import { CreateDynamicInput } from './dto/create-dynamic.input';
+import { UpdateDynamicInput } from './dto/update-dynamic.input';
 import { Component } from './entities/component.entity';
-import { CreateComponentInput } from './dto/create-component.input';
-import { UpdateComponentInput } from './dto/update-component.input';
+import { Cooler } from './entities/cooler.entity';
 
-@Resolver(() => Component)
+@Resolver(() => ComponentOutputUnion)
 export class ComponentsResolver {
   constructor(private readonly componentsService: ComponentsService) {}
 
-  @Mutation(() => Component)
-  createComponent(@Args('createComponentInput') createComponentInput: CreateComponentInput) {
-    return this.componentsService.create(createComponentInput);
+  @Mutation(() => ComponentOutputUnion)
+  createComponent(
+    @Args('createComponentInput')
+    createComponentInput: CreateDynamicInput,
+  ): typeof ComponentOutputUnion {
+    // return this.componentsService.create(createComponentInput);
+    const test = new Cooler();
+    test.diameter = 1;
+    return test;
   }
 
-  @Query(() => [Component], { name: 'components' })
-  findAll() {
-    return this.componentsService.findAll();
+  @Query(() => [ComponentOutputUnion], { name: 'components' })
+  findAll(): Array<typeof ComponentOutputUnion> {
+    // return this.componentsService.findAll();
+    const test = new Cooler();
+    test.diameter = 1;
+    return [test];
   }
 
-  @Query(() => Component, { name: 'component' })
-  findOne(@Args('id', { type: () => String }) id: string) {
-    return this.componentsService.findOne(id);
+  @Query(() => ComponentOutputUnion, { name: 'component' })
+  findOne(
+    @Args('id', { type: () => String }) id: string,
+  ): typeof ComponentOutputUnion {
+    // return this.componentsService.findOne(id);
+    const test = new Cooler();
+    test.diameter = 1;
+    return test;
   }
 
-  @Mutation(() => Component)
-  updateComponent(@Args('updateComponentInput') updateComponentInput: UpdateComponentInput) {
-    return this.componentsService.update(updateComponentInput.id, updateComponentInput);
+  @Mutation(() => ComponentOutputUnion)
+  updateComponent(
+    @Args('updateComponentInput')
+    updateComponentInput: UpdateDynamicInput,
+  ): typeof ComponentOutputUnion {
+    // return this.componentsService.update(
+    //   updateComponentInput.id,
+    //   updateComponentInput,
+    // );
+    const test = new Cooler();
+    test.diameter = 1;
+    return test
   }
 
-  @Mutation(() => Component)
-  removeComponent(@Args('id', { type: () => String }) id: string) {
-    return this.componentsService.remove(id);
+  @Mutation(() => ComponentOutputUnion)
+  removeComponent(@Args('id', { type: () => String }) id: string): typeof ComponentOutputUnion  {
+    // return this.componentsService.remove(id);
+    const test = new Cooler();
+    test.diameter = 1;
+    return test;
   }
 }

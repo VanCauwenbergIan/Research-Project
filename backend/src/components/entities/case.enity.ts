@@ -1,11 +1,24 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
+import {
+  createUnionType,
+  Field,
+  Float,
+  Int,
+  ObjectType,
+} from '@nestjs/graphql';
 import { Column } from 'typeorm';
 import { BoundingBox } from './boundingbox.entity';
 import { Component } from './component.entity';
 import { MoboTypes } from './motherboard.entity';
+// import { Cooler } from './cooler.entity';
+// import { CPU } from './cpu.entity';
+// import { CPUCooler } from './cpucooler.entity';
+// import { GPU } from './gpu.entity';
+// import { Memory } from './memory.entity';
+// import { MoboTypes, Motherboard } from './motherboard.entity';
+// import { PSU } from './psu.entity';
 
 @ObjectType()
-export class Clase extends Component {
+export class Case extends Component {
   @Field(() => [MoboTypes])
   @Column()
   supportedMotherboardFormats: [MoboTypes];

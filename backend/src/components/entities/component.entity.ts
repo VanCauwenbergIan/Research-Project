@@ -1,6 +1,28 @@
-import { ObjectType, Field, ID, Float } from '@nestjs/graphql';
-import { ObjectIdColumn, Column, Entity } from 'typeorm';
+import {
+  ObjectType,
+  Field,
+  ID,
+  Float,
+  registerEnumType,
+} from '@nestjs/graphql';
+import { ObjectIdColumn, Column } from 'typeorm';
 import { ObjectId } from 'mongodb';
+
+export enum ObjectTypes {
+  case = 'PC Case',
+  cooler = 'Case Cooler',
+  cpu = 'CPU',
+  cpu_cooler = 'CPU Cooler',
+  gpu = 'GPU',
+  memory = 'Memory',
+  motherboard = 'Motherboard',
+  psu = 'PSU',
+  storage = 'Storage',
+}
+
+registerEnumType(ObjectTypes, {
+  name: 'ObjectTypes',
+});
 
 @ObjectType()
 export class Component {
@@ -11,6 +33,10 @@ export class Component {
   @Field()
   @Column()
   name: string;
+
+  @Field(() => ObjectTypes)
+  @Column()
+  objectType: ObjectTypes;
 
   @Field()
   @Column()

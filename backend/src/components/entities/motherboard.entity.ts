@@ -10,7 +10,6 @@ export enum MoboTypes {
   atx = 'ATX',
   e_atx = 'E-ATX',
 }
-
 export enum SocketTypes {
   lga1151 = 'LGA 1151',
   lga2066 = 'LGA 2066',
