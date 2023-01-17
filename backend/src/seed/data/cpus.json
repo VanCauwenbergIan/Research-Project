@@ -1,0 +1,20 @@
+[
+  {
+    "name": "",
+    "objectType": "CPU",
+    "manufacturer": "",
+    "price": 0.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "active": true,
+
+    "series": "",
+    "integratedGraphics": true,
+    "socket": "",
+    "coreCount": 0,
+    "threadCount": 0,
+    "clockSpeed": 0.0,
+    "cacheSize": 0,
+    "tdp": 0
+  }
+]

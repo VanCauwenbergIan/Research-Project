@@ -1,0 +1,35 @@
+[
+  {
+    "name": "",
+    "objectType": "PC Case",
+    "manufacturer": "",
+    "price": 0.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "active": true,
+
+    "supportedMotherboardFormats": [""],
+    "maxLengthGPU": 0.0,
+    "pciSlots": 0,
+    "psuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "motherboardBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "drivesBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ],
+    "fansBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ]
+  }
+]

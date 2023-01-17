@@ -6,9 +6,6 @@ export class CreateCoolerInput extends CreateComponentInput {
   @Field(() => Int)
   diameter: number;
 
-  @Field(() => Int)
-  tdp: number;
-
   @Field(() => Float)
   noise: number;
 }

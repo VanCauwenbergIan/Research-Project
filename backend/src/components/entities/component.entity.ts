@@ -17,10 +17,10 @@ export enum ObjectTypes {
   cpu = 'CPU',
   cpu_cooler = 'CPU Cooler',
   gpu = 'GPU',
-  memory = 'Memory',
+  memory = 'Memory Module',
   motherboard = 'Motherboard',
   psu = 'PSU',
-  storage = 'Storage',
+  storage = 'Storage Device',
 }
 export enum VramTypes {
   gddr5 = 'GDDR5',
@@ -105,6 +105,10 @@ export class Component {
   @Column({ nullable: true })
   imageUrl?: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  modelUrl?: string;
+
   @Field({ defaultValue: true })
   @Column()
   active: boolean;
@@ -115,7 +119,7 @@ export class Component {
 export class Case extends Component {
   @Field(() => [MoboTypes])
   @Column()
-  supportedMotherboardFormats: [MoboTypes];
+  supportedMotherboardFormats: MoboTypes[];
 
   @Field(() => Float)
   @Column()
@@ -135,11 +139,11 @@ export class Case extends Component {
 
   @Field(() => [BoundingBox])
   @Column()
-  drivesBB: [BoundingBox];
+  drivesBB: BoundingBox[];
 
   @Field(() => [BoundingBox])
   @Column()
-  fansBB: [BoundingBox];
+  fansBB: BoundingBox[];
 
   // todo: add a way to check cpu cooler size
 }
@@ -150,10 +154,6 @@ export class Cooler extends Component {
   @Field(() => Int)
   @Column()
   diameter: number;
-
-  @Field(() => Int)
-  @Column()
-  tdp: number;
 
   @Field(() => Float)
   @Column()
@@ -202,6 +202,10 @@ export class CPUCooler extends Cooler {
   @Field(() => [SocketTypes])
   @Column()
   socket: SocketTypes[];
+
+  @Field(() => Int)
+  @Column()
+  tdp: number;
 }
 
 @Entity()
@@ -235,7 +239,7 @@ export class GPU extends Component {
   @Column()
   cores: number;
 
-  @Field(() => Int)
+  @Field(() => Float)
   @Column()
   clockSpeed: number;
 }

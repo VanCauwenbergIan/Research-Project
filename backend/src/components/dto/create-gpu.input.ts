@@ -25,6 +25,6 @@ export class CreateGPUInput extends CreateComponentInput {
   @Field(() => Int)
   cores: number;
 
-  @Field(() => Int)
+  @Field(() => Float)
   clockSpeed: number;
 }

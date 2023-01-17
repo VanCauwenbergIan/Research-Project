@@ -1,0 +1,17 @@
+[
+  {
+    "name": "",
+    "objectType": "CPU Cooler",
+    "manufacturer": "",
+    "price": 0.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "active": true,
+
+    "diameter": 0,
+    "noise": 0.0,
+
+    "socket": [""],
+    "tdp": 0
+  }
+]

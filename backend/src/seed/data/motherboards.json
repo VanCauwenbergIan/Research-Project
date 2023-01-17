@@ -1,0 +1,32 @@
+[
+  {
+    "name": "",
+    "objectType": "Motherboard",
+    "manufacturer": "",
+    "price": 0.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "active": true,
+
+    "format": "",
+    "socket": "",
+    "chipset": "",
+    "supportedMemoryTypes": [""],
+    "memorySlots": 0,
+    "maxMemory": 0,
+    "cpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "gpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "ramBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ]
+  }
+]

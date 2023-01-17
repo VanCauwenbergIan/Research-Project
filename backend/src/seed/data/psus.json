@@ -1,0 +1,15 @@
+[
+  {
+    "name": "",
+    "objectType": "PSU",
+    "manufacturer": "",
+    "price": 0.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "active": true,
+
+    "power": 0,
+    "rating": 0,
+    "modular": true
+  }
+]

@@ -141,6 +141,7 @@ export class ComponentsService {
     caseObj.manufacturer = updateCaseInput.manufacturer;
     caseObj.price = updateCaseInput.price;
     caseObj.imageUrl = updateCaseInput.imageUrl;
+    caseObj.modelUrl = updateCaseInput.modelUrl;
     caseObj.active = updateCaseInput.active;
 
     caseObj.supportedMotherboardFormats =
@@ -168,10 +169,10 @@ export class ComponentsService {
     coolerObj.manufacturer = updateCoolerInput.manufacturer;
     coolerObj.price = updateCoolerInput.price;
     coolerObj.imageUrl = updateCoolerInput.imageUrl;
+    coolerObj.modelUrl = updateCoolerInput.modelUrl;
     coolerObj.active = updateCoolerInput.active;
 
     coolerObj.diameter = updateCoolerInput.diameter;
-    coolerObj.tdp = updateCoolerInput.tdp;
     coolerObj.noise = updateCoolerInput.noise;
 
     return this.coolerRepository.save(coolerObj);
@@ -190,6 +191,7 @@ export class ComponentsService {
     cpuObj.manufacturer = updateCpuInput.manufacturer;
     cpuObj.price = updateCpuInput.price;
     cpuObj.imageUrl = updateCpuInput.imageUrl;
+    cpuObj.modelUrl = updateCpuInput.modelUrl;
     cpuObj.active = updateCpuInput.active;
 
     cpuObj.series = updateCpuInput.series;
@@ -219,12 +221,13 @@ export class ComponentsService {
     cpuCoolerObj.manufacturer = updateCpuCoolerInput.manufacturer;
     cpuCoolerObj.price = updateCpuCoolerInput.price;
     cpuCoolerObj.imageUrl = updateCpuCoolerInput.imageUrl;
+    cpuCoolerObj.modelUrl = updateCpuCoolerInput.modelUrl;
     cpuCoolerObj.active = updateCpuCoolerInput.active;
 
     cpuCoolerObj.diameter = updateCpuCoolerInput.diameter;
-    cpuCoolerObj.tdp = updateCpuCoolerInput.tdp;
     cpuCoolerObj.noise = updateCpuCoolerInput.noise;
 
+    cpuCoolerObj.tdp = updateCpuCoolerInput.tdp;
     cpuCoolerObj.socket = updateCpuCoolerInput.socket;
 
     return this.cpuCoolerRepository.save(cpuCoolerObj);
@@ -243,6 +246,7 @@ export class ComponentsService {
     gpuObj.manufacturer = updateGpuInput.manufacturer;
     gpuObj.price = updateGpuInput.price;
     gpuObj.imageUrl = updateGpuInput.imageUrl;
+    gpuObj.modelUrl = updateGpuInput.modelUrl;
     gpuObj.active = updateGpuInput.active;
 
     gpuObj.series = updateGpuInput.series;
@@ -270,6 +274,7 @@ export class ComponentsService {
     memoryObj.manufacturer = updateMemoryInput.manufacturer;
     memoryObj.price = updateMemoryInput.price;
     memoryObj.imageUrl = updateMemoryInput.imageUrl;
+    memoryObj.modelUrl = updateMemoryInput.modelUrl;
     memoryObj.active = updateMemoryInput.active;
 
     memoryObj.generation = updateMemoryInput.generation;
@@ -294,6 +299,7 @@ export class ComponentsService {
     motherboardObj.manufacturer = updateMotherboardInput.manufacturer;
     motherboardObj.price = updateMotherboardInput.price;
     motherboardObj.imageUrl = updateMotherboardInput.imageUrl;
+    motherboardObj.modelUrl = updateMotherboardInput.modelUrl;
     motherboardObj.active = updateMotherboardInput.active;
 
     motherboardObj.format = updateMotherboardInput.format;
@@ -323,11 +329,12 @@ export class ComponentsService {
     psuObj.manufacturer = updatePsuInput.manufacturer;
     psuObj.price = updatePsuInput.price;
     psuObj.imageUrl = updatePsuInput.imageUrl;
+    psuObj.modelUrl = psuObj.modelUrl;
     psuObj.active = updatePsuInput.active;
 
-    psuObj.power = updatePsuInput.power
-    psuObj.rating = updatePsuInput.rating
-    psuObj.modular = updatePsuInput.modular
+    psuObj.power = updatePsuInput.power;
+    psuObj.rating = updatePsuInput.rating;
+    psuObj.modular = updatePsuInput.modular;
 
     return this.psuRepository.save(psuObj);
   }
@@ -347,13 +354,14 @@ export class ComponentsService {
     storageObj.manufacturer = updateStorageInput.manufacturer;
     storageObj.price = updateStorageInput.price;
     storageObj.imageUrl = updateStorageInput.imageUrl;
+    storageObj.modelUrl = updateStorageInput.modelUrl;
     storageObj.active = updateStorageInput.active;
 
-    storageObj.type = updateStorageInput.type
-    storageObj.format = updateStorageInput.format
-    storageObj.capacity = updateStorageInput.capacity
-    storageObj.read = updateStorageInput.read
-    storageObj.write = updateStorageInput.write
+    storageObj.type = updateStorageInput.type;
+    storageObj.format = updateStorageInput.format;
+    storageObj.capacity = updateStorageInput.capacity;
+    storageObj.read = updateStorageInput.read;
+    storageObj.write = updateStorageInput.write;
 
     return this.storageRepository.save(storageObj);
   }

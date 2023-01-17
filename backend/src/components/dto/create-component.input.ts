@@ -6,7 +6,7 @@ export class CreateComponentInput {
   @Field()
   name: string;
 
-  @Field(() => ObjectTypes, {nullable: true})
+  @Field(() => ObjectTypes, { nullable: true })
   objectType?: ObjectTypes;
 
   @Field()
@@ -17,6 +17,9 @@ export class CreateComponentInput {
 
   @Field({ nullable: true })
   imageUrl?: string;
+
+  @Field({ nullable: true })
+  modelUrl?: string;
 
   @Field({ defaultValue: true })
   active: boolean;

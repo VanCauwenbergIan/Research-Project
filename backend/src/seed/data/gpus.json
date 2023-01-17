@@ -1,0 +1,20 @@
+[
+  {
+    "name": "",
+    "objectType": "GPU",
+    "manufacturer": "",
+    "price": 0.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "active": true,
+
+    "series": "",
+    "vramSize": 0,
+    "vramType": "",
+    "length": 0.0,
+    "tdp": 0,
+    "slots": 0,
+    "cores": 0,
+    "clockSpeed": 0.0
+  }
+]
