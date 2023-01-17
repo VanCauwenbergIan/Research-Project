@@ -10,6 +10,7 @@ import {
 import { ObjectIdColumn, Column, Entity } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { BoundingBox } from './boundingbox.entity';
+import { Vector3 } from './vector3.entity';
 
 export enum ObjectTypes {
   case = 'PC Case',
@@ -108,6 +109,16 @@ export class Component {
   @Field({ nullable: true })
   @Column({ nullable: true })
   modelUrl?: string;
+
+  // scale compared to NZXT Case as baseline
+  @Field(() => Vector3, { defaultValue: { x: 1, y: 1, z: 1 } })
+  @Column()
+  scale: Vector3;
+
+  // default rotation when loading in
+  @Field(() => Vector3, { defaultValue: { x: 0, y: 0, z: 0 } })
+  @Column()
+  rotation: Vector3;
 
   @Field({ defaultValue: true })
   @Column()
@@ -308,6 +319,10 @@ export class PSU extends Component {
   @Field(() => Int)
   @Column()
   power: number;
+
+  @Field(() => MoboTypes)
+  @Column()
+  format: MoboTypes;
 
   @Field(() => Int)
   @Column()

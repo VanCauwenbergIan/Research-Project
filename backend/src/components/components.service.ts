@@ -142,6 +142,8 @@ export class ComponentsService {
     caseObj.price = updateCaseInput.price;
     caseObj.imageUrl = updateCaseInput.imageUrl;
     caseObj.modelUrl = updateCaseInput.modelUrl;
+    caseObj.scale = updateCaseInput.scale;
+    caseObj.rotation = updateCaseInput.rotation;
     caseObj.active = updateCaseInput.active;
 
     caseObj.supportedMotherboardFormats =
@@ -170,6 +172,8 @@ export class ComponentsService {
     coolerObj.price = updateCoolerInput.price;
     coolerObj.imageUrl = updateCoolerInput.imageUrl;
     coolerObj.modelUrl = updateCoolerInput.modelUrl;
+    coolerObj.scale = updateCoolerInput.scale;
+    coolerObj.rotation = updateCoolerInput.rotation;
     coolerObj.active = updateCoolerInput.active;
 
     coolerObj.diameter = updateCoolerInput.diameter;
@@ -192,6 +196,8 @@ export class ComponentsService {
     cpuObj.price = updateCpuInput.price;
     cpuObj.imageUrl = updateCpuInput.imageUrl;
     cpuObj.modelUrl = updateCpuInput.modelUrl;
+    cpuObj.scale = updateCpuInput.scale;
+    cpuObj.rotation = updateCpuInput.rotation;
     cpuObj.active = updateCpuInput.active;
 
     cpuObj.series = updateCpuInput.series;
@@ -222,6 +228,8 @@ export class ComponentsService {
     cpuCoolerObj.price = updateCpuCoolerInput.price;
     cpuCoolerObj.imageUrl = updateCpuCoolerInput.imageUrl;
     cpuCoolerObj.modelUrl = updateCpuCoolerInput.modelUrl;
+    cpuCoolerObj.scale = updateCpuCoolerInput.scale;
+    cpuCoolerObj.rotation = updateCpuCoolerInput.rotation;
     cpuCoolerObj.active = updateCpuCoolerInput.active;
 
     cpuCoolerObj.diameter = updateCpuCoolerInput.diameter;
@@ -247,6 +255,8 @@ export class ComponentsService {
     gpuObj.price = updateGpuInput.price;
     gpuObj.imageUrl = updateGpuInput.imageUrl;
     gpuObj.modelUrl = updateGpuInput.modelUrl;
+    gpuObj.scale = updateGpuInput.scale;
+    gpuObj.rotation = updateGpuInput.rotation;
     gpuObj.active = updateGpuInput.active;
 
     gpuObj.series = updateGpuInput.series;
@@ -275,6 +285,8 @@ export class ComponentsService {
     memoryObj.price = updateMemoryInput.price;
     memoryObj.imageUrl = updateMemoryInput.imageUrl;
     memoryObj.modelUrl = updateMemoryInput.modelUrl;
+    memoryObj.scale = updateMemoryInput.scale;
+    memoryObj.rotation = updateMemoryInput.rotation;
     memoryObj.active = updateMemoryInput.active;
 
     memoryObj.generation = updateMemoryInput.generation;
@@ -300,6 +312,8 @@ export class ComponentsService {
     motherboardObj.price = updateMotherboardInput.price;
     motherboardObj.imageUrl = updateMotherboardInput.imageUrl;
     motherboardObj.modelUrl = updateMotherboardInput.modelUrl;
+    motherboardObj.scale = updateMotherboardInput.scale;
+    motherboardObj.rotation = updateMotherboardInput.rotation;
     motherboardObj.active = updateMotherboardInput.active;
 
     motherboardObj.format = updateMotherboardInput.format;
@@ -329,10 +343,13 @@ export class ComponentsService {
     psuObj.manufacturer = updatePsuInput.manufacturer;
     psuObj.price = updatePsuInput.price;
     psuObj.imageUrl = updatePsuInput.imageUrl;
-    psuObj.modelUrl = psuObj.modelUrl;
+    psuObj.modelUrl = updatePsuInput.modelUrl;
+    psuObj.scale = updatePsuInput.scale;
+    psuObj.rotation = updatePsuInput.rotation;
     psuObj.active = updatePsuInput.active;
 
     psuObj.power = updatePsuInput.power;
+    psuObj.format = updatePsuInput.format;
     psuObj.rating = updatePsuInput.rating;
     psuObj.modular = updatePsuInput.modular;
 
@@ -355,6 +372,8 @@ export class ComponentsService {
     storageObj.price = updateStorageInput.price;
     storageObj.imageUrl = updateStorageInput.imageUrl;
     storageObj.modelUrl = updateStorageInput.modelUrl;
+    storageObj.scale = updateStorageInput.scale;
+    storageObj.rotation = updateStorageInput.rotation;
     storageObj.active = updateStorageInput.active;
 
     storageObj.type = updateStorageInput.type;

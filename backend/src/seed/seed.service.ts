@@ -65,6 +65,8 @@ export class DatabaseSeedService {
       newCase.price = jsonCase.price;
       newCase.imageUrl = jsonCase.imageUrl;
       newCase.modelUrl = jsonCase.modelUrl;
+      newCase.scale = jsonCase.scale;
+      newCase.rotation = jsonCase.rotation;
       newCase.active = jsonCase.active;
 
       newCase.supportedMotherboardFormats =
@@ -256,6 +258,7 @@ export class DatabaseSeedService {
       newPsu.active = jsonPsu.active;
 
       newPsu.power = jsonPsu.power;
+      newPsu.format = jsonPsu.format as MoboTypes;
       newPsu.rating = jsonPsu.rating;
       newPsu.modular = jsonPsu.modular;
 
