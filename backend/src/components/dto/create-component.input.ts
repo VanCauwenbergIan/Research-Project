@@ -6,8 +6,8 @@ export class CreateComponentInput {
   @Field()
   name: string;
 
-  @Field(() => ObjectTypes)
-  objectType: ObjectTypes;
+  @Field(() => ObjectTypes, {nullable: true})
+  objectType?: ObjectTypes;
 
   @Field()
   manufacturer: string;

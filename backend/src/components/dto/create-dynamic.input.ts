@@ -31,10 +31,10 @@ export class CreateDynamicInput {
   gpuInput?: CreateGPUInput;
 
   @Field(() => CreateMemoryInput, { nullable: true })
-  memory?: CreateMemoryInput;
+  memoryInput?: CreateMemoryInput;
 
   @Field(() => CreateMotherboardInput, { nullable: true })
-  motherboard?: CreateMotherboardInput;
+  motherboardInput?: CreateMotherboardInput;
 
   @Field(() => CreatePSUInput, { nullable: true })
   psuInput?: CreatePSUInput;

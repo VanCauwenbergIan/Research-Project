@@ -31,10 +31,10 @@ export class UpdateDynamicInput {
   gpuInput?: UpdateGPUInput;
 
   @Field(() => UpdateMemoryInput, { nullable: true })
-  memory?: UpdateMemoryInput;
+  memoryInput?: UpdateMemoryInput;
 
   @Field(() => UpdateMotherboardInput, { nullable: true })
-  motherboard?: UpdateMotherboardInput;
+  motherboardInput?: UpdateMotherboardInput;
 
   @Field(() => UpdatePSUInput, { nullable: true })
   psuInput?: UpdatePSUInput;

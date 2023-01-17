@@ -78,6 +78,7 @@ registerEnumType(StorageFormats, {
   name: 'StorageFormats',
 });
 
+@Entity()
 @ObjectType()
 export class Component {
   @Field(() => ID)

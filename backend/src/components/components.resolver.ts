@@ -5,13 +5,11 @@ import {
   Args,
   createUnionType,
 } from '@nestjs/graphql';
-import {
-  ClientMessage,
-} from 'src/bootstrap/entities/clientMessage';
+import { ClientMessage } from 'src/bootstrap/entities/clientMessage';
 import { ComponentsService } from './components.service';
 import { CreateDynamicInput } from './dto/create-dynamic.input';
 import { UpdateDynamicInput } from './dto/update-dynamic.input';
-import { Component, ComponentOutputUnion, Cooler } from './entities/component.entity';
+import { ComponentOutputUnion, Cooler } from './entities/component.entity';
 
 @Resolver()
 export class ComponentsResolver {
@@ -21,11 +19,8 @@ export class ComponentsResolver {
   createComponent(
     @Args('createComponentInput')
     createComponentInput: CreateDynamicInput,
-  ): typeof ComponentOutputUnion {
-    // return this.componentsService.create(createComponentInput);
-    const test = new Cooler();
-    test.diameter = 1;
-    return test;
+  ): Promise<typeof ComponentOutputUnion> {
+    return this.componentsService.resolveCreation(createComponentInput);
   }
 
   @Query(() => [ComponentOutputUnion], { name: 'components' })
@@ -57,11 +52,13 @@ export class ComponentsResolver {
     // );
     const test = new Cooler();
     test.diameter = 1;
-    return test
+    return test;
   }
 
   @Mutation(() => ComponentOutputUnion)
-  removeComponent(@Args('id', { type: () => String }) id: string): typeof ComponentOutputUnion  {
+  removeComponent(
+    @Args('id', { type: () => String }) id: string,
+  ): typeof ComponentOutputUnion {
     // return this.componentsService.remove(id);
     const test = new Cooler();
     test.diameter = 1;
