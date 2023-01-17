@@ -25,7 +25,8 @@ export enum ObjectTypes {
 }
 export enum VramTypes {
   gddr5 = 'GDDR5',
-  gddr6 = 'GDDR5',
+  gddr6 = 'GDDR6',
+  gddr6x = 'GDDR6x',
 }
 export enum MemoryTypes {
   ddr3 = 'DDR3',
@@ -39,9 +40,10 @@ export enum MoboTypes {
   e_atx = 'E-ATX',
 }
 export enum SocketTypes {
-  lga1151 = 'LGA 1151',
-  lga2066 = 'LGA 2066',
   lga1200 = 'LGA 1200',
+  lga1150 = 'LGA 1150',
+  lga1151 = 'LGA 1151',
+  lga1155 = 'LGA 1155',
   lga1700 = 'LGA 1700',
   am4 = 'AM4',
   am5 = 'AM5',
@@ -162,7 +164,7 @@ export class Case extends Component {
 @Entity()
 @ObjectType()
 export class Cooler extends Component {
-  @Field(() => Int)
+  @Field(() => Float)
   @Column()
   diameter: number;
 
@@ -266,9 +268,9 @@ export class Memory extends Component {
   @Column()
   size: number;
 
-  @Field()
+  @Field(() => Int)
   @Column()
-  timings: string;
+  speed: number;
 }
 
 @Entity()

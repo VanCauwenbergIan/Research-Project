@@ -10,6 +10,6 @@ export class CreateMemoryInput extends CreateComponentInput {
   @Field(() => Int)
   size: number;
 
-  @Field()
-  timings: string;
+  @Field(() => Int)
+  speed: number;
 }

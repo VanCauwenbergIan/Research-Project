@@ -1,21 +1,117 @@
 [
   {
-    "name": "",
+    "name": "B450 ITX",
     "objectType": "Motherboard",
-    "manufacturer": "",
-    "price": 0.0,
+    "manufacturer": "Gigabyte",
+    "price": 105.0,
     "imageUrl": "",
     "modelUrl": "",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
 
-    "format": "",
-    "socket": "",
-    "chipset": "",
-    "supportedMemoryTypes": [""],
-    "memorySlots": 0,
-    "maxMemory": 0,
+    "format": "Mini-ITX",
+    "socket": "AM4",
+    "chipset": "B450",
+    "supportedMemoryTypes": ["DDR4"],
+    "memorySlots": 2,
+    "maxMemory": 64,
+    "cpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "gpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "ramBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ]
+  },
+  {
+    "name": "H610I ITX",
+    "objectType": "Motherboard",
+    "manufacturer": "Gigabyte",
+    "price": 147.54,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "format": "Mini-ITX",
+    "socket": "LGA 1700",
+    "chipset": "H610",
+    "supportedMemoryTypes": ["DDR4"],
+    "memorySlots": 2,
+    "maxMemory": 64,
+    "cpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "gpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "ramBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ]
+  },
+  {
+    "name": "ROG Maximus Z690",
+    "objectType": "Motherboard",
+    "manufacturer": "Asus",
+    "price": 299.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "format": "ATX",
+    "socket": "LGA 1700",
+    "chipset": "Z690",
+    "supportedMemoryTypes": ["DDR4", "DDR5"],
+    "memorySlots": 4,
+    "maxMemory": 128,
+    "cpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "gpuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "ramBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ]
+  },
+  {
+    "name": "Strix B550-A",
+    "objectType": "Motherboard",
+    "manufacturer": "Asus",
+    "price": 168.62,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "format": "ATX",
+    "socket": "AM4",
+    "chipset": "B550",
+    "supportedMemoryTypes": ["DDR4", "DDR5"],
+    "memorySlots": 4,
+    "maxMemory": 128,
     "cpuBB": {
       "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
       "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }

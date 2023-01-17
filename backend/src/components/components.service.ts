@@ -291,7 +291,7 @@ export class ComponentsService {
 
     memoryObj.generation = updateMemoryInput.generation;
     memoryObj.size = updateMemoryInput.size;
-    memoryObj.timings = updateMemoryInput.timings;
+    memoryObj.speed = updateMemoryInput.speed;
 
     return this.memoryRepository.save(memoryObj);
   }

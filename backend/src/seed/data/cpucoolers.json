@@ -1,19 +1,27 @@
 [
   {
-    "name": "",
+    "name": "Pure Rock Slim 2",
     "objectType": "CPU Cooler",
-    "manufacturer": "",
-    "price": 0.0,
+    "manufacturer": "Be quiet!",
+    "price": 29.99,
     "imageUrl": "",
     "modelUrl": "",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
 
-    "diameter": 0,
-    "noise": 0.0,
+    "diameter": 0.092,
+    "noise": 25.4,
 
-    "socket": [""],
-    "tdp": 0
+    "socket": [
+      "AM4",
+      "AM5",
+      "LGA 1150",
+      "LGA 1151",
+      "LGA 1155",
+      "LGA 1200",
+      "LGA 1700"
+    ],
+    "tdp": 130
   }
 ]

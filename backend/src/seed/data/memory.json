@@ -1,17 +1,47 @@
 [
   {
-    "name": "",
+    "name": "HyperX Fury 8 3200",
     "objectType": "Memory Module",
-    "manufacturer": "",
-    "price": 0.0,
+    "manufacturer": "Kingston",
+    "price": 23.99,
     "imageUrl": "",
     "modelUrl": "",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
 
-    "generation": "",
-    "size": 0,
-    "timings": ""
+    "generation": "DDR4",
+    "size": 8,
+    "speed": 3200
+  },
+  {
+    "name": "HyperX Fury 16 3200",
+    "objectType": "Memory Module",
+    "manufacturer": "Kingston",
+    "price": 43.79,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "generation": "DDR4",
+    "size": 16,
+    "speed": 3200
+  },
+  {
+    "name": "HyperX Fury 32 3200",
+    "objectType": "Memory Module",
+    "manufacturer": "Kingston",
+    "price": 83.9,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "generation": "DDR4",
+    "size": 32,
+    "speed": 3200
   }
 ]

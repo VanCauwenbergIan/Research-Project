@@ -204,7 +204,7 @@ export class DatabaseSeedService {
 
       newMemory.generation = jsonMemory.generation as MemoryTypes;
       newMemory.size = jsonMemory.size;
-      newMemory.timings = jsonMemory.timings;
+      newMemory.speed = jsonMemory.speed;
 
       memory.push(newMemory);
     }

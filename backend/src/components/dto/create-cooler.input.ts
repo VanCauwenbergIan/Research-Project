@@ -3,7 +3,7 @@ import { CreateComponentInput } from './create-component.input';
 
 @InputType()
 export class CreateCoolerInput extends CreateComponentInput {
-  @Field(() => Int)
+  @Field(() => Float)
   diameter: number;
 
   @Field(() => Float)

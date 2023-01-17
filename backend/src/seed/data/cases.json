@@ -1,18 +1,53 @@
 [
   {
-    "name": "",
+    "name": "NCASE M1 Mini ITX",
     "objectType": "PC Case",
-    "manufacturer": "",
-    "price": 0.0,
+    "manufacturer": "NCASE",
+    "price": 199.99,
     "imageUrl": "",
     "modelUrl": "",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
 
-    "supportedMotherboardFormats": [""],
-    "maxLengthGPU": 0.0,
-    "pciSlots": 0,
+    "supportedMotherboardFormats": ["Mini-ITX"],
+    "maxLengthGPU": 0.333,
+    "pciSlots": 3,
+    "psuBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "motherboardBB": {
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+    },
+    "drivesBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ],
+    "fansBB": [
+      {
+        "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }
+      }
+    ]
+  },
+  {
+    "name": "NZXT H510",
+    "objectType": "PC Case",
+    "manufacturer": "NZXT",
+    "price": 89.99,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "supportedMotherboardFormats": ["Mini-ITX", "Micro-ATX", "ATX"],
+    "maxLengthGPU": 0.381,
+    "pciSlots": 7,
     "psuBB": {
       "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
       "scale": { "x": 0.0, "y": 0.0, "z": 0.0 }

@@ -1,19 +1,36 @@
 [
   {
-    "name": "",
-    "objectType": "PSU",
-    "manufacturer": "",
-    "price": 0.0,
+    "name": "SanDisk SSD Ultra 3D",
+    "objectType": "Storage",
+    "manufacturer": "Western Digital",
+    "price": 125.99,
     "imageUrl": "",
     "modelUrl": "",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
 
-    "type": "",
-    "format": "",
-    "capacity": 0,
-    "read": 0,
-    "write": 0
+    "type": "SSD",
+    "format": "SATA",
+    "capacity": 1024,
+    "read": 550,
+    "write": 525
+  },
+  {
+    "name": "SanDisk SSD Ultra 3D",
+    "objectType": "Storage",
+    "manufacturer": "Western Digital",
+    "price": 229.0,
+    "imageUrl": "",
+    "modelUrl": "",
+    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "type": "SSD",
+    "format": "SATA",
+    "capacity": 2048,
+    "read": 550,
+    "write": 525
   }
 ]

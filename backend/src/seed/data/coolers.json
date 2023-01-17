@@ -1,16 +1,16 @@
 [
   {
-    "name": "",
+    "name": "LL120 RGB 120mm",
     "objectType": "Case Cooler",
-    "manufacturer": "",
-    "price": 0.0,
+    "manufacturer": "Corsair",
+    "price": 30.9,
     "imageUrl": "",
     "modelUrl": "",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
 
-    "diameter": 0,
-    "noise": 0.0
+    "diameter": 0.12,
+    "noise": 24.8
   }
 ]
