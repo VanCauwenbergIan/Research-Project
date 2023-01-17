@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { MemoryTypes } from '../entities/memory.entity';
+import { MemoryTypes } from '../entities/component.entity';
 import { CreateComponentInput } from './create-component.input';
 
 @InputType()

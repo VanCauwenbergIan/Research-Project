@@ -1,6 +1,7 @@
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 
+@InputType('Vector3Input')
 @ObjectType()
 export class Vector3 {
   @Field(() => Float)

@@ -1,5 +1,5 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
-import { VramTypes } from '../entities/gpu.entity';
+import { VramTypes } from '../entities/component.entity';
 import { CreateComponentInput } from './create-component.input';
 
 @InputType()

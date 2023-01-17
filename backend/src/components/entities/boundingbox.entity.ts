@@ -1,7 +1,8 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 import { Vector3 } from './vector3.entity';
 
+@InputType('BoundingBoxInput')
 @ObjectType()
 export class BoundingBox {
   @Field()

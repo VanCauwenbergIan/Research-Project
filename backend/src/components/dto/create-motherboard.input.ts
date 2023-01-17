@@ -1,7 +1,6 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
 import { BoundingBox } from "../entities/boundingbox.entity";
-import { MemoryTypes } from "../entities/memory.entity";
-import { MoboTypes, SocketTypes } from "../entities/motherboard.entity";
+import { MemoryTypes, MoboTypes, SocketTypes } from "../entities/component.entity";
 import { CreateComponentInput } from "./create-component.input";
 
 @InputType()

@@ -7,15 +7,13 @@ import {
 } from '@nestjs/graphql';
 import {
   ClientMessage,
-  ComponentOutputUnion,
 } from 'src/bootstrap/entities/clientMessage';
 import { ComponentsService } from './components.service';
 import { CreateDynamicInput } from './dto/create-dynamic.input';
 import { UpdateDynamicInput } from './dto/update-dynamic.input';
-import { Component } from './entities/component.entity';
-import { Cooler } from './entities/cooler.entity';
+import { Component, ComponentOutputUnion, Cooler } from './entities/component.entity';
 
-@Resolver(() => ComponentOutputUnion)
+@Resolver()
 export class ComponentsResolver {
   constructor(private readonly componentsService: ComponentsService) {}
 

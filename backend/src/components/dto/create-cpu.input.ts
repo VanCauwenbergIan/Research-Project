@@ -1,5 +1,5 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
-import { SocketTypes } from '../entities/motherboard.entity';
+import { SocketTypes } from '../entities/component.entity';
 import { CreateComponentInput } from './create-component.input';
 
 @InputType()
