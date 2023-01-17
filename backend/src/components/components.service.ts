@@ -230,7 +230,7 @@ export class ComponentsService {
     return this.cpuCoolerRepository.save(cpuCoolerObj);
   }
 
-  async updateGPU(updateGpuInput: UpdateGPUInput): Promise<GPU> {
+  async updateGpu(updateGpuInput: UpdateGPUInput): Promise<GPU> {
     console.log(`This updates GPU ${updateGpuInput.id}`);
     const parsedId = new ObjectId(updateGpuInput.id);
     const gpuObj = await this.gpuRepository.findOneBy({
