@@ -1,0 +1,82 @@
+[
+  {
+    "name": "RTX 4090",
+    "objectType": "GPU",
+    "manufacturer": "Nvidia",
+    "price": 2199.0,
+    "imageUrl": "RTX-4090-Founders-Edition.png",
+    "modelUrl": "PC/GPU/geforce_rtx_4090_founders_edition.glb",
+    "scale": { "x": 0.012, "y": 0.012, "z": 0.012 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 1.570795 },
+    "active": true,
+
+    "series": "RTX 40 Ada Lovelace",
+    "vramSize": 24,
+    "vramType": "GDDR6x",
+    "length": 0.3576,
+    "tdp": 450,
+    "slots": 4,
+    "cores": 16384,
+    "clockSpeed": 2.61
+  },
+  {
+    "name": "RTX 3090",
+    "objectType": "GPU",
+    "manufacturer": "Nvidia",
+    "price": 1599.0,
+    "imageUrl": "RTX-3090-Founders-Edition.png",
+    "modelUrl": "PC/GPU/geforce_rtx_3090_founders_edition.glb",
+    "scale": { "x": 16.0, "y": 16.0, "z": 16.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 1.570795 },
+    "active": true,
+
+    "series": "RTX 30 Ampere",
+    "vramSize": 24,
+    "vramType": "GDDR6x",
+    "length": 0.313,
+    "tdp": 350,
+    "slots": 3,
+    "cores": 10496,
+    "clockSpeed": 1.4
+  },
+  {
+    "name": "RTX 3060ti",
+    "objectType": "GPU",
+    "manufacturer": "Nvidia",
+    "price": 499.0,
+    "imageUrl": "RTX-3060ti-Founders-Edition.png",
+    "modelUrl": "PC/GPU/geforce_rtx_3060_ti_founders_edition.glb",
+    "scale": { "x": 16.0, "y": 16.0, "z": 16.0 },
+    "rotation": { "x": 3.14159, "y": 0.0, "z": 1.570795 },
+    "active": true,
+
+    "series": "RTX 30 Ampere",
+    "vramSize": 8,
+    "vramType": "GDDR6",
+    "length": 0.242,
+    "tdp": 200,
+    "slots": 2,
+    "cores": 4864,
+    "clockSpeed": 1.41
+  },
+  {
+    "name": "RX 6500 XT",
+    "objectType": "GPU",
+    "manufacturer": "Sapphire (AMD)",
+    "price": 237.99,
+    "imageUrl": "AMD_Sapphire_RX6500XT_Pulse.png",
+    "modelUrl": "PC/GPU/red_graphics_card.glb",
+    "scale": { "x": 0.58, "y": 0.58, "z": 0.58 },
+    "rotation": { "x": 1.55422, "y": 0.000523599, "z": 0.0837758 },
+    "active": true,
+
+    "series": "RX 6000 RDNA2",
+    "vramSize": 4,
+    "vramType": "GDDR6",
+    "length": 0.194,
+    "tdp": 130,
+    "slots": 2,
+    "cores": 1024,
+    "clockSpeed": 2.42
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Ryzen 7 5800X",
+    "objectType": "CPU",
+    "manufacturer": "AMD",
+    "price": 259.0,
+    "imageUrl": "AMD_Ryzen_7_5000.png",
+    "modelUrl": "PC/CPU/pc_cpu_processor.glb",
+    "scale": { "x": 0.12, "y": 0.12, "z": 0.12 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "series": "Ryzen 5000 Vermeer",
+    "integratedGraphics": false,
+    "socket": "AM4",
+    "coreCount": 8,
+    "threadCount": 16,
+    "clockSpeed": 3.8,
+    "cacheSize": 32.768,
+    "tdp": 105,
+    "coolerBB": {
+      "position": { "x": 0.079, "y": 0.008, "z": 0.835},
+      "scale": { "x": -0.857, "y": 1.317, "z": 1.622 }
+    }
+  },
+  {
+    "name": "Ryzen 5 5600X",
+    "objectType": "CPU",
+    "manufacturer": "AMD",
+    "price": 189.9,
+    "imageUrl": "AMD_Ryzen_5_5000.png",
+    "modelUrl": "PC/CPU/pc_cpu_processor.glb",
+    "scale": { "x": 0.12, "y": 0.12, "z": 0.12 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "series": "Ryzen 5000 Vermeer",
+    "integratedGraphics": false,
+    "socket": "AM4",
+    "coreCount": 6,
+    "threadCount": 12,
+    "clockSpeed": 3.7,
+    "cacheSize": 35.84,
+    "tdp": 65,
+    "coolerBB": {
+      "position": { "x": 0.079, "y": 0.008, "z": 0.835 },
+      "scale": { "x": -0.857, "y": 1.317, "z": 1.622 }
+    }
+  },
+  {
+    "name": "Ryzen 5 5500",
+    "objectType": "CPU",
+    "manufacturer": "AMD",
+    "price": 109.9,
+    "imageUrl": "AMD_Ryzen_5_5000.png",
+    "modelUrl": "PC/CPU/pc_cpu_processor.glb",
+    "scale": { "x": 0.12, "y": 0.12, "z": 0.12 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "series": "Ryzen 5000 Cezanne",
+    "integratedGraphics": false,
+    "socket": "AM4",
+    "coreCount": 6,
+    "threadCount": 12,
+    "clockSpeed": 3.6,
+    "cacheSize": 19.84,
+    "tdp": 65,
+    "coolerBB": {
+      "position": { "x": 0.079, "y": 0.008, "z": 0.835 },
+      "scale": { "x": -0.857, "y": 1.317, "z": 1.622 }
+    }
+  },
+  {
+    "name": "Core i7-13700K",
+    "objectType": "CPU",
+    "manufacturer": "Intel",
+    "price": 479.0,
+    "imageUrl": "Intel__Core_i7_13700K.png",
+    "modelUrl": "PC/CPU/pc_cpu_processor.glb",
+    "scale": { "x": 0.12, "y": 0.12, "z": 0.12 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "series": "Core i7 1300 Raptor Lake",
+    "integratedGraphics": true,
+    "socket": "LGA1700",
+    "coreCount": 16,
+    "threadCount": 12,
+    "clockSpeed": 3.4,
+    "cacheSize": 55.295,
+    "tdp": 125,
+    "coolerBB": {
+      "position": { "x": 0.079, "y": 0.008, "z": 0.835 },
+      "scale": { "x": -0.857, "y": 1.317, "z": 1.622 }
+    }
+  },
+  {
+    "name": "Core i5-13600K",
+    "objectType": "CPU",
+    "manufacturer": "Intel",
+    "price": 369.0,
+    "imageUrl": "Intel__Core_i5_13600K.png",
+    "modelUrl": "PC/CPU/pc_cpu_processor.glb",
+    "scale": { "x": 0.12, "y": 0.12, "z": 0.12 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "series": "Core i5 1300 Raptor Lake",
+    "integratedGraphics": true,
+    "socket": "LGA1700",
+    "coreCount": 14,
+    "threadCount": 20,
+    "clockSpeed": 3.5,
+    "cacheSize": 45.056,
+    "tdp": 125,
+    "coolerBB": {
+      "position": { "x": 0.079, "y": 0.008, "z": 0.835 },
+      "scale": { "x": -0.857, "y": 1.317, "z": 1.622 }
+    }
+  },
+  {
+    "name": "Core i3-13100F",
+    "objectType": "CPU",
+    "manufacturer": "Intel",
+    "price": 134.9,
+    "imageUrl": "Intel__Core_i3_13100F.png",
+    "modelUrl": "PC/CPU/pc_cpu_processor.glb",
+    "scale": { "x": 0.12, "y": 0.12, "z": 0.12 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
+    "active": true,
+
+    "series": "Core i3 1300 Raptor Lake",
+    "integratedGraphics": false,
+    "socket": "LGA1700",
+    "coreCount": 4,
+    "threadCount": 8,
+    "clockSpeed": 3.4,
+    "cacheSize": 45.056,
+    "tdp": 60,
+    "coolerBB": {
+      "position": { "x": 0.079, "y": 0.008, "z": 0.835 },
+      "scale": { "x": -0.857, "y": 1.317, "z": 1.622 }
+    }
+  }
+]
