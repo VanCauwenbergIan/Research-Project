@@ -6,8 +6,8 @@
     "price": 23.99,
     "imageUrl": "hyperX_Fury.png",
     "modelUrl": "PC/Memory/kingston_hyperx_fury_black_ram_module.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 0.35, "y": 0.35, "z": 0.35 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
     "active": true,
 
     "generation": "DDR4",
@@ -21,8 +21,8 @@
     "price": 43.79,
     "imageUrl": "hyperX_Fury.png",
     "modelUrl": "PC/Memory/kingston_hyperx_fury_black_ram_module.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 0.35, "y": 0.35, "z": 0.35 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
     "active": true,
 
     "generation": "DDR4",
@@ -36,8 +36,8 @@
     "price": 83.9,
     "imageUrl": "hyperX_Fury.png",
     "modelUrl": "PC/Memory/kingston_hyperx_fury_black_ram_module.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 0.35, "y": 0.35, "z": 0.35 },
+    "rotation": { "x": 1.570795, "y": 0.0, "z": 0.0 },
     "active": true,
 
     "generation": "DDR4",

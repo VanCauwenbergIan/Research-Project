@@ -207,6 +207,10 @@ export class CPU extends Component {
   @Field(() => Int)
   @Column()
   tdp: number;
+
+  @Field(() => BoundingBox)
+  @Column()
+  coolerBB: BoundingBox;
 }
 
 @Entity()

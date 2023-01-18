@@ -129,6 +129,7 @@ export class DatabaseSeedService {
       newCpu.clockSpeed = jsonCpu.clockSpeed;
       newCpu.cacheSize = jsonCpu.cacheSize;
       newCpu.tdp = jsonCpu.tdp;
+      newCpu.coolerBB = jsonCpu.coolerBB
 
       cpus.push(newCpu);
     }

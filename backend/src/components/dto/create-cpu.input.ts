@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { BoundingBox } from '../entities/boundingbox.entity';
 import { SocketTypes } from '../entities/component.entity';
 import { CreateComponentInput } from './create-component.input';
 
@@ -27,4 +28,7 @@ export class CreateCPUInput extends CreateComponentInput {
 
   @Field(() => Int)
   tdp: number;
+
+  @Field(() => BoundingBox)
+  coolerBB: BoundingBox;
 }

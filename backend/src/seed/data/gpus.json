@@ -6,8 +6,8 @@
     "price": 2199.0,
     "imageUrl": "RTX-4090-Founders-Edition.png",
     "modelUrl": "PC/GPU/geforce_rtx_4090_founders_edition.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 0.012, "y": 0.012, "z": 0.012 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 1.570795 },
     "active": true,
 
     "series": "RTX 40 Ada Lovelace",
@@ -26,8 +26,8 @@
     "price": 1599.0,
     "imageUrl": "RTX-3090-Founders-Edition.png",
     "modelUrl": "PC/GPU/geforce_rtx_3090_founders_edition.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 16.0, "y": 16.0, "z": 16.0 },
+    "rotation": { "x": 0.0, "y": 0.0, "z": 1.570795 },
     "active": true,
 
     "series": "RTX 30 Ampere",
@@ -46,8 +46,8 @@
     "price": 499.0,
     "imageUrl": "RTX-3060ti-Founders-Edition.png",
     "modelUrl": "PC/GPU/geforce_rtx_3060_ti_founders_edition.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 16.0, "y": 16.0, "z": 16.0 },
+    "rotation": { "x": 3.14159, "y": 0.0, "z": 1.570795 },
     "active": true,
 
     "series": "RTX 30 Ampere",
@@ -66,8 +66,8 @@
     "price": 237.99,
     "imageUrl": "AMD_Sapphire_RX6500XT_Pulse.png",
     "modelUrl": "PC/GPU/red_graphics_card.glb",
-    "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
-    "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
+    "scale": { "x": 0.58, "y": 0.58, "z": 0.58 },
+    "rotation": { "x": 1.55422, "y": 0.000523599, "z": 0.0837758 },
     "active": true,
 
     "series": "RX 6000 RDNA2",
