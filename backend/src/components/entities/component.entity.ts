@@ -377,18 +377,18 @@ export const ComponentOutputUnion = createUnionType({
       PSU,
       Storage,
     ] as const,
-  resolveType: (value) => {
+  resolveType(value) {
     if (value.supportedMotherboardFormats) {
       return Case;
     } else if (value.diameter && value.socket) {
       return CPUCooler;
     } else if (value.diameter) {
       return Cooler;
-    } else if (value.integratedGraphics) {
+    } else if (value.threadCount) {
       return CPU;
     } else if (value.vramSize) {
       return GPU;
-    } else if (value.timings) {
+    } else if (value.generation) {
       return Memory;
     } else if (value.chipset) {
       return Motherboard;
@@ -396,8 +396,6 @@ export const ComponentOutputUnion = createUnionType({
       return PSU;
     } else if (value.read) {
       return Storage;
-    } else {
-      return null;
     }
   },
 });

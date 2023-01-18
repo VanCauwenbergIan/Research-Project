@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BoundingBox } from 'src/components/entities/boundingbox.entity';
 import {
   Case,
   Cooler,
@@ -96,6 +95,8 @@ export class DatabaseSeedService {
       newCooler.price = jsonCooler.price;
       newCooler.imageUrl = jsonCooler.imageUrl;
       newCooler.modelUrl = jsonCooler.modelUrl;
+      newCooler.scale = jsonCooler.scale;
+      newCooler.rotation = jsonCooler.rotation;
       newCooler.active = jsonCooler.active;
 
       newCooler.diameter = jsonCooler.diameter;
@@ -119,6 +120,8 @@ export class DatabaseSeedService {
       newCpu.price = jsonCpu.price;
       newCpu.imageUrl = jsonCpu.imageUrl;
       newCpu.modelUrl = jsonCpu.modelUrl;
+      newCpu.scale = jsonCpu.scale;
+      newCpu.rotation = jsonCpu.rotation;
       newCpu.active = jsonCpu.active;
 
       newCpu.series = jsonCpu.series;
@@ -129,7 +132,7 @@ export class DatabaseSeedService {
       newCpu.clockSpeed = jsonCpu.clockSpeed;
       newCpu.cacheSize = jsonCpu.cacheSize;
       newCpu.tdp = jsonCpu.tdp;
-      newCpu.coolerBB = jsonCpu.coolerBB
+      newCpu.coolerBB = jsonCpu.coolerBB;
 
       cpus.push(newCpu);
     }
@@ -149,7 +152,12 @@ export class DatabaseSeedService {
       newCpuCooler.price = jsonCpuCooler.price;
       newCpuCooler.imageUrl = jsonCpuCooler.imageUrl;
       newCpuCooler.modelUrl = jsonCpuCooler.modelUrl;
+      newCpuCooler.scale = jsonCpuCooler.scale;
+      newCpuCooler.rotation = jsonCpuCooler.rotation;
       newCpuCooler.active = jsonCpuCooler.active;
+
+      newCpuCooler.diameter = jsonCpuCooler.diameter;
+      newCpuCooler.noise = jsonCpuCooler.noise;
 
       newCpuCooler.socket = jsonCpuCooler.socket as SocketTypes[];
       newCpuCooler.tdp = jsonCpuCooler.tdp;
@@ -172,6 +180,8 @@ export class DatabaseSeedService {
       newGpu.price = jsonGpu.price;
       newGpu.imageUrl = jsonGpu.imageUrl;
       newGpu.modelUrl = jsonGpu.modelUrl;
+      newGpu.scale = jsonGpu.scale;
+      newGpu.rotation = jsonGpu.rotation;
       newGpu.active = jsonGpu.active;
 
       newGpu.series = jsonGpu.series;
@@ -201,6 +211,8 @@ export class DatabaseSeedService {
       newMemory.price = jsonMemory.price;
       newMemory.imageUrl = jsonMemory.imageUrl;
       newMemory.modelUrl = jsonMemory.modelUrl;
+      newMemory.scale = jsonMemory.scale;
+      newMemory.rotation = jsonMemory.rotation;
       newMemory.active = jsonMemory.active;
 
       newMemory.generation = jsonMemory.generation as MemoryTypes;
@@ -225,6 +237,8 @@ export class DatabaseSeedService {
       newMotherboard.price = jsonMotherboard.price;
       newMotherboard.imageUrl = jsonMotherboard.imageUrl;
       newMotherboard.modelUrl = jsonMotherboard.modelUrl;
+      newMotherboard.scale = jsonMotherboard.scale;
+      newMotherboard.rotation = jsonMotherboard.rotation;
       newMotherboard.active = jsonMotherboard.active;
 
       newMotherboard.format = jsonMotherboard.format as MoboTypes;
@@ -256,6 +270,8 @@ export class DatabaseSeedService {
       newPsu.price = jsonPsu.price;
       newPsu.imageUrl = jsonPsu.imageUrl;
       newPsu.modelUrl = jsonPsu.modelUrl;
+      newPsu.scale = jsonPsu.scale;
+      newPsu.rotation = jsonPsu.rotation;
       newPsu.active = jsonPsu.active;
 
       newPsu.power = jsonPsu.power;
@@ -281,6 +297,8 @@ export class DatabaseSeedService {
       newStorage.price = jsonStorage.price;
       newStorage.imageUrl = jsonStorage.imageUrl;
       newStorage.modelUrl = jsonStorage.modelUrl;
+      newStorage.scale = jsonStorage.scale;
+      newStorage.rotation = jsonStorage.rotation;
       newStorage.active = jsonStorage.active;
 
       newStorage.type = jsonStorage.type as StorageTypes;

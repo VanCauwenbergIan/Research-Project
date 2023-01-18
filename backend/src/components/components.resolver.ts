@@ -5,7 +5,6 @@ import {
   Args,
   createUnionType,
 } from '@nestjs/graphql';
-import { ClientMessage } from 'src/bootstrap/entities/clientMessage';
 import { ComponentsService } from './components.service';
 import { CreateDynamicInput } from './dto/create-dynamic.input';
 import { UpdateDynamicInput } from './dto/update-dynamic.input';

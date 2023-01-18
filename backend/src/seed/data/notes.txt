@@ -1,2 +1,0 @@
-- the Socket on the larger motherboard is bigger, but it will have to do due to the lack of replacements (scale 0.12 on ITX vs 0.16 on ATX)
-- rotate a case fan when the BB scale of x is larger than that of y, the intake on the ITX case is on the bottom
