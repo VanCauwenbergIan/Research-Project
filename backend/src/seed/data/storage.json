@@ -1,11 +1,11 @@
 [
   {
-    "name": "SanDisk SSD Ultra 3D",
+    "name": "SanDisk SSD Ultra 3D 1TB",
     "objectType": "Storage",
     "manufacturer": "Western Digital",
     "price": 125.99,
-    "imageUrl": "",
-    "modelUrl": "",
+    "imageUrl": "Sandisk_ultra_3d.png",
+    "modelUrl": "PC/Storage/ssd_solid_state_drive.glb",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
@@ -17,12 +17,12 @@
     "write": 525
   },
   {
-    "name": "SanDisk SSD Ultra 3D",
+    "name": "SanDisk SSD Ultra 3D 2TB",
     "objectType": "Storage",
     "manufacturer": "Western Digital",
     "price": 229.0,
-    "imageUrl": "",
-    "modelUrl": "",
+    "imageUrl": "Sandisk_ultra_3d.png",
+    "modelUrl": "PC/Storage/ssd_solid_state_drive.glb",
     "scale": { "x": 1.0, "y": 1.0, "z": 1.0 },
     "rotation": { "x": 0.0, "y": 0.0, "z": 0.0 },
     "active": true,
