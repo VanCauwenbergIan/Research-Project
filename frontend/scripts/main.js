@@ -25,6 +25,7 @@ import {
 } from 'three-mesh-bvh'
 import SnappingBox from './Utils/snappingBox'
 import { LoadingManager } from './Loaders/loadingManager'
+import { fetchAllComponents } from './Utils/requests'
 
 // DOM elements
 let htmlCanvas, htmlLoader, htmlMainMenu, htmlHeader, htmlFooter, htmlGUI
@@ -46,9 +47,13 @@ let caseBB, psuBB, motherboardBB, motherboardBB2
 // Events
 const newModelDraggedIn = new Event('model-dragged-in')
 
-const initScene = () => {
+const initScene = async () => {
   // Scene
   scene = new THREE.Scene()
+
+  // Test fetch
+  const result = await fetchAllComponents()
+  console.log(result)
 
   // Loader
   loadingManager = new LoadingManager(scene, htmlLoader, htmlGUI)
@@ -241,7 +246,7 @@ const updateBoundingBoxes = () => {
 }
 
 ;(() => {
-  window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM loaded')
     htmlCanvas = document.querySelector('.webgl')
     htmlLoader = document.querySelector('.loading-bar')
@@ -251,7 +256,7 @@ const updateBoundingBoxes = () => {
     htmlFooter = htmlGUI.querySelector('.gui-footer')
 
     // initTest()
-    initScene()
+    await initScene()
     onScreenChange(sizes, camera, renderer)
     tick()
   })

@@ -6,7 +6,7 @@ import { CreateCoolerInput } from './create-cooler.input';
 @InputType()
 export class CreateCPUCoolerInput extends CreateCoolerInput {
   @Field(() => [SocketTypes])
-  socket: SocketTypes[];
+  supportedSockets: SocketTypes[];
 
   @Field(() => Int)
   tdp: number;

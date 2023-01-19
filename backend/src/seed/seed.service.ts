@@ -159,7 +159,8 @@ export class DatabaseSeedService {
       newCpuCooler.diameter = jsonCpuCooler.diameter;
       newCpuCooler.noise = jsonCpuCooler.noise;
 
-      newCpuCooler.socket = jsonCpuCooler.socket as SocketTypes[];
+      newCpuCooler.supportedSockets =
+        jsonCpuCooler.supportedSockets as SocketTypes[];
       newCpuCooler.tdp = jsonCpuCooler.tdp;
 
       cpuCoolers.push(newCpuCooler);
@@ -302,7 +303,8 @@ export class DatabaseSeedService {
       newStorage.active = jsonStorage.active;
 
       newStorage.type = jsonStorage.type as StorageTypes;
-      newStorage.format = jsonStorage.format as StorageFormats;
+      newStorage.formatConnection =
+        jsonStorage.formatConnection as StorageFormats;
       newStorage.capacity = jsonStorage.capacity;
       newStorage.read = jsonStorage.read;
       newStorage.write = jsonStorage.write;

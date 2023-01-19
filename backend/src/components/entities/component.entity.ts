@@ -31,7 +31,7 @@ export enum VramTypes {
 export enum MemoryTypes {
   ddr3 = 'DDR3',
   ddr4 = 'DDR4',
-  ddr5 = 'DDR3',
+  ddr5 = 'DDR5',
 }
 export enum MoboTypes {
   itx = 'Mini-ITX',
@@ -218,7 +218,7 @@ export class CPU extends Component {
 export class CPUCooler extends Cooler {
   @Field(() => [SocketTypes])
   @Column()
-  socket: SocketTypes[];
+  supportedSockets: SocketTypes[];
 
   @Field(() => Int)
   @Column()
@@ -348,7 +348,7 @@ export class Storage extends Component {
 
   @Field(() => StorageFormats)
   @Column()
-  format: StorageFormats;
+  formatConnection: StorageFormats;
 
   @Field(() => Int)
   @Column()

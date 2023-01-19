@@ -84,7 +84,7 @@
 
     "series": "Core i7 1300 Raptor Lake",
     "integratedGraphics": true,
-    "socket": "LGA1700",
+    "socket": "LGA 1700",
     "coreCount": 16,
     "threadCount": 12,
     "clockSpeed": 3.4,
@@ -108,7 +108,7 @@
 
     "series": "Core i5 1300 Raptor Lake",
     "integratedGraphics": true,
-    "socket": "LGA1700",
+    "socket": "LGA 1700",
     "coreCount": 14,
     "threadCount": 20,
     "clockSpeed": 3.5,
@@ -132,7 +132,7 @@
 
     "series": "Core i3 1300 Raptor Lake",
     "integratedGraphics": false,
-    "socket": "LGA1700",
+    "socket": "LGA 1700",
     "coreCount": 4,
     "threadCount": 8,
     "clockSpeed": 3.4,
