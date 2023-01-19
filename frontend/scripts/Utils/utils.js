@@ -127,11 +127,11 @@ export const addMenuItems = (menu, models) => {
       id="${model.id}"
       class="mb-3 w-52 p-2 rounded-lg flex items-center flex-row bg-black bg-opacity-[0.12] gap-x-2"
     >
-    <img src="../../assets/images/${model.imageUrl}" class="aspect-square w-16 h-16 bg-white rounded-lg p-1"/>
-      ${model.name}
+    <img src="../../assets/images/${model.imageUrl}" class="aspect-square w-16 h-16 bg-white rounded-lg p-1" draggable="false"/>
+      <p draggable="false">${model.name}</p>
     </div>
     `
-    console.log(menu.innerHTML)
+    
     menu.innerHTML += innerHTML
   }
 }

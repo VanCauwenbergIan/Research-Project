@@ -28,10 +28,31 @@ import {
 } from 'three-mesh-bvh'
 import SnappingBox from './Utils/snappingBox'
 import { LoadingManager } from './Loaders/loadingManager'
-import { fetchAllComponents, fetchCases } from './Utils/requests'
+import {
+  fetchAllComponents,
+  fetchCases,
+  fetchCoolers,
+  fetchCPUCoolers,
+  fetchCPUs,
+  fetchGPUs,
+  fetchMemory,
+  fetchMotherboards,
+  fetchPSUs,
+  fetchStorage,
+} from './Utils/requests'
 
 // DOM elements
-let htmlCanvas, htmlLoader, htmlMainMenu, htmlHeader, htmlFooter, htmlGUI
+let htmlCanvas,
+  htmlLoader,
+  htmlGUI,
+  htmlMainMenu,
+  htmlHeader,
+  htmlFooter,
+  htmlPrice,
+  htmlWattage,
+  htmlStage,
+  htmlConfirm,
+  htmlRevert
 // Scene components
 let scene, renderer, camera, loadingManager, snappingBox
 // Meshes
@@ -74,6 +95,9 @@ let currentMenuOptions = [],
   currentMenuInfo = []
 let raycaster, pointer
 let currentstage = 0
+let priceTotal = 0,
+  wattageTotal = 0
+let centeredCases = []
 // Controls
 let orbitControls, dragControls
 // Bounding boxes
@@ -106,15 +130,15 @@ const initScene = async () => {
   renderer.setClearColor(0xccd7d6, 1)
   renderer.physicallyCorrectLights = true
 
-  addHelpers(scene)
+  // addHelpers(scene)
   loadCamera()
   loadLights()
   loadControls()
   loadRaycaster()
 
-  // Init Menu (cases)
-  handleStages(currentstage)
+  initButtons()
   handleDrag()
+  goForward()
 }
 
 const loadCamera = () => {
@@ -138,30 +162,29 @@ const loadCamera = () => {
 const loadModels = (components, arrayModels, arrayInfo) => {
   const gltfLoader = new GTLFLoader(scene, loadingManager.instance)
 
-  for (const component of components) {
-    gltfLoader
-      .addModel(`../assets/models/${component.modelUrl}`, component.id)
-      .then((result) => {
-        arrayModels.push(result)
-        result.rotation.set(
-          component.rotation.x,
-          component.rotation.y,
-          component.rotation.z,
-        )
-        result.scale.set(
-          component.scale.x,
-          component.scale.y,
-          component.scale.z,
-        )
+  if (arrayModels.length === 0) {
+    for (const component of components) {
+      gltfLoader
+        .addModel(`../assets/models/${component.modelUrl}`, component.id)
+        .then((result) => {
+          arrayModels.push(result)
+          result.rotation.set(
+            component.rotation.x,
+            component.rotation.y,
+            component.rotation.z,
+          )
+          result.scale.set(
+            component.scale.x,
+            component.scale.y,
+            component.scale.z,
+          )
 
-        if (component.objectType !== 'case') {
-          console.log('draggable')
-          result.isDraggable = true
-        }
-
-        console.log(arrayModels, arrayInfo)
-      })
-    arrayInfo.push(component)
+          if (component.objectType !== 'case') {
+            result.isDraggable = true
+          }
+        })
+      arrayInfo.push(component)
+    }
   }
 
   // gltfLoader
@@ -275,19 +298,21 @@ const handleDrag = () => {
     const chosenObjectInfo = currentMenuInfo.find(
       (info) => info.id === e.chosenModel,
     )
-    console.log(chosenObject, chosenObjectInfo)
-
     let newPosition = new THREE.Vector3()
 
     if (chosenObjectInfo.objectType === 'case') {
-      caseMesh = chosenObject
-      caseBB = new THREE.Box3().setFromObject(caseMesh)
+      if (!centeredCases.includes(chosenObjectInfo.id)) {
+        caseMesh = chosenObject
+        caseBB = new THREE.Box3().setFromObject(caseMesh)
 
-      const center = caseBB.getCenter(new THREE.Vector3())
+        const center = caseBB.getCenter(new THREE.Vector3())
 
-      caseMesh.position.x += caseMesh.position.x - center.x
-      caseMesh.position.y += caseMesh.position.y - center.y
-      caseMesh.position.z += caseMesh.position.z - center.z
+        caseMesh.position.sub(center)
+        centeredCases.push(chosenObjectInfo.id)
+      }
+
+      addToCart(chosenObjectInfo)
+      enableConfirmButton(true)
     } else {
       newPosition = convertMouseToVector3(pointer, camera.instance)
       chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
@@ -295,7 +320,78 @@ const handleDrag = () => {
 
     scene.add(chosenObject)
     disableDragMenu(htmlMainMenu)
+    enableRevertButton(true)
   })
+}
+
+const initButtons = () => {
+  htmlConfirm.addEventListener('click', () => {
+    goForward()
+  })
+  htmlRevert.addEventListener('click', () => {
+    let orphanedChildFound = false
+
+    for (const child of scene.children) {
+      if (
+        currentMenuInfo.findIndex((option) => option.id === child.name) > -1 &&
+        cart.findIndex((item) => item.id === child.name) === -1
+      ) {
+        console.log('orphan')
+        orphanedChildFound = true
+      }
+    }
+
+    if (!orphanedChildFound) {
+      removeFromCart()
+
+      if (
+        cart.length >= 1 &&
+        currentstage > 1 &&
+        currentMenuInfo[0].objectType !== cart[cart.length - 1].objectType
+      ) {
+        goBackward()
+      }
+    } else {
+      scene.children.pop()
+      enableDragMenu(htmlMainMenu)
+    }
+
+    if (cart.length == 0) {
+      enableRevertButton(false)
+
+      if (currentstage === 2) {
+        goBackward()
+      }
+    }
+  })
+}
+
+const enableConfirmButton = (bool) => {
+  htmlConfirm.disabled = !bool
+}
+
+const enableRevertButton = (bool) => {
+  htmlRevert.disabled = !bool
+}
+
+const addToCart = (item) => {
+  cart.push(item)
+  priceTotal += item.price
+  htmlPrice.innerHTML = priceTotal.toFixed(2)
+
+  console.log(cart)
+  // handleWattage()
+}
+
+const removeFromCart = () => {
+  const removedItem = cart.pop()
+  scene.children.pop()
+  enableDragMenu(htmlMainMenu)
+
+  priceTotal -= removedItem.price
+  htmlPrice.innerHTML = priceTotal.toFixed(2)
+
+  console.log(cart)
 }
 
 const goForward = () => {
@@ -309,30 +405,99 @@ const goBackward = () => {
 }
 
 const handleStages = async (stage) => {
+  console.log(stage)
+  enableConfirmButton(false)
+
   switch (stage) {
-    case 0:
-      const result = await fetchCases()
-      loadModels(result.data.cases, cases, casesInfo)
+    case 1:
+      const resultCases = await fetchCases()
+
+      loadModels(resultCases.data.cases, cases, casesInfo)
       addMenuItems(htmlMainMenu, casesInfo)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = cases
       currentMenuInfo = casesInfo
-      break
-    case 1:
+      htmlStage.innerHTML = 'Case'
       break
     case 2:
+      const resultMobo = await fetchMotherboards()
+
+      loadModels(resultMobo.data.motherboards, motherboards, motherboardsInfo)
+      addMenuItems(htmlMainMenu, motherboardsInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = motherboards
+      currentMenuInfo = motherboardsInfo
+      htmlStage.innerHTML = 'Motherboard'
       break
     case 3:
+      const resultCpus = await fetchCPUs()
+
+      loadModels(resultCpus.data.cpus, cpus, cpusInfo)
+      addMenuItems(htmlMainMenu, cpusInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = cpus
+      currentMenuInfo = cpusInfo
+      htmlStage.innerHTML = 'CPU'
       break
     case 4:
+      const resultMemory = await fetchMemory()
+
+      loadModels(resultMemory.data.memory, memory, memoryInfo)
+      addMenuItems(htmlMainMenu, memoryInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = memory
+      currentMenuInfo = memoryInfo
+      htmlStage.innerHTML = 'Memory'
       break
     case 5:
+      const resultCpuCoolers = await fetchCPUCoolers()
+
+      loadModels(resultCpuCoolers.data.cpucoolers, cpucoolers, cpucoolersInfo)
+      addMenuItems(htmlMainMenu, cpucoolersInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = cpucoolers
+      currentMenuInfo = cpucoolersInfo
+      htmlStage.innerHTML = 'CPU Cooler'
       break
     case 6:
+      const resultGpus = await fetchGPUs()
+
+      loadModels(resultGpus.data.gpus, gpus, gpusInfo)
+      addMenuItems(htmlMainMenu, gpusInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = gpus
+      currentMenuInfo = gpusInfo
+      htmlStage.innerHTML = 'GPU'
       break
     case 7:
+      const resultStorage = await fetchStorage()
+
+      loadModels(resultStorage.data.storage, storage, storageInfo)
+      addMenuItems(htmlMainMenu, storageInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = storage
+      currentMenuInfo = storageInfo
+      htmlStage.innerHTML = 'Storage Device'
       break
     case 8:
+      const resultCoolers = await fetchCoolers()
+
+      loadModels(resultCoolers.data.coolers, coolers, coolersInfo)
+      addMenuItems(htmlMainMenu, coolersInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = coolers
+      currentMenuInfo = coolersInfo
+      htmlStage.innerHTML = 'Case Fan'
+      break
+    case 9:
+      const resultPsus = await fetchPSUs()
+
+      loadModels(resultPsus.data.coolers, psus, psusInfo)
+      addMenuItems(htmlMainMenu, psusInfo)
+      enableDragMenu(htmlMainMenu)
+      currentMenuOptions = psus
+      currentMenuInfo = psusInfo
+      htmlStage.innerHTML = 'PSU'
       break
   }
 }
@@ -375,6 +540,11 @@ const updateBoundingBoxes = () => {
     htmlMainMenu = htmlGUI.querySelector('.gui-main-menu')
     htmlHeader = htmlGUI.querySelector('.gui-header')
     htmlFooter = htmlGUI.querySelector('.gui-footer')
+    htmlPrice = htmlHeader.querySelector('.gui-header-price')
+    htmlWattage = htmlHeader.querySelector('.gui-header-wattage')
+    htmlStage = htmlFooter.querySelector('.gui-footer-stage')
+    htmlRevert = htmlFooter.querySelector('.gui-footer-revert')
+    htmlConfirm = htmlFooter.querySelector('.gui-footer-confirm')
 
     // initTest()
     await initScene()
