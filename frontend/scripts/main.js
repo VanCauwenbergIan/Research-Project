@@ -4,17 +4,17 @@ import * as THREE from 'three'
 import Camera from './Cameras/perspectiveCamera'
 import {
   addHelpers,
-  onMouseDown,
   onDrag,
   onMouseMove,
   onScreenChange,
-  onMouseUp,
   checkCollision,
   addMenuItems,
   convertMouseToVector3,
   initMenuEvents,
   enableDragMenu,
   disableDragMenu,
+  refreshMouse,
+  getFirstIntersect,
 } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
@@ -186,58 +186,6 @@ const loadModels = (components, arrayModels, arrayInfo) => {
       arrayInfo.push(component)
     }
   }
-
-  // gltfLoader
-  //   .addModel(
-  //     '../assets/models/PC/Cases/computer_case_based_off_of_nzxt_510b.glb',
-  //     'case',
-  //     true,
-  //   )
-  //   .then((result) => {
-  //     pcCase = result
-  //     caseBB = new THREE.Box3().setFromObject(pcCase)
-
-  //     const center = caseBB.getCenter(new THREE.Vector3())
-
-  //     pcCase.position.x += pcCase.position.x - center.x
-  //     pcCase.position.y += pcCase.position.y - center.y
-  //     pcCase.position.z += pcCase.position.z - center.z
-  //   })
-  // gltfLoader
-  //   .addModel('../assets/models/PC/PSU/power_supply_-_basic.glb', 'psu', true)
-  //   .then((result) => {
-  //     psu = result
-  //     psuBB = new THREE.Box3().setFromObject(psu)
-  //     psu.position.set(0, -2, 3)
-  //     psu.scale.set(0.55, 0.55, 0.55)
-  //     psu.rotation.y = Math.PI * 1.5
-  //     psu.rotation.z = Math.PI
-  //     psu.isDraggable = true
-  //   })
-  // gltfLoader
-  //   .addModel(
-  //     '../assets/models/PC/Motherboards/motherboard_am4.glb',
-  //     'motherboard',
-  //   )
-  //   .then((result) => {
-  //     motherboard = result
-  //     motherboardBB = new THREE.Box3().setFromObject(motherboard)
-  //     motherboard.scale.set(0.49, 0.49, 0.49)
-  //     motherboard.rotation.x = Math.PI / 2
-  //     motherboard.isDraggable = true
-  //   })
-  // gltfLoader
-  //   .addModel(
-  //     '../assets//models/PC/Motherboards/maximus_vi_formula.glb',
-  //     'motherboard2',
-  //   )
-  //   .then((result) => {
-  //     motherboard2 = result
-  //     motherboardBB2 = new THREE.Box3().setFromObject(motherboard2)
-  //     motherboard2.scale.set(0.6, 0.6, 0.6)
-  //     motherboard2.rotation.y = Math.PI * 1.5
-  //     motherboard2.isDraggable = true
-  //   })
 }
 
 const loadLights = () => {
@@ -285,8 +233,8 @@ const loadRaycaster = () => {
     sizes,
     currentlyDraggable,
   )
-  onMouseDown(raycaster, pointer, camera.instance, scene, sizes, snappingBox)
-  onMouseUp(raycaster, pointer, camera.instance, scene, sizes, snappingBox)
+  onMouseDown()
+  onMouseUp()
 }
 
 const handleDrag = () => {
@@ -316,6 +264,36 @@ const handleDrag = () => {
     } else {
       newPosition = convertMouseToVector3(pointer, camera.instance)
       chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
+      chosenObject.isDraggable = true
+
+      switch (chosenObjectInfo.objectType) {
+        case 'cooler':
+          break
+        case 'cpu':
+          cpuMesh = chosenObject
+          cpuBB = new THREE.Box3().setFromObject(cpuMesh)
+          break
+        case 'cpu_cooler':
+          cpucoolerMesh = chosenObject
+          cpucoolerBB = new THREE.Box3().setFromObject(cpucoolerMesh)
+          break
+        case 'gpu':
+          gpuMesh = chosenObject
+          gpuBB = new THREE.Box3().setFromObject(gpuMesh)
+          break
+        case 'memory':
+          break
+        case 'motherboard':
+          motherboardMesh = chosenObject
+          motherboardBB = new THREE.Box3().setFromObject(motherboardMesh)
+          break
+        case 'psu':
+          psuMesh = chosenObject
+          psuBB = new THREE.Box3().setFromObject(psuMesh)
+          break
+        case 'storage':
+          break
+      }
     }
 
     scene.add(chosenObject)
@@ -342,13 +320,17 @@ const initButtons = () => {
     }
 
     if (!orphanedChildFound) {
+      const lastChild = cart[cart.length - 1]
+
       removeFromCart()
 
       if (
         cart.length >= 1 &&
         currentstage > 1 &&
-        currentMenuInfo[0].objectType !== cart[cart.length - 1].objectType
+        currentMenuInfo[0].objectType !== lastChild.objectType
       ) {
+        console.log('impossible')
+        console.log(currentMenuInfo)
         goBackward()
       }
     } else {
@@ -517,15 +499,17 @@ const updateBoundingBoxes = () => {
   if (snappingBox) {
     snappingBox.updateBoundingBox()
 
-    if (caseBB && psuBB) {
-      psuBB = new THREE.Box3().setFromObject(psu)
-
+    if (motherboardMesh && motherboardBB) {
+      motherboardBB = new THREE.Box3().setFromObject(motherboardMesh)
       checkCollision(
         snappingBox,
-        psuBB,
-        psu,
+        motherboardBB,
+        motherboardMesh,
+        currentMenuInfo,
         dragControls.instance,
         orbitControls.instance,
+        cart,
+        priceTotal
       )
     }
   }
@@ -552,3 +536,68 @@ const updateBoundingBoxes = () => {
     tick()
   })
 })()
+
+const onMouseDown = () => {
+  window.addEventListener('mousedown', (e) => {
+    refreshMouse(pointer, sizes, e)
+    raycaster.setFromCamera(pointer, camera.instance)
+
+    let object = getFirstIntersect(raycaster, scene)
+
+    if (object && object.isDraggable) {
+      dragControls.instance.activate()
+
+      const objectInfo = currentMenuInfo.find((info) => info.id === object.name)
+      const currentCase = cart.find((item) => item.objectType === 'case')
+      const currentMotherboard = cart.find(
+        (item) => item.objectType === 'motherboard',
+      )
+      const currentCpu = cart.find((item) => item.objectType === 'cpu')
+      let position, scale
+
+      switch (objectInfo.objectType) {
+        case 'cooler':
+          break
+        case 'cpu':
+          position = currentMotherboard.cpuBB.position
+          scale = currentMotherboard.cpuBB.scale
+          break
+        case 'cpu_cooler':
+          position = currentCpu.coolerBB.position
+          scale = currentCpu.coolerBB.scale
+          break
+        case 'gpu':
+          position = currentMotherboard.gpuBB.position
+          scale = currentMotherboard.gpuBB.scale
+          break
+        case 'memory':
+          break
+        case 'motherboard':
+          position = currentCase.motherboardBB.position
+          scale = currentCase.motherboardBB.scale
+          break
+        case 'psu':
+          position = currentCase.psuBB.position
+          scale = currentCase.psuBB.scale
+          break
+        case 'storage':
+          break
+      }
+
+      snappingBox.addBoundingBox(position, scale)
+    }
+  })
+}
+
+const onMouseUp = () => {
+  window.addEventListener('mouseup', (e) => {
+    refreshMouse(pointer, sizes, e)
+    raycaster.setFromCamera(pointer, camera.instance)
+
+    let object = getFirstIntersect(raycaster, scene)
+
+    if (object) {
+      snappingBox.removeBox()
+    }
+  })
+}
