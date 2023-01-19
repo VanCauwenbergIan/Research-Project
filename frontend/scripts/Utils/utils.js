@@ -118,14 +118,40 @@ export const checkCollision = (
   }
 }
 
-export const initMenuItems = (menu, canvas, event) => {
+export const addMenuItems = (menu, models) => {
+  menu.innerHTML = ''
+
+  for (const model of models) {
+    const innerHTML = `          
+    <div
+      id="${model.id}"
+      class="mb-3 w-52 p-2 rounded-lg flex items-center flex-row bg-black bg-opacity-[0.12] gap-x-2"
+    >
+    <img src="../../assets/images/${model.imageUrl}" class="aspect-square w-16 h-16 bg-white rounded-lg p-1"/>
+      ${model.name}
+    </div>
+    `
+    console.log(menu.innerHTML)
+    menu.innerHTML += innerHTML
+  }
+}
+
+export const enableDragMenu = (menu) => {
   for (const child of menu.children) {
     child.setAttribute('draggable', true)
     child.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('text/plain', child.id)
     })
   }
+}
 
+export const disableDragMenu = (menu) => {
+  for (const child of menu.children) {
+    child.setAttribute('draggable', false)
+  }
+}
+
+export const initMenuEvents = (event, canvas) => {
   canvas.addEventListener('dragover', (e) => {
     e.preventDefault()
   })

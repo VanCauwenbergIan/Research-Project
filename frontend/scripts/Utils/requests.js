@@ -424,7 +424,7 @@ export const fetchCases = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchCoolers = async () => {
@@ -460,7 +460,7 @@ export const fetchCoolers = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchCPUs = async () => {
@@ -514,7 +514,7 @@ export const fetchCPUs = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchCPUCoolers = async () => {
@@ -553,7 +553,7 @@ export const fetchCPUCoolers = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchGPUs = async () => {
@@ -595,7 +595,7 @@ export const fetchGPUs = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchMemory = async () => {
@@ -632,7 +632,7 @@ export const fetchMemory = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchStorage = async () => {
@@ -671,7 +671,7 @@ export const fetchStorage = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchMotherboards = async () => {
@@ -747,7 +747,7 @@ export const fetchMotherboards = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
 
 export const fetchPSUs = async () => {
@@ -785,5 +785,5 @@ export const fetchPSUs = async () => {
       }
     }`,
     }),
-  })
+  }).then((result) => result.json())
 }
