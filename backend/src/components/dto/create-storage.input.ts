@@ -8,7 +8,7 @@ export class CreateStorageInput extends CreateComponentInput {
   type: StorageTypes;
 
   @Field(() => StorageFormats)
-  format: StorageFormats;
+  formatConnection: StorageFormats;
 
   @Field(() => Int)
   capacity: number;

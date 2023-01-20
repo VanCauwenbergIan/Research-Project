@@ -9,6 +9,7 @@ export class LoadingManager {
     this.scene = scene
     this.domLoader = domLoader
     this.gui = gui
+    this.loading = true
     this.addLoader()
   }
 
@@ -49,29 +50,35 @@ export class LoadingManager {
   }
 
   onLoad(overlay) {
-    gsap.delayedCall(0.5, () => {
-      gsap.to(overlay.material.uniforms.uAlpha, { duration: 3, value: 0 })
+    if (this.loading) {
+      gsap.delayedCall(0.5, () => {
+        gsap.to(overlay.material.uniforms.uAlpha, { duration: 3, value: 0 })
 
-      // Loader
-      this.domLoader.style.transform = 'scaleX(0)'
-      this.domLoader.classList.remove('origin-top-left')
-      this.domLoader.classList.add('origin-top-right')
-      this.domLoader.classList.remove('duration-500')
-      this.domLoader.classList.add('duration-[1500]')
-      this.domLoader.classList.add('ease-in-out')
+        // Loader
+        this.domLoader.style.transform = 'scaleX(0)'
+        this.domLoader.classList.remove('origin-top-left')
+        this.domLoader.classList.add('origin-top-right')
+        this.domLoader.classList.remove('duration-500')
+        this.domLoader.classList.add('duration-[1500]')
+        this.domLoader.classList.add('ease-in-out')
 
-      gsap.delayedCall(1.5, () => {
-        // Open menus
-        this.gui.style.visibility = 'visible'
-        gsap.to(this.gui, { duration: 1.5, opacity: 1 })
+        gsap.delayedCall(1.5, () => {
+          // Open menus
+          this.gui.style.visibility = 'visible'
+          gsap.to(this.gui, { duration: 1.5, opacity: 1 })
+        })
       })
-    })
+
+      this.loading = false
+    }
   }
 
   onProgress(itemUrl, itemsLoaded, itemsTotal, element) {
     const ratio = itemsLoaded / itemsTotal
 
-    element.style.transform = `scaleX(${ratio})`
+    if (this.loading) {
+      element.style.transform = `scaleX(${ratio})`
+    }
   }
 
   onError(error) {

@@ -237,7 +237,7 @@ export class ComponentsService {
     cpuCoolerObj.noise = updateCpuCoolerInput.noise;
 
     cpuCoolerObj.tdp = updateCpuCoolerInput.tdp;
-    cpuCoolerObj.socket = updateCpuCoolerInput.socket;
+    cpuCoolerObj.supportedSockets = updateCpuCoolerInput.supportedSockets;
 
     return this.cpuCoolerRepository.save(cpuCoolerObj);
   }
@@ -378,7 +378,7 @@ export class ComponentsService {
     storageObj.active = updateStorageInput.active;
 
     storageObj.type = updateStorageInput.type;
-    storageObj.format = updateStorageInput.format;
+    storageObj.formatConnection = updateStorageInput.formatConnection;
     storageObj.capacity = updateStorageInput.capacity;
     storageObj.read = updateStorageInput.read;
     storageObj.write = updateStorageInput.write;

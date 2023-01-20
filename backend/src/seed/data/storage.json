@@ -1,7 +1,7 @@
 [
   {
     "name": "SanDisk SSD Ultra 3D 1TB",
-    "objectType": "Storage",
+    "objectType": "Storage Device",
     "manufacturer": "Western Digital",
     "price": 125.99,
     "imageUrl": "Sandisk_ultra_3d.png",
@@ -11,14 +11,14 @@
     "active": true,
 
     "type": "SSD",
-    "format": "SATA",
+    "formatConnection": "SATA",
     "capacity": 1024,
     "read": 550,
     "write": 525
   },
   {
     "name": "SanDisk SSD Ultra 3D 2TB",
-    "objectType": "Storage",
+    "objectType": "Storage Device",
     "manufacturer": "Western Digital",
     "price": 229.0,
     "imageUrl": "Sandisk_ultra_3d.png",
@@ -28,7 +28,7 @@
     "active": true,
 
     "type": "SSD",
-    "format": "SATA",
+    "formatConnection": "SATA",
     "capacity": 2048,
     "read": 550,
     "write": 525
