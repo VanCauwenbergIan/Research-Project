@@ -7,7 +7,6 @@ import {
   onDrag,
   onMouseMove,
   onScreenChange,
-  checkCollision,
   addMenuItems,
   convertMouseToVector3,
   initMenuEvents,
@@ -48,11 +47,17 @@ let htmlCanvas,
   htmlMainMenu,
   htmlHeader,
   htmlFooter,
-  htmlPrice,
+  htmlPriceHeader,
   htmlWattage,
   htmlStage,
   htmlConfirm,
-  htmlRevert
+  htmlRevert,
+  htmlCart,
+  htmlCartOpen,
+  htmlCartClose,
+  htmlCartItems,
+  htmlOverlay,
+  htmlPriceCart
 // Scene components
 let scene, renderer, camera, loadingManager, snappingBox
 // Meshes
@@ -237,8 +242,120 @@ const loadRaycaster = () => {
   onMouseUp()
 }
 
+export const checkCollision = (bb2, model) => {
+  const bb1 = snappingBox.boundingBox
+
+  if (bb2.intersectsBox(bb1) && !orbitControls.instance.enabled) {
+    const center = bb1.getCenter(new THREE.Vector3())
+    const sizeBB = bb1.getSize(new THREE.Vector3())
+    const sizeModel = bb2.getSize(new THREE.Vector3())
+    const modelInfo = currentMenuInfo.find((info) => info.id === model.name)
+
+    dragControls.instance.deactivate()
+    model.isDraggable = false
+    snappingBox.removeBox()
+
+    if (modelInfo && !cart.includes(modelInfo)) {
+      addToCart(modelInfo)
+    }
+
+    if (center.x >= 0) {
+      model.position.x = center.x + (sizeBB.x - sizeModel.x) / 2
+    } else {
+      model.position.x = center.x - (sizeBB.x - sizeModel.x) / 2
+    }
+    if (center.y >= 0) {
+      model.position.y = center.y + (sizeBB.y - sizeModel.y) / 2
+    } else {
+      model.position.y = center.y - (sizeBB.y - sizeModel.y) / 2
+    }
+    if (center.z >= 0) {
+      model.position.z = center.z + (sizeBB.z - sizeModel.z) / 2
+    } else {
+      model.position.z = center.z - (sizeBB.z - sizeModel.z) / 2
+    }
+
+    window.addEventListener('mouseup', () => {
+      orbitControls.instance.enabled = true
+      window.removeEventListener('mouseup', this)
+    })
+  }
+}
+
+const onMouseDown = () => {
+  window.addEventListener('mousedown', (e) => {
+    refreshMouse(pointer, sizes, e)
+    raycaster.setFromCamera(pointer, camera.instance)
+
+    let object = getFirstIntersect(raycaster, scene)
+
+    if (object && object.isDraggable) {
+      dragControls.instance.activate()
+
+      const objectInfo = currentMenuInfo.find((info) => info.id === object.name)
+      const currentCase = cart.find((item) => item.objectType === 'case')
+      const currentMotherboard = cart.find(
+        (item) => item.objectType === 'motherboard',
+      )
+      const currentCpu = cart.find((item) => item.objectType === 'cpu')
+      let position, scale
+
+      switch (objectInfo.objectType) {
+        case 'cooler':
+          break
+        case 'cpu':
+          position = currentMotherboard.cpuBB.position
+          scale = currentMotherboard.cpuBB.scale
+          break
+        case 'cpu_cooler':
+          position = currentCpu.coolerBB.position
+          scale = currentCpu.coolerBB.scale
+          break
+        case 'gpu':
+          position = currentMotherboard.gpuBB.position
+          scale = currentMotherboard.gpuBB.scale
+          break
+        case 'memory':
+          break
+        case 'motherboard':
+          position = currentCase.motherboardBB.position
+          scale = currentCase.motherboardBB.scale
+          break
+        case 'psu':
+          position = currentCase.psuBB.position
+          scale = currentCase.psuBB.scale
+          break
+        case 'storage':
+          break
+      }
+
+      snappingBox.addBoundingBox(position, scale)
+    }
+  })
+}
+
+const onMouseUp = () => {
+  window.addEventListener('mouseup', (e) => {
+    refreshMouse(pointer, sizes, e)
+    raycaster.setFromCamera(pointer, camera.instance)
+
+    let object = getFirstIntersect(raycaster, scene)
+
+    if (object) {
+      snappingBox.removeBox()
+    }
+  })
+}
+
 const handleDrag = () => {
-  initMenuEvents(newModelDraggedIn, htmlCanvas)
+  initMenuEvents(
+    newModelDraggedIn,
+    htmlCanvas,
+    htmlCart,
+    htmlOverlay,
+    htmlCartOpen,
+    htmlCartClose,
+  )
   htmlCanvas.addEventListener('model-dragged-in', (e) => {
     const chosenObject = currentMenuOptions.find(
       (option) => option.name === e.chosenModel,
@@ -329,8 +446,6 @@ const initButtons = () => {
         currentstage > 1 &&
         currentMenuInfo[0].objectType !== lastChild.objectType
       ) {
-        console.log('impossible')
-        console.log(currentMenuInfo)
         goBackward()
       }
     } else {
@@ -359,7 +474,23 @@ const enableRevertButton = (bool) => {
 const addToCart = (item) => {
   cart.push(item)
   priceTotal += item.price
-  htmlPrice.innerHTML = priceTotal.toFixed(2)
+  htmlPriceHeader.innerHTML = priceTotal.toFixed(2)
+  htmlPriceCart.innerHTML = priceTotal.toFixed(2)
+
+  htmlCartItems.innerHTML += `              
+  <li id="${item.id}-cart" class="my-8 flex flex-row gap-x-8">
+    <img src="../assets/images/${item.imageUrl}"
+    class="aspect-square w-20 h-20 bg-black bg-opacity-[0.12] rounded-lg p-1"/>
+    <div class="flex flex-row justify-between items-center w-full">
+      <div class="flex flex-col justify-between">
+        <p class="text-lg font-semibold">${item.name}</p>
+        <P class="text-base opacity-50 capitalize">${item.objectType} - ${
+    item.manufacturer
+  }</P>
+      </div>
+      <p class="font-semibold text-lg">€ ${item.price.toFixed(2)}</p>
+    </div>
+  </li>`
 
   console.log(cart)
   // handleWattage()
@@ -367,11 +498,15 @@ const addToCart = (item) => {
 
 const removeFromCart = () => {
   const removedItem = cart.pop()
+  const element = document.getElementById(`${removedItem.id}-cart`)
+
+  htmlCartItems.removeChild(element)
   scene.children.pop()
   enableDragMenu(htmlMainMenu)
 
   priceTotal -= removedItem.price
-  htmlPrice.innerHTML = priceTotal.toFixed(2)
+  htmlPriceHeader.innerHTML = priceTotal.toFixed(2)
+  htmlPriceCart.innerHTML = priceTotal.toFixed(2)
 
   console.log(cart)
 }
@@ -501,16 +636,7 @@ const updateBoundingBoxes = () => {
 
     if (motherboardMesh && motherboardBB) {
       motherboardBB = new THREE.Box3().setFromObject(motherboardMesh)
-      checkCollision(
-        snappingBox,
-        motherboardBB,
-        motherboardMesh,
-        currentMenuInfo,
-        dragControls.instance,
-        orbitControls.instance,
-        cart,
-        priceTotal
-      )
+      checkCollision(motherboardBB, motherboardMesh)
     }
   }
 }
@@ -524,11 +650,17 @@ const updateBoundingBoxes = () => {
     htmlMainMenu = htmlGUI.querySelector('.gui-main-menu')
     htmlHeader = htmlGUI.querySelector('.gui-header')
     htmlFooter = htmlGUI.querySelector('.gui-footer')
-    htmlPrice = htmlHeader.querySelector('.gui-header-price')
+    htmlPriceHeader = htmlHeader.querySelector('.gui-header-price')
     htmlWattage = htmlHeader.querySelector('.gui-header-wattage')
     htmlStage = htmlFooter.querySelector('.gui-footer-stage')
     htmlRevert = htmlFooter.querySelector('.gui-footer-revert')
     htmlConfirm = htmlFooter.querySelector('.gui-footer-confirm')
+    htmlCart = htmlGUI.querySelector('.gui-cart')
+    htmlCartOpen = htmlHeader.querySelector('.gui-header-opencart')
+    htmlCartClose = htmlCart.querySelector('.gui-cart-close')
+    htmlCartItems = htmlCart.querySelector('.gui-cart-items')
+    htmlOverlay = htmlGUI.querySelector('.gui-overlay')
+    htmlPriceCart = htmlCart.querySelector('.gui-cart-price')
 
     // initTest()
     await initScene()
@@ -536,68 +668,3 @@ const updateBoundingBoxes = () => {
     tick()
   })
 })()
-
-const onMouseDown = () => {
-  window.addEventListener('mousedown', (e) => {
-    refreshMouse(pointer, sizes, e)
-    raycaster.setFromCamera(pointer, camera.instance)
-
-    let object = getFirstIntersect(raycaster, scene)
-
-    if (object && object.isDraggable) {
-      dragControls.instance.activate()
-
-      const objectInfo = currentMenuInfo.find((info) => info.id === object.name)
-      const currentCase = cart.find((item) => item.objectType === 'case')
-      const currentMotherboard = cart.find(
-        (item) => item.objectType === 'motherboard',
-      )
-      const currentCpu = cart.find((item) => item.objectType === 'cpu')
-      let position, scale
-
-      switch (objectInfo.objectType) {
-        case 'cooler':
-          break
-        case 'cpu':
-          position = currentMotherboard.cpuBB.position
-          scale = currentMotherboard.cpuBB.scale
-          break
-        case 'cpu_cooler':
-          position = currentCpu.coolerBB.position
-          scale = currentCpu.coolerBB.scale
-          break
-        case 'gpu':
-          position = currentMotherboard.gpuBB.position
-          scale = currentMotherboard.gpuBB.scale
-          break
-        case 'memory':
-          break
-        case 'motherboard':
-          position = currentCase.motherboardBB.position
-          scale = currentCase.motherboardBB.scale
-          break
-        case 'psu':
-          position = currentCase.psuBB.position
-          scale = currentCase.psuBB.scale
-          break
-        case 'storage':
-          break
-      }
-
-      snappingBox.addBoundingBox(position, scale)
-    }
-  })
-}
-
-const onMouseUp = () => {
-  window.addEventListener('mouseup', (e) => {
-    refreshMouse(pointer, sizes, e)
-    raycaster.setFromCamera(pointer, camera.instance)
-
-    let object = getFirstIntersect(raycaster, scene)
-
-    if (object) {
-      snappingBox.removeBox()
-    }
-  })
-}

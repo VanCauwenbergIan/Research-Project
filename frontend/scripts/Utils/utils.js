@@ -51,57 +51,6 @@ export const onMouseMove = (
  * General purpose functions
  */
 
-export const checkCollision = (
-  snappingBox,
-  bb2,
-  model,
-  allInfo,
-  dragControls,
-  orbitControls,
-  cart,
-  price,
-) => {
-  const bb1 = snappingBox.boundingBox
-
-  if (bb2.intersectsBox(bb1) && !orbitControls.enabled) {
-    const center = bb1.getCenter(new THREE.Vector3())
-    const sizeBB = bb1.getSize(new THREE.Vector3())
-    const sizeModel = bb2.getSize(new THREE.Vector3())
-    const modelInfo = allInfo.find((info) => info.id === model.name)
-
-    dragControls.deactivate()
-    model.isDraggable = false
-    snappingBox.removeBox()
-
-    if (modelInfo && !cart.includes(modelInfo)) {
-      cart.push(modelInfo)
-      price += modelInfo.price
-      console.log(cart)
-    }
-
-    if (center.x >= 0) {
-      model.position.x = center.x + (sizeBB.x - sizeModel.x) / 2
-    } else {
-      model.position.x = center.x - (sizeBB.x - sizeModel.x) / 2
-    }
-    if (center.y >= 0) {
-      model.position.y = center.y + (sizeBB.y - sizeModel.y) / 2
-    } else {
-      model.position.y = center.y - (sizeBB.y - sizeModel.y) / 2
-    }
-    if (center.z >= 0) {
-      model.position.z = center.z + (sizeBB.z - sizeModel.z) / 2
-    } else {
-      model.position.z = center.z - (sizeBB.z - sizeModel.z) / 2
-    }
-
-    window.addEventListener('mouseup', () => {
-      orbitControls.enabled = true
-      window.removeEventListener('mouseup', this)
-    })
-  }
-}
-
 export const addMenuItems = (menu, models) => {
   menu.innerHTML = ''
 
@@ -135,7 +84,7 @@ export const disableDragMenu = (menu) => {
   }
 }
 
-export const initMenuEvents = (event, canvas) => {
+export const initMenuEvents = (event, canvas, cart, overlay, open, close) => {
   canvas.addEventListener('dragover', (e) => {
     e.preventDefault()
   })
@@ -149,6 +98,18 @@ export const initMenuEvents = (event, canvas) => {
 
     event.chosenModel = data
     canvas.dispatchEvent(event)
+  })
+  open.addEventListener('click', () => {
+    cart.classList.remove('hidden')
+    overlay.classList.remove('hidden')
+
+    cart.classList.add('flex')
+  })
+  close.addEventListener('click', () => {
+    cart.classList.remove('flex')
+
+    cart.classList.add('hidden')
+    overlay.classList.add('hidden')
   })
 }
 
