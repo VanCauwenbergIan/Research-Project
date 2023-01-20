@@ -148,6 +148,56 @@ export const getFirstIntersect = (raycaster, scene) => {
   }
 }
 
+export const calculatePower = (cart) => {
+  let memoryCount = 0
+  let totalPower = 0
+
+  for (const item of cart) {
+    switch (item.objectType) {
+      case 'cpu':
+      case 'gpu':
+        totalPower += item.tdp
+        break
+      case 'memory':
+        memoryCount += item.size
+        break
+      case 'cpu_cooler':
+        totalPower += 10
+        break
+      case 'cooler':
+        totalPower += 5
+        break
+      case 'motherboard':
+        switch (item.format) {
+          case 'itx':
+            totalPower += 30
+            break
+          case 'm_atx':
+            totalPower += 65
+            break
+          case 'atx':
+            totalPower += 70
+            break
+          case 'e_atx':
+            totalPower += 105
+            break
+        }
+        break
+      case 'storage':
+        if (item.type === 'ssd') {
+          totalPower += 10
+        } else {
+          totalPower += 20
+        }
+        break
+    }
+  }
+
+  totalPower += (7 * memoryCount) / 8
+
+  return totalPower
+}
+
 /**
  * Debugging only
  */

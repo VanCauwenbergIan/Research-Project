@@ -14,6 +14,7 @@ import {
   disableDragMenu,
   refreshMouse,
   getFirstIntersect,
+  calculatePower,
 } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
@@ -474,8 +475,10 @@ const enableRevertButton = (bool) => {
 const addToCart = (item) => {
   cart.push(item)
   priceTotal += item.price
+  wattageTotal = calculatePower(cart)
   htmlPriceHeader.innerHTML = priceTotal.toFixed(2)
   htmlPriceCart.innerHTML = priceTotal.toFixed(2)
+  htmlWattage.innerHTML = wattageTotal
 
   htmlCartItems.innerHTML += `              
   <li id="${item.id}-cart" class="my-8 flex flex-row gap-x-8">
@@ -505,8 +508,10 @@ const removeFromCart = () => {
   enableDragMenu(htmlMainMenu)
 
   priceTotal -= removedItem.price
+  wattageTotal = calculatePower(cart)
   htmlPriceHeader.innerHTML = priceTotal.toFixed(2)
   htmlPriceCart.innerHTML = priceTotal.toFixed(2)
+  htmlWattage.innerHTML = wattageTotal
 
   console.log(cart)
 }
