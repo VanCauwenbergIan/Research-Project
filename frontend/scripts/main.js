@@ -104,6 +104,7 @@ let currentstage = 0
 let priceTotal = 0,
   wattageTotal = 0
 let centeredCases = []
+let motherboardCentered
 // Controls
 let orbitControls, dragControls
 // Bounding boxes
@@ -173,6 +174,10 @@ const loadModels = (components, arrayModels, arrayInfo) => {
       gltfLoader
         .addModel(`../assets/models/${component.modelUrl}`, component.id)
         .then((result) => {
+          if (component.objectType !== 'case') {
+            result.isDraggable = true
+          }
+
           arrayModels.push(result)
           result.rotation.set(
             component.rotation.x,
@@ -184,10 +189,6 @@ const loadModels = (components, arrayModels, arrayInfo) => {
             component.scale.y,
             component.scale.z,
           )
-
-          if (component.objectType !== 'case') {
-            result.isDraggable = true
-          }
         })
       arrayInfo.push(component)
     }
@@ -288,32 +289,37 @@ const onMouseDown = () => {
         case 'cooler':
           break
         case 'cpu':
-          position = currentMotherboard.cpuBB.position
+          const BBposition = currentMotherboard.cpuBB.position
+
+          position = new THREE.Vector3(BBposition.x, BBposition.y, BBposition.z)
           scale = currentMotherboard.cpuBB.scale
+          snappingBox.addBoundingBox(position, scale, motherboardCentered)
           break
         case 'cpu_cooler':
           position = currentCpu.coolerBB.position
           scale = currentCpu.coolerBB.scale
+          snappingBox.addBoundingBox(position, scale)
           break
         case 'gpu':
           position = currentMotherboard.gpuBB.position
           scale = currentMotherboard.gpuBB.scale
+          snappingBox.addBoundingBox(position, scale, motherboardCentered)
           break
         case 'memory':
           break
         case 'motherboard':
           position = currentCase.motherboardBB.position
           scale = currentCase.motherboardBB.scale
+          snappingBox.addBoundingBox(position, scale)
           break
         case 'psu':
           position = currentCase.psuBB.position
           scale = currentCase.psuBB.scale
+          snappingBox.addBoundingBox(position, scale)
           break
         case 'storage':
           break
       }
-
-      snappingBox.addBoundingBox(position, scale)
     }
   })
 }
@@ -363,6 +369,12 @@ const handleDrag = () => {
       addToCart(chosenObjectInfo)
       enableConfirmButton(true)
     } else {
+      if (chosenObjectInfo.objectType === 'motherboard') {
+        const bb = new THREE.Box3().setFromObject(chosenObject)
+        const center = bb.getCenter(new THREE.Vector3())
+        motherboardCentered = chosenObject.position.sub(center)
+      }
+
       newPosition = convertMouseToVector3(pointer, camera.instance)
       chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
       chosenObject.isDraggable = true

@@ -29,7 +29,11 @@ export default class SnappingBox {
       .applyMatrix4(this.mesh.matrixWorld)
   }
 
-  addBoundingBox(position, scale) {
+  addBoundingBox(position, scale, offsetVector) {
+    if (offsetVector) {
+      position.add(offsetVector)
+    }
+
     this.mesh.position.set(position.x, position.y, position.z)
     this.mesh.scale.set(scale.x, scale.y, scale.z)
     this.scene.add(this.mesh)
