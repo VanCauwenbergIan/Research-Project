@@ -215,8 +215,6 @@ const loadControls = () => {
     htmlCanvas,
   )
 
-  dragControls.instance.transformGroup = true
-
   onDrag(orbitControls.instance, dragControls.instance)
 }
 
@@ -472,7 +470,7 @@ const addToCart = (item) => {
     <div class="flex flex-row justify-between items-center w-full">
       <div class="flex flex-col justify-between">
         <p class="text-lg font-semibold">${item.name}</p>
-        <P class="text-base opacity-50 capitalize">${item.objectType} - ${
+        <P class="text-base opacity-50">${item.objectType} - ${
     item.manufacturer
   }</P>
       </div>
@@ -482,6 +480,14 @@ const addToCart = (item) => {
 
   console.log(cart)
   enableConfirmButton(true)
+  // reinit drag controls to prevent jumping after snap
+  dragControls.instance.dispose()
+  dragControls = new DragControls(
+    currentlyDraggable,
+    camera.instance,
+    htmlCanvas,
+  )
+  onDrag(orbitControls.instance, dragControls.instance)
 }
 
 const removeFromCart = () => {

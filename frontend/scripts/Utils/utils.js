@@ -42,6 +42,7 @@ export const onMouseMove = (
     let object = getFirstIntersect(raycaster, scene)
 
     if (object && object.isDraggable) {
+      console.log('draggable', object)
       currentlyDraggable.push(object)
     }
   })

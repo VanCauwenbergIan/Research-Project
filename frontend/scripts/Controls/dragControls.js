@@ -16,5 +16,6 @@ export default class DragControls extends Controls {
       this.camera,
       this.canvas,
     )
+    this.instance.transformGroup = true
   }
 }
