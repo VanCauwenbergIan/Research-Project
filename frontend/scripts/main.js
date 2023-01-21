@@ -248,8 +248,6 @@ export const checkCollision = (bb2, model) => {
 
   if (bb2.intersectsBox(bb1) && !orbitControls.instance.enabled) {
     const center = bb1.getCenter(new THREE.Vector3())
-    const sizeBB = bb1.getSize(new THREE.Vector3())
-    const sizeModel = bb2.getSize(new THREE.Vector3())
     const modelInfo = currentMenuInfo.find((info) => info.id === model.name)
 
     dragControls.instance.deactivate()
@@ -260,21 +258,8 @@ export const checkCollision = (bb2, model) => {
       addToCart(modelInfo)
     }
 
-    if (center.x >= 0) {
-      model.position.x = center.x + (sizeBB.x - sizeModel.x) / 2
-    } else {
-      model.position.x = center.x - (sizeBB.x - sizeModel.x) / 2
-    }
-    if (center.y >= 0) {
-      model.position.y = center.y + (sizeBB.y - sizeModel.y) / 2
-    } else {
-      model.position.y = center.y - (sizeBB.y - sizeModel.y) / 2
-    }
-    if (center.z >= 0) {
-      model.position.z = center.z + (sizeBB.z - sizeModel.z) / 2
-    } else {
-      model.position.z = center.z - (sizeBB.z - sizeModel.z) / 2
-    }
+    // bb1.localToWorld(center)
+    model.position.set(center.x, center.y, center.z)
 
     window.addEventListener('mouseup', () => {
       orbitControls.instance.enabled = true
@@ -496,7 +481,7 @@ const addToCart = (item) => {
   </li>`
 
   console.log(cart)
-  // handleWattage()
+  enableConfirmButton(true)
 }
 
 const removeFromCart = () => {
@@ -505,6 +490,7 @@ const removeFromCart = () => {
 
   htmlCartItems.removeChild(element)
   scene.children.pop()
+  enableConfirmButton(false)
   enableDragMenu(htmlMainMenu)
 
   priceTotal -= removedItem.price
@@ -535,7 +521,7 @@ const handleStages = async (stage) => {
       const resultCases = await fetchCases()
 
       loadModels(resultCases.data.cases, cases, casesInfo)
-      addMenuItems(htmlMainMenu, casesInfo)
+      addMenuItems(htmlMainMenu, casesInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = cases
       currentMenuInfo = casesInfo
@@ -545,7 +531,7 @@ const handleStages = async (stage) => {
       const resultMobo = await fetchMotherboards()
 
       loadModels(resultMobo.data.motherboards, motherboards, motherboardsInfo)
-      addMenuItems(htmlMainMenu, motherboardsInfo)
+      addMenuItems(htmlMainMenu, motherboardsInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = motherboards
       currentMenuInfo = motherboardsInfo
@@ -555,7 +541,7 @@ const handleStages = async (stage) => {
       const resultCpus = await fetchCPUs()
 
       loadModels(resultCpus.data.cpus, cpus, cpusInfo)
-      addMenuItems(htmlMainMenu, cpusInfo)
+      addMenuItems(htmlMainMenu, cpusInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = cpus
       currentMenuInfo = cpusInfo
@@ -565,7 +551,7 @@ const handleStages = async (stage) => {
       const resultMemory = await fetchMemory()
 
       loadModels(resultMemory.data.memory, memory, memoryInfo)
-      addMenuItems(htmlMainMenu, memoryInfo)
+      addMenuItems(htmlMainMenu, memoryInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = memory
       currentMenuInfo = memoryInfo
@@ -575,7 +561,7 @@ const handleStages = async (stage) => {
       const resultCpuCoolers = await fetchCPUCoolers()
 
       loadModels(resultCpuCoolers.data.cpucoolers, cpucoolers, cpucoolersInfo)
-      addMenuItems(htmlMainMenu, cpucoolersInfo)
+      addMenuItems(htmlMainMenu, cpucoolersInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = cpucoolers
       currentMenuInfo = cpucoolersInfo
@@ -585,7 +571,7 @@ const handleStages = async (stage) => {
       const resultGpus = await fetchGPUs()
 
       loadModels(resultGpus.data.gpus, gpus, gpusInfo)
-      addMenuItems(htmlMainMenu, gpusInfo)
+      addMenuItems(htmlMainMenu, gpusInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = gpus
       currentMenuInfo = gpusInfo
@@ -595,7 +581,7 @@ const handleStages = async (stage) => {
       const resultStorage = await fetchStorage()
 
       loadModels(resultStorage.data.storage, storage, storageInfo)
-      addMenuItems(htmlMainMenu, storageInfo)
+      addMenuItems(htmlMainMenu, storageInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = storage
       currentMenuInfo = storageInfo
@@ -605,7 +591,7 @@ const handleStages = async (stage) => {
       const resultCoolers = await fetchCoolers()
 
       loadModels(resultCoolers.data.coolers, coolers, coolersInfo)
-      addMenuItems(htmlMainMenu, coolersInfo)
+      addMenuItems(htmlMainMenu, coolersInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = coolers
       currentMenuInfo = coolersInfo
@@ -615,7 +601,7 @@ const handleStages = async (stage) => {
       const resultPsus = await fetchPSUs()
 
       loadModels(resultPsus.data.coolers, psus, psusInfo)
-      addMenuItems(htmlMainMenu, psusInfo)
+      addMenuItems(htmlMainMenu, psusInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = psus
       currentMenuInfo = psusInfo
@@ -639,9 +625,12 @@ const updateBoundingBoxes = () => {
   if (snappingBox) {
     snappingBox.updateBoundingBox()
 
-    if (motherboardMesh && motherboardBB) {
+    if (motherboardMesh && motherboardBB && currentstage === 2) {
       motherboardBB = new THREE.Box3().setFromObject(motherboardMesh)
       checkCollision(motherboardBB, motherboardMesh)
+    } else if (cpuMesh && cpuBB && currentstage === 3) {
+      cpuBB = new THREE.Box3().setFromObject(cpuMesh)
+      checkCollision(cpuBB, cpuMesh)
     }
   }
 }

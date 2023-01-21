@@ -51,8 +51,14 @@ export const onMouseMove = (
  * General purpose functions
  */
 
-export const addMenuItems = (menu, models) => {
+export const addMenuItems = (menu, models, cart) => {
   menu.innerHTML = ''
+
+  const currentCase = cart.find((item) => item.objectType === 'case')
+  const currentMotherboard = cart.find(
+    (item) => item.objectType === 'motherboard',
+  )
+  const totalPower = calculatePower(cart)
 
   for (const model of models) {
     const innerHTML = `          
@@ -65,7 +71,60 @@ export const addMenuItems = (menu, models) => {
     </div>
     `
 
-    menu.innerHTML += innerHTML
+    switch (model.objectType) {
+      case 'case':
+      case 'cooler':
+      case 'storage':
+        menu.innerHTML += innerHTML
+        break
+      case 'motherboard':
+        if (
+          currentCase &&
+          currentCase.supportedMotherboardFormats.includes(model.format)
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'cpu':
+        if (currentMotherboard && currentMotherboard.socket === model.socket) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'memory':
+        if (
+          currentMotherboard &&
+          currentMotherboard.supportedMemoryTypes.includes(model.generation)
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'cpu_cooler':
+        if (
+          currentMotherboard &&
+          model.supportedSockets.includes(currentMotherboard.socket)
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'gpu':
+        if (
+          currentCase &&
+          currentCase.pciSlots >= model.slots &&
+          currentCase.maxLengthGPU >= model.length
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'psu':
+        if (
+          currentCase &&
+          currentCase.supportedMotherboardFormats.includes(model.format) &&
+          (model.power / 100) * model.rating + 50 >= totalPower
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+    }
   }
 }
 
@@ -118,15 +177,14 @@ export const convertMouseToVector3 = (pointer, camera) => {
   const vector = new THREE.Vector3()
   const position = new THREE.Vector3()
 
-  vector.set(pointer.x, pointer.y, 0.5)
-  vector.unproject(camera)
-  vector.sub(camera.position).normalize()
+  vector.set(pointer.x, 0, 3)
+  // vector.unproject(camera)
 
-  const distance = -camera.position.z / vector.z
+  // const distance = -camera.position.z / vector.z
 
-  position.copy(camera.position).add(vector.multiplyScalar(distance))
+  // position.copy(camera.position).add(vector.multiplyScalar(distance))
 
-  return position
+  return vector
 }
 
 export const refreshMouse = (pointer, sizes, e) => {
