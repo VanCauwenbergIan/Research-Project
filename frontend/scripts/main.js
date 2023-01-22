@@ -255,6 +255,26 @@ export const checkCollision = (bb2, model) => {
 
     if (modelInfo && !cart.includes(modelInfo)) {
       addToCart(modelInfo)
+    } else if (modelInfo) {
+      let inCart = []
+
+      switch (modelInfo.objectType) {
+        case 'memory':
+          inCart = cart.filter((item) => item.id === modelInfo.id)
+
+          if (inCart.length < memoryMeshes.length) {
+            increaseCountCart(modelInfo)
+          }
+          break
+        case 'cooler':
+          count = coolerMeshes.length
+          increaseCountCart(modelInfo)
+          break
+        case 'storage':
+          count = storageMeshes.length
+          increaseCountCart(modelInfo)
+          break
+      }
     }
 
     model.position.set(center.x, center.y, center.z)
@@ -537,7 +557,7 @@ const enableRevertButton = (bool) => {
   htmlRevert.disabled = !bool
 }
 
-const addToCart = (item) => {
+const addToCart = (item, count = 1) => {
   cart.push(item)
   priceTotal += item.price
   wattageTotal = calculatePower(cart)
@@ -546,17 +566,19 @@ const addToCart = (item) => {
   htmlWattage.innerHTML = wattageTotal
 
   htmlCartItems.innerHTML += `              
-  <li id="${item.id}-cart" class="my-8 flex flex-row gap-x-8">
+  <li id="${item.id}-cart" class="gui-cart-item my-8 flex flex-row gap-x-8">
     <img src="../assets/images/${item.imageUrl}"
     class="aspect-square w-20 h-20 bg-black bg-opacity-[0.12] rounded-lg p-1"/>
     <div class="flex flex-row justify-between items-center w-full">
       <div class="flex flex-col justify-between">
-        <p class="text-lg font-semibold">${item.name}</p>
+        <p class="gui-cart-item-count text-lg font-semibold">x1 ${item.name}</p>
         <P class="text-base opacity-50">${item.objectType} - ${
     item.manufacturer
   }</P>
       </div>
-      <p class="font-semibold text-lg">€ ${item.price.toFixed(2)}</p>
+      <p class="font-semibold text-lg gui-cart-item-price">€ ${item.price.toFixed(
+        2,
+      )}</p>
     </div>
   </li>`
 
@@ -581,11 +603,36 @@ const addToCart = (item) => {
   }
 }
 
+const increaseCountCart = (item) => {
+  const element = document.getElementById(`${item.id}-cart`)
+  let countElement = element.querySelector('.gui-cart-item-count')
+  let priceElement = element.querySelector('.gui-cart-item-price')
+  let count = countElement.innerHTML[1]
+
+  count++
+  cart.push(item)
+  countElement.innerHTML = `x${count}` + countElement.innerHTML.slice(2)
+  priceElement.innerHTML = `€ ${(count * item.price).toFixed(2)}`
+  priceTotal += item.price
+  htmlPriceHeader.innerHTML = priceTotal.toFixed(2)
+  htmlPriceCart.innerHTML = priceTotal.toFixed(2)
+}
+
 const removeFromCart = () => {
   const removedItem = cart.pop()
   const element = document.getElementById(`${removedItem.id}-cart`)
+  let countElement = element.querySelector('.gui-cart-item-count')
+  let priceElement = element.querySelector('.gui-cart-item-price')
+  let count = countElement.innerHTML[1]
 
-  htmlCartItems.removeChild(element)
+  if (count > 1) {
+    count--
+    countElement.innerHTML = `x${count}` + countElement.innerHTML.slice(2)
+    priceElement.innerHTML = `€ ${(count * removedItem.price).toFixed(2)}`
+  } else {
+    htmlCartItems.removeChild(element)
+  }
+
   scene.children.pop()
   enableConfirmButton(false)
   enableDragMenu(htmlMainMenu)
