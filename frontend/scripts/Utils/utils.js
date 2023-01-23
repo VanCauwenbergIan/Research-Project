@@ -119,7 +119,7 @@ export const addMenuItems = (menu, models, cart) => {
         if (
           currentCase &&
           currentCase.supportedMotherboardFormats.includes(model.format) &&
-          (model.power / 100) * model.rating + 50 >= totalPower
+          (model.power / 100) * model.rating - 50 >= totalPower
         ) {
           menu.innerHTML += innerHTML
         }
@@ -254,6 +254,43 @@ export const calculatePower = (cart) => {
   totalPower += (7 * memoryCount) / 8
 
   return totalPower
+}
+
+export const lookForOrphans = (scene, menuInfo, cart) => {
+  let orphanedChildFound = false
+  let previousChildren = []
+
+  for (const child of scene.children) {
+    if (
+      menuInfo.findIndex((option) => option.id === child.name) > -1 &&
+      cart.findIndex((item) => item.id === child.name) === -1
+    ) {
+      console.log('orphan')
+      orphanedChildFound = true
+    }
+
+    previousChildren.push(child)
+  }
+
+  for (const child of scene.children) {
+    const childrenInArray = previousChildren.filter(
+      (prevChild) => prevChild.name === child.name,
+    )
+    const element = document.getElementById(`${child.name}-cart`)
+
+    if (element) {
+      let countElement = element.querySelector('.gui-cart-item-count')
+      let count = countElement.innerHTML[1]
+      console.log(childrenInArray.length, count)
+
+      if (childrenInArray.length != count) {
+        console.log('orphan')
+        orphanedChildFound = true
+      }
+    }
+  }
+
+  return orphanedChildFound
 }
 
 /**

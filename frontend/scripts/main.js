@@ -15,6 +15,7 @@ import {
   refreshMouse,
   getFirstIntersect,
   calculatePower,
+  lookForOrphans,
 } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
@@ -535,7 +536,7 @@ const handleDrag = () => {
           break
         case 'storage':
           if (currentCase.drivesBB.length > storageMeshes.length) {
-            const existingModel = scene.getObjectByName(chosenObject.id)
+            const existingModel = scene.getObjectByName(chosenObjectInfo.id)
             let copy
 
             if (!existingModel) {
@@ -564,17 +565,7 @@ const initButtons = () => {
     goForward()
   })
   htmlRevert.addEventListener('click', () => {
-    let orphanedChildFound = false
-
-    for (const child of scene.children) {
-      if (
-        currentMenuInfo.findIndex((option) => option.id === child.name) > -1 &&
-        cart.findIndex((item) => item.id === child.name) === -1
-      ) {
-        console.log('orphan')
-        orphanedChildFound = true
-      }
-    }
+    let orphanedChildFound = lookForOrphans(scene, currentMenuInfo, cart)
 
     if (!orphanedChildFound) {
       const lastChild = cart[cart.length - 1]
@@ -591,6 +582,21 @@ const initButtons = () => {
     } else {
       scene.children.pop()
       enableDragMenu(htmlMainMenu)
+
+      switch (currentstage) {
+        case 4:
+          memoryMeshes.pop()
+          memoryBB.pop()
+          break
+        case 7:
+          storageMeshes.pop()
+          storageBB.pop()
+          break
+        case 8:
+          coolersMeshes.pop()
+          coolersBB.pop()
+          break
+      }
     }
 
     if (cart.length == 0) {
@@ -658,7 +664,7 @@ const addToCart = (item) => {
         enableDragMenu(htmlMainMenu)
       }
       break
-    case 'coolers':
+    case 'cooler':
       if (currentCase.fansBB.length < coolersMeshes.length) {
         enableDragMenu(htmlMainMenu)
       }
@@ -698,6 +704,7 @@ const increaseCountCart = (item) => {
 }
 
 const removeFromCart = () => {
+  console.log('remove from cart')
   const removedItem = cart.pop()
   const element = document.getElementById(`${removedItem.id}-cart`)
   let countElement = element.querySelector('.gui-cart-item-count')
@@ -741,8 +748,38 @@ const removeFromCart = () => {
 }
 
 const goForward = () => {
-  currentstage += 1
-  handleStages(currentstage)
+  const orphanFound = lookForOrphans(scene, currentMenuInfo, cart)
+  console.log('check for orphan')
+
+  // if (orphanFound) {
+  //   scene.children.pop()
+  //   enableDragMenu(htmlMainMenu)
+
+  //   switch (currentstage) {
+  //     case 4:
+  //       memoryMeshes.pop()
+  //       memoryBB.pop()
+  //       break
+  //     case 7:
+  //       storageMeshes.pop()
+  //       storageBB.pop()
+  //       break
+  //     case 8:
+  //       coolersMeshes.pop()
+  //       coolersBB.pop()
+  //       break
+  //   }
+  // }
+
+  if (currentstage !== 9) {
+    currentstage += 1
+    handleStages(currentstage)
+  } else {
+    htmlCart.classList.remove('hidden')
+    htmlOverlay.classList.remove('hidden')
+    htmlCart.classList.add('flex')
+    htmlOverlay.classList.add('flex')
+  }
 }
 
 const goBackward = () => {
