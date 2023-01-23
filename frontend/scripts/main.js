@@ -69,7 +69,7 @@ let caseMesh,
   cpucoolerMesh,
   gpuMesh,
   storageMeshes = [],
-  coolerMeshes = [],
+  coolersMeshes = [],
   psuMesh
 // Objects
 let cases = [],
@@ -104,7 +104,7 @@ let currentstage = 0
 let priceTotal = 0,
   wattageTotal = 0
 let centeredCases = []
-let motherboardCentered
+let motherboardCentered, cpuCentered
 // Controls
 let orbitControls, dragControls
 // Bounding boxes
@@ -115,7 +115,7 @@ let caseBB,
   cpucoolerBB,
   gpuBB,
   storageBB = [],
-  coolerBB = [],
+  coolersBB = [],
   psuBB
 // Events
 const newModelDraggedIn = new Event('model-dragged-in')
@@ -256,23 +256,23 @@ export const checkCollision = (bb2, model) => {
     if (modelInfo && !cart.includes(modelInfo)) {
       addToCart(modelInfo)
     } else if (modelInfo) {
-      let inCart = []
+      let inCart = cart.filter((item) => item.id === modelInfo.id)
 
       switch (modelInfo.objectType) {
         case 'memory':
-          inCart = cart.filter((item) => item.id === modelInfo.id)
-
           if (inCart.length < memoryMeshes.length) {
             increaseCountCart(modelInfo)
           }
           break
         case 'cooler':
-          count = coolerMeshes.length
-          increaseCountCart(modelInfo)
+          if (inCart.length < coolersMeshes.length) {
+            increaseCountCart(modelInfo)
+          }
           break
         case 'storage':
-          count = storageMeshes.length
-          increaseCountCart(modelInfo)
+          if (inCart.length < storageMeshes.length) {
+            increaseCountCart(modelInfo)
+          }
           break
       }
     }
@@ -306,6 +306,15 @@ const onMouseDown = () => {
 
       switch (objectInfo.objectType) {
         case 'cooler':
+          const coolersInCart = cart.filter(
+            (item) => item.objectType === 'cooler',
+          )
+          const coolersBB = currentCase.fansBB
+          const currentCoolerBB = coolersBB[coolersInCart.length]
+
+          position = currentCoolerBB.position
+          scale = currentCoolerBB.scale
+          snappingBox.addBoundingBox(position, scale)
           break
         case 'cpu':
           position = new THREE.Vector3(
@@ -317,23 +326,31 @@ const onMouseDown = () => {
           snappingBox.addBoundingBox(position, scale, motherboardCentered)
           break
         case 'cpu_cooler':
-          position = currentCpu.coolerBB.position
+          position = new THREE.Vector3(
+            currentCpu.coolerBB.position.x,
+            currentCpu.coolerBB.position.y,
+            currentCpu.coolerBB.position.z,
+          )
           scale = currentCpu.coolerBB.scale
-          snappingBox.addBoundingBox(position, scale)
+          snappingBox.addBoundingBox(position, scale, cpuCentered)
           break
         case 'gpu':
-          position = currentMotherboard.gpuBB.position
+          position = new THREE.Vector3(
+            currentMotherboard.gpuBB.position.x,
+            currentMotherboard.gpuBB.position.y,
+            currentMotherboard.gpuBB.position.z,
+          )
           scale = currentMotherboard.gpuBB.scale
           snappingBox.addBoundingBox(position, scale, motherboardCentered)
           break
         case 'memory':
-          const memoryBBs = []
+          const memoryBB = []
           const memoryInCart = cart.filter(
             (item) => item.objectType === 'memory',
           )
 
           for (const bb of currentMotherboard.ramBB) {
-            memoryBBs.push({
+            memoryBB.push({
               position: new THREE.Vector3(
                 bb.position.x,
                 bb.position.y,
@@ -343,10 +360,10 @@ const onMouseDown = () => {
             })
           }
 
-          const currentBB = memoryBBs[memoryInCart.length]
+          const currentMemoryBB = memoryBB[memoryInCart.length]
 
-          position = currentBB.position
-          scale = currentBB.scale
+          position = currentMemoryBB.position
+          scale = currentMemoryBB.scale
           snappingBox.addBoundingBox(position, scale, motherboardCentered)
           break
         case 'motherboard':
@@ -360,6 +377,15 @@ const onMouseDown = () => {
           snappingBox.addBoundingBox(position, scale)
           break
         case 'storage':
+          const storageInCart = cart.filter(
+            (item) => item.objectType === 'storage',
+          )
+          const storageBB = currentCase.drivesBB
+          const currentStorageBB = storageBB[storageInCart.length]
+
+          position = currentStorageBB.position
+          scale = currentStorageBB.scale
+          snappingBox.addBoundingBox(position, scale)
           break
       }
     }
@@ -413,20 +439,41 @@ const handleDrag = () => {
       enableConfirmButton(true)
     } else {
       if (chosenObjectInfo.objectType === 'motherboard') {
-        const bb = new THREE.Box3().setFromObject(chosenObject)
-        const center = bb.getCenter(new THREE.Vector3())
-        motherboardCentered = chosenObject.position.sub(center)
+      } else if (chosenObjectInfo.objectType === 'cpu') {
       }
 
       newPosition = convertMouseToVector3(pointer, camera.instance)
 
+      const currentMotherboard = cart.find(
+        (item) => item.objectType === 'motherboard',
+      )
+      const currentCase = cart.find((item) => item.objectType === 'case')
+
       switch (chosenObjectInfo.objectType) {
         case 'cooler':
-          chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
-          chosenObject.isDraggable = true
-          scene.add(chosenObject)
+          if (currentCase.fansBB.length > coolersMeshes.length) {
+            const existingModel = scene.getObjectByName(chosenObjectInfo.id)
+            let copy
+
+            if (!existingModel) {
+              copy = chosenObject
+            } else {
+              copy = existingModel.clone()
+            }
+
+            copy.position.set(newPosition.x, newPosition.y, newPosition.z)
+            copy.isDraggable = true
+            coolersMeshes.push(copy)
+            coolersBB.push(new THREE.Box3().setFromObject(copy))
+            scene.add(copy)
+          }
           break
         case 'cpu':
+          const centerCPU = new THREE.Box3()
+            .setFromObject(chosenObject)
+            .getCenter(new THREE.Vector3())
+          cpuCentered = chosenObject.position.sub(centerCPU)
+
           chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
           chosenObject.isDraggable = true
           cpuMesh = chosenObject
@@ -448,37 +495,31 @@ const handleDrag = () => {
           scene.add(chosenObject)
           break
         case 'memory':
-          const currentMotherboard = cart.find(
-            (item) => item.objectType === 'motherboard',
-          )
-
           console.log(memoryMeshes)
 
           if (currentMotherboard.memorySlots > memoryMeshes.length) {
             const existingModel = scene.getObjectByName(chosenObjectInfo.id)
+            let copy
 
             if (!existingModel) {
-              chosenObject.position.set(
-                newPosition.x,
-                newPosition.y,
-                newPosition.z,
-              )
-              chosenObject.isDraggable = true
-              memoryMeshes.push(chosenObject)
-              memoryBB.push(new THREE.Box3().setFromObject(chosenObject))
-              scene.add(chosenObject)
+              copy = chosenObject
             } else {
-              const copy = existingModel.clone()
-
-              copy.position.set(newPosition.x, newPosition.y, newPosition.z)
-              copy.isDraggable = true
-              memoryMeshes.push(copy)
-              memoryBB.push(new THREE.Box3().setFromObject(copy))
-              scene.add(copy)
+              copy = existingModel.clone()
             }
+
+            copy.position.set(newPosition.x, newPosition.y, newPosition.z)
+            copy.isDraggable = true
+            memoryMeshes.push(copy)
+            memoryBB.push(new THREE.Box3().setFromObject(copy))
+            scene.add(copy)
           }
           break
         case 'motherboard':
+          const centerMobo = new THREE.Box3()
+            .setFromObject(chosenObject)
+            .getCenter(new THREE.Vector3())
+          motherboardCentered = chosenObject.position.sub(centerMobo)
+
           chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
           chosenObject.isDraggable = true
           motherboardMesh = chosenObject
@@ -493,9 +534,22 @@ const handleDrag = () => {
           scene.add(chosenObject)
           break
         case 'storage':
-          chosenObject.position.set(newPosition.x, newPosition.y, newPosition.z)
-          chosenObject.isDraggable = true
-          scene.add(chosenObject)
+          if (currentCase.drivesBB.length > storageMeshes.length) {
+            const existingModel = scene.getObjectByName(chosenObject.id)
+            let copy
+
+            if (!existingModel) {
+              copy = chosenObject
+            } else {
+              copy = existingModel.clone()
+            }
+
+            copy.position.set(newPosition.x, newPosition.y, newPosition.z)
+            copy.isDraggable = true
+            storageMeshes.push(copy)
+            storageBB.push(new THREE.Box3().setFromObject(copy))
+            scene.add(copy)
+          }
           break
       }
     }
@@ -557,7 +611,7 @@ const enableRevertButton = (bool) => {
   htmlRevert.disabled = !bool
 }
 
-const addToCart = (item, count = 1) => {
+const addToCart = (item) => {
   cart.push(item)
   priceTotal += item.price
   wattageTotal = calculatePower(cart)
@@ -593,12 +647,26 @@ const addToCart = (item, count = 1) => {
   )
   onDrag(orbitControls.instance, dragControls.instance)
 
+  const currentMotherboard = cart.find(
+    (item) => item.objectType === 'motherboard',
+  )
+  const currentCase = cart.find((item) => item.objectType === 'case')
+
   switch (item.objectType) {
     case 'memory':
+      if (currentMotherboard.memorySlots < memoryMeshes.length) {
+        enableDragMenu(htmlMainMenu)
+      }
+      break
     case 'coolers':
-      enableDragMenu(htmlMainMenu)
+      if (currentCase.fansBB.length < coolersMeshes.length) {
+        enableDragMenu(htmlMainMenu)
+      }
       break
     case 'storage':
+      if (currentCase.drivesBB.length < storageMeshes.length) {
+        enableDragMenu(htmlMainMenu)
+      }
       break
   }
 }
@@ -614,8 +682,19 @@ const increaseCountCart = (item) => {
   countElement.innerHTML = `x${count}` + countElement.innerHTML.slice(2)
   priceElement.innerHTML = `€ ${(count * item.price).toFixed(2)}`
   priceTotal += item.price
+  wattageTotal = calculatePower(cart)
   htmlPriceHeader.innerHTML = priceTotal.toFixed(2)
   htmlPriceCart.innerHTML = priceTotal.toFixed(2)
+  htmlWattage.innerHTML = wattageTotal
+  enableConfirmButton(true)
+  // reinit drag controls to prevent jumping after snap
+  dragControls.instance.dispose()
+  dragControls = new DragControls(
+    currentlyDraggable,
+    camera.instance,
+    htmlCanvas,
+  )
+  onDrag(orbitControls.instance, dragControls.instance)
 }
 
 const removeFromCart = () => {
@@ -647,6 +726,14 @@ const removeFromCart = () => {
     case 'memory':
       memoryMeshes.pop()
       memoryBB.pop()
+      break
+    case 'cooler':
+      coolersMeshes.pop()
+      coolersBB.pop()
+      break
+    case 'storage':
+      storageMeshes.pop()
+      storageBB.pop()
       break
   }
 
@@ -736,6 +823,8 @@ const handleStages = async (stage) => {
       loadModels(resultStorage.data.storage, storage, storageInfo)
       addMenuItems(htmlMainMenu, storageInfo, cart)
       enableDragMenu(htmlMainMenu)
+      storageMeshes = []
+      storageBB = []
       currentMenuOptions = storage
       currentMenuInfo = storageInfo
       htmlStage.innerHTML = 'Storage Device'
@@ -746,6 +835,8 @@ const handleStages = async (stage) => {
       loadModels(resultCoolers.data.coolers, coolers, coolersInfo)
       addMenuItems(htmlMainMenu, coolersInfo, cart)
       enableDragMenu(htmlMainMenu)
+      coolersMeshes = []
+      coolersBB = []
       currentMenuOptions = coolers
       currentMenuInfo = coolersInfo
       htmlStage.innerHTML = 'Case Fan'
@@ -753,7 +844,7 @@ const handleStages = async (stage) => {
     case 9:
       const resultPsus = await fetchPSUs()
 
-      loadModels(resultPsus.data.coolers, psus, psusInfo)
+      loadModels(resultPsus.data.psus, psus, psusInfo)
       addMenuItems(htmlMainMenu, psusInfo, cart)
       enableDragMenu(htmlMainMenu)
       currentMenuOptions = psus
@@ -778,10 +869,10 @@ const updateBoundingBoxes = () => {
   if (snappingBox) {
     snappingBox.updateBoundingBox()
 
-    if (motherboardMesh && motherboardBB && currentstage === 2) {
+    if (motherboardMesh && currentstage === 2) {
       motherboardBB = new THREE.Box3().setFromObject(motherboardMesh)
       checkCollision(motherboardBB, motherboardMesh)
-    } else if (cpuMesh && cpuBB && currentstage === 3) {
+    } else if (cpuMesh && currentstage === 3) {
       cpuBB = new THREE.Box3().setFromObject(cpuMesh)
       checkCollision(cpuBB, cpuMesh)
     } else if (memoryMeshes.length >= 1 && currentstage === 4) {
@@ -792,6 +883,31 @@ const updateBoundingBoxes = () => {
         memoryBB[index] = new THREE.Box3().setFromObject(memoryMeshes[index])
         checkCollision(memoryBB[index], memoryMeshes[index])
       }
+    } else if (cpucoolerMesh && currentstage === 5) {
+      cpucoolerBB = new THREE.Box3().setFromObject(cpucoolerMesh)
+      checkCollision(cpucoolerBB, cpucoolerMesh)
+    } else if (gpuMesh && gpuBB && currentstage === 6) {
+      gpuBB = new THREE.Box3().setFromObject(gpuMesh)
+      checkCollision(gpuBB, gpuMesh)
+    } else if (storageMeshes.length >= 1 && currentstage === 7) {
+      const storageInCart = cart.filter((item) => item.objectType === 'storage')
+      const index = storageInCart.length
+
+      if (storageMeshes.length > index) {
+        storageBB[index] = new THREE.Box3().setFromObject(storageMeshes[index])
+        checkCollision(storageBB[index], storageMeshes[index])
+      }
+    } else if (coolersMeshes.length >= 1 && currentstage === 8) {
+      const coolersInCart = cart.filter((item) => item.objectType === 'cooler')
+      const index = coolersInCart.length
+
+      if (coolersMeshes.length > index) {
+        coolersBB[index] = new THREE.Box3().setFromObject(coolersMeshes[index])
+        checkCollision(coolersBB[index], coolersMeshes[index])
+      }
+    } else if (psuMesh && currentstage === 9) {
+      psuBB = new THREE.Box3().setFromObject(psuMesh)
+      checkCollision(psuBB, psuMesh)
     }
   }
 }
