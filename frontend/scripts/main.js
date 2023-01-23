@@ -660,17 +660,17 @@ const addToCart = (item) => {
 
   switch (item.objectType) {
     case 'memory':
-      if (currentMotherboard.memorySlots < memoryMeshes.length) {
+      if (currentMotherboard.memorySlots > memoryMeshes.length) {
         enableDragMenu(htmlMainMenu)
       }
       break
     case 'cooler':
-      if (currentCase.fansBB.length < coolersMeshes.length) {
+      if (currentCase.fansBB.length > coolersMeshes.length) {
         enableDragMenu(htmlMainMenu)
       }
       break
     case 'storage':
-      if (currentCase.drivesBB.length < storageMeshes.length) {
+      if (currentCase.drivesBB.length > storageMeshes.length) {
         enableDragMenu(htmlMainMenu)
       }
       break
@@ -701,6 +701,29 @@ const increaseCountCart = (item) => {
     htmlCanvas,
   )
   onDrag(orbitControls.instance, dragControls.instance)
+
+  const currentMotherboard = cart.find(
+    (item) => item.objectType === 'motherboard',
+  )
+  const currentCase = cart.find((item) => item.objectType === 'case')
+
+  switch (item.objectType) {
+    case 'memory':
+      if (currentMotherboard.memorySlots > memoryMeshes.length) {
+        enableDragMenu(htmlMainMenu)
+      }
+      break
+    case 'cooler':
+      if (currentCase.fansBB.length > coolersMeshes.length) {
+        enableDragMenu(htmlMainMenu)
+      }
+      break
+    case 'storage':
+      if (currentCase.drivesBB.length > storageMeshes.length) {
+        enableDragMenu(htmlMainMenu)
+      }
+      break
+  }
 }
 
 const removeFromCart = () => {
@@ -731,6 +754,15 @@ const removeFromCart = () => {
 
   switch (removedItem.objectType) {
     case 'memory':
+    case 'cooler':
+    case 'storage':
+      if (
+        cart.filter((item) => item.objectType === removedItem.objectType)
+          .length >= 1
+      ) {
+        enableConfirmButton(true)
+      }
+    case 'memory':
       memoryMeshes.pop()
       memoryBB.pop()
       break
@@ -751,25 +783,25 @@ const goForward = () => {
   const orphanFound = lookForOrphans(scene, currentMenuInfo, cart)
   console.log('check for orphan')
 
-  // if (orphanFound) {
-  //   scene.children.pop()
-  //   enableDragMenu(htmlMainMenu)
+  if (orphanFound) {
+    scene.children.pop()
+    enableDragMenu(htmlMainMenu)
 
-  //   switch (currentstage) {
-  //     case 4:
-  //       memoryMeshes.pop()
-  //       memoryBB.pop()
-  //       break
-  //     case 7:
-  //       storageMeshes.pop()
-  //       storageBB.pop()
-  //       break
-  //     case 8:
-  //       coolersMeshes.pop()
-  //       coolersBB.pop()
-  //       break
-  //   }
-  // }
+    switch (currentstage) {
+      case 4:
+        memoryMeshes.pop()
+        memoryBB.pop()
+        break
+      case 7:
+        storageMeshes.pop()
+        storageBB.pop()
+        break
+      case 8:
+        coolersMeshes.pop()
+        coolersBB.pop()
+        break
+    }
+  }
 
   if (currentstage !== 9) {
     currentstage += 1
