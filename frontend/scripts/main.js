@@ -278,6 +278,17 @@ export const checkCollision = (bb2, model) => {
       }
     }
 
+    if (modelInfo && modelInfo.objectType === 'cooler') {
+      const size = snappingBox.boundingBox.getSize(new THREE.Vector3())
+      console.log('rotation', size)
+
+      if (size.x > size.y) {
+        model.rotation.set(Math.PI / 2, 0, 0)
+      } else {
+        model.rotation.set(0, Math.PI / 2, 0)
+      }
+    }
+
     model.position.set(center.x, center.y, center.z)
 
     window.addEventListener('mouseup', () => {
@@ -496,8 +507,6 @@ const handleDrag = () => {
           scene.add(chosenObject)
           break
         case 'memory':
-          console.log(memoryMeshes)
-
           if (currentMotherboard.memorySlots > memoryMeshes.length) {
             const existingModel = scene.getObjectByName(chosenObjectInfo.id)
             let copy
@@ -727,7 +736,6 @@ const increaseCountCart = (item) => {
 }
 
 const removeFromCart = () => {
-  console.log('remove from cart')
   const removedItem = cart.pop()
   const element = document.getElementById(`${removedItem.id}-cart`)
   let countElement = element.querySelector('.gui-cart-item-count')
@@ -781,7 +789,6 @@ const removeFromCart = () => {
 
 const goForward = () => {
   const orphanFound = lookForOrphans(scene, currentMenuInfo, cart)
-  console.log('check for orphan')
 
   if (orphanFound) {
     scene.children.pop()
@@ -860,8 +867,6 @@ const handleStages = async (stage) => {
       loadModels(resultMemory.data.memory, memory, memoryInfo)
       addMenuItems(htmlMainMenu, memoryInfo, cart)
       enableDragMenu(htmlMainMenu)
-      memoryMeshes = []
-      memoryBB = []
       currentMenuOptions = memory
       currentMenuInfo = memoryInfo
       htmlStage.innerHTML = 'Memory'

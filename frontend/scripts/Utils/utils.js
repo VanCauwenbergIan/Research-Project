@@ -121,7 +121,13 @@ export const addMenuItems = (menu, models, cart) => {
           currentCase.supportedMotherboardFormats.includes(model.format) &&
           (model.power / 100) * model.rating - 50 >= totalPower
         ) {
-          menu.innerHTML += innerHTML
+          if (currentCase.supportedMotherboardFormats.includes('atx')) {
+            if (model.format !== 'itx') {
+              menu.innerHTML += innerHTML
+            }
+          } else {
+            menu.innerHTML += innerHTML
+          }
         }
         break
     }
