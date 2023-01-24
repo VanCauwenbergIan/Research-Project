@@ -138,7 +138,7 @@ const initScene = async () => {
   renderer.setClearColor(0xccd7d6, 1)
   renderer.physicallyCorrectLights = true
 
-  addHelpers(scene)
+  // addHelpers(scene)
   loadCamera()
   loadLights()
   loadControls()
@@ -280,7 +280,6 @@ export const checkCollision = (bb2, model) => {
 
     if (modelInfo && modelInfo.objectType === 'cooler') {
       const size = snappingBox.boundingBox.getSize(new THREE.Vector3())
-      console.log('rotation', size)
 
       if (size.x > size.y) {
         model.rotation.set(Math.PI / 2, 0, 0)
@@ -348,8 +347,8 @@ const onMouseDown = () => {
           break
         case 'gpu':
           position = new THREE.Vector3(
-            currentMotherboard.gpuBB.position.x,
-            currentMotherboard.gpuBB.position.y,
+            currentMotherboard.gpuBB.position.x += 0.01,
+            currentMotherboard.gpuBB.position.y -= 0.02,
             currentMotherboard.gpuBB.position.z,
           )
           scale = currentMotherboard.gpuBB.scale
