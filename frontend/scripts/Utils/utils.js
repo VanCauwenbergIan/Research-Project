@@ -51,8 +51,14 @@ export const onMouseMove = (
  * General purpose functions
  */
 
-export const addMenuItems = (menu, models) => {
+export const addMenuItems = (menu, models, cart) => {
   menu.innerHTML = ''
+
+  const currentCase = cart.find((item) => item.objectType === 'case')
+  const currentMotherboard = cart.find(
+    (item) => item.objectType === 'motherboard',
+  )
+  const totalPower = calculatePower(cart)
 
   for (const model of models) {
     const innerHTML = `          
@@ -65,7 +71,66 @@ export const addMenuItems = (menu, models) => {
     </div>
     `
 
-    menu.innerHTML += innerHTML
+    switch (model.objectType) {
+      case 'case':
+      case 'cooler':
+      case 'storage':
+        menu.innerHTML += innerHTML
+        break
+      case 'motherboard':
+        if (
+          currentCase &&
+          currentCase.supportedMotherboardFormats.includes(model.format)
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'cpu':
+        if (currentMotherboard && currentMotherboard.socket === model.socket) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'memory':
+        if (
+          currentMotherboard &&
+          currentMotherboard.supportedMemoryTypes.includes(model.generation)
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'cpu_cooler':
+        if (
+          currentMotherboard &&
+          model.supportedSockets.includes(currentMotherboard.socket)
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'gpu':
+        if (
+          currentCase &&
+          currentCase.pciSlots >= model.slots &&
+          currentCase.maxLengthGPU >= model.length
+        ) {
+          menu.innerHTML += innerHTML
+        }
+        break
+      case 'psu':
+        if (
+          currentCase &&
+          currentCase.supportedMotherboardFormats.includes(model.format) &&
+          (model.power / 100) * model.rating - 50 >= totalPower
+        ) {
+          if (currentCase.supportedMotherboardFormats.includes('atx')) {
+            if (model.format !== 'itx') {
+              menu.innerHTML += innerHTML
+            }
+          } else {
+            menu.innerHTML += innerHTML
+          }
+        }
+        break
+    }
   }
 }
 
@@ -118,15 +183,14 @@ export const convertMouseToVector3 = (pointer, camera) => {
   const vector = new THREE.Vector3()
   const position = new THREE.Vector3()
 
-  vector.set(pointer.x, pointer.y, 0.5)
-  vector.unproject(camera)
-  vector.sub(camera.position).normalize()
+  vector.set(pointer.x, 0, 3)
+  // vector.unproject(camera)
 
-  const distance = -camera.position.z / vector.z
+  // const distance = -camera.position.z / vector.z
 
-  position.copy(camera.position).add(vector.multiplyScalar(distance))
+  // position.copy(camera.position).add(vector.multiplyScalar(distance))
 
-  return position
+  return vector
 }
 
 export const refreshMouse = (pointer, sizes, e) => {
@@ -146,6 +210,93 @@ export const getFirstIntersect = (raycaster, scene) => {
 
     return object
   }
+}
+
+export const calculatePower = (cart) => {
+  let memoryCount = 0
+  let totalPower = 0
+
+  for (const item of cart) {
+    switch (item.objectType) {
+      case 'cpu':
+      case 'gpu':
+        totalPower += item.tdp
+        break
+      case 'memory':
+        memoryCount += item.size
+        break
+      case 'cpu_cooler':
+        totalPower += 10
+        break
+      case 'cooler':
+        totalPower += 5
+        break
+      case 'motherboard':
+        switch (item.format) {
+          case 'itx':
+            totalPower += 30
+            break
+          case 'm_atx':
+            totalPower += 65
+            break
+          case 'atx':
+            totalPower += 70
+            break
+          case 'e_atx':
+            totalPower += 105
+            break
+        }
+        break
+      case 'storage':
+        if (item.type === 'ssd') {
+          totalPower += 10
+        } else {
+          totalPower += 20
+        }
+        break
+    }
+  }
+
+  totalPower += (7 * memoryCount) / 8
+
+  return totalPower
+}
+
+export const lookForOrphans = (scene, menuInfo, cart) => {
+  let orphanedChildFound = false
+  let previousChildren = []
+
+  for (const child of scene.children) {
+    if (
+      menuInfo.findIndex((option) => option.id === child.name) > -1 &&
+      cart.findIndex((item) => item.id === child.name) === -1
+    ) {
+      console.log('orphan')
+      orphanedChildFound = true
+    }
+
+    previousChildren.push(child)
+  }
+
+  for (const child of scene.children) {
+    const childrenInArray = previousChildren.filter(
+      (prevChild) => prevChild.name === child.name,
+    )
+    const element = document.getElementById(`${child.name}-cart`)
+
+    if (element) {
+      let countElement = element.querySelector('.gui-cart-item-count')
+      let count = countElement.innerHTML[1]
+      console.log(childrenInArray.length, count)
+
+      if (childrenInArray.length != count) {
+        console.log('orphan')
+        orphanedChildFound = true
+      }
+    }
+  }
+
+  return orphanedChildFound
 }
 
 /**
