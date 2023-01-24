@@ -17,12 +17,12 @@ export const onScreenChange = (sizes, camera, renderer) => {
 }
 
 export const onDrag = (orbitControls, dragControls) => {
-  dragControls.addEventListener('dragstart', () => {
-    orbitControls.enabled = false
+  dragControls.addEventListener('dragging-changed', (e) => {
+    orbitControls.enabled = !e.value
   })
-  dragControls.addEventListener('dragend', () => {
-    orbitControls.enabled = true
-  })
+  // dragControls.addEventListener('dragend', () => {
+  //   orbitControls.enabled = true
+  // })
 }
 
 export const onMouseMove = (

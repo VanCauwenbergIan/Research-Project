@@ -211,11 +211,8 @@ const loadControls = () => {
     camera.instance,
     htmlCanvas,
   )
-  dragControls = new DragControls(
-    currentlyDraggable,
-    camera.instance,
-    htmlCanvas,
-  )
+  dragControls = new DragControls(camera.instance, htmlCanvas)
+  scene.add(dragControls.instance)
 
   onDrag(orbitControls.instance, dragControls.instance)
 }
@@ -250,7 +247,7 @@ export const checkCollision = (bb2, model) => {
     const center = bb1.getCenter(new THREE.Vector3())
     const modelInfo = currentMenuInfo.find((info) => info.id === model.name)
 
-    dragControls.instance.deactivate()
+    dragControls.instance.detach(model)
     model.isDraggable = false
     snappingBox.removeBox()
 
@@ -305,7 +302,8 @@ const onMouseDown = () => {
     let object = getFirstIntersect(raycaster, scene)
 
     if (object && object.isDraggable) {
-      dragControls.instance.activate()
+      dragControls.instance.attach(object)
+      console.log('attach')
 
       const objectInfo = currentMenuInfo.find((info) => info.id === object.name)
       const currentCase = cart.find((item) => item.objectType === 'case')
@@ -653,13 +651,13 @@ const addToCart = (item) => {
   console.log(cart)
   enableConfirmButton(true)
   // reinit drag controls to prevent jumping after snap
-  dragControls.instance.dispose()
-  dragControls = new DragControls(
-    currentlyDraggable,
-    camera.instance,
-    htmlCanvas,
-  )
-  onDrag(orbitControls.instance, dragControls.instance)
+  // dragControls.instance.dispose()
+  // dragControls = new DragControls(
+  //   currentlyDraggable,
+  //   camera.instance,
+  //   htmlCanvas,
+  // )
+  // onDrag(orbitControls.instance, dragControls.instance)
 
   const currentMotherboard = cart.find(
     (item) => item.objectType === 'motherboard',
@@ -702,13 +700,13 @@ const increaseCountCart = (item) => {
   htmlWattage.innerHTML = wattageTotal
   enableConfirmButton(true)
   // reinit drag controls to prevent jumping after snap
-  dragControls.instance.dispose()
-  dragControls = new DragControls(
-    currentlyDraggable,
-    camera.instance,
-    htmlCanvas,
-  )
-  onDrag(orbitControls.instance, dragControls.instance)
+  // dragControls.instance.dispose()
+  // dragControls = new DragControls(
+  //   currentlyDraggable,
+  //   camera.instance,
+  //   htmlCanvas,
+  // )
+  // onDrag(orbitControls.instance, dragControls.instance)
 
   const currentMotherboard = cart.find(
     (item) => item.objectType === 'motherboard',
