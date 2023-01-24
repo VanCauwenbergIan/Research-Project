@@ -347,8 +347,8 @@ const onMouseDown = () => {
           break
         case 'gpu':
           position = new THREE.Vector3(
-            currentMotherboard.gpuBB.position.x += 0.01,
-            currentMotherboard.gpuBB.position.y -= 0.02,
+            currentMotherboard.gpuBB.position.x,
+            currentMotherboard.gpuBB.position.y,
             currentMotherboard.gpuBB.position.z,
           )
           scale = currentMotherboard.gpuBB.scale
