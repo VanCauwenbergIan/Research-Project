@@ -24,6 +24,7 @@ services:
     networks:
       - mongo
   backend:
+    image: 'chocoladepudding/back:latest'
     build:
       context: ..
       dockerfile: ./databaseVolume/backend.Dockerfile
@@ -40,6 +41,7 @@ services:
       HOST: 'mongodb'
       HOST_PORT: '27017'
   web:
+    image: 'chocoladepudding/web:latest'
     build:
       context: ..
       dockerfile: ./databaseVolume/frontend.Dockerfile

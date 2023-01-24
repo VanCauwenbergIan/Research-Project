@@ -18,7 +18,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mongodb',
-        url: `mongodb://${configService.get('HOST')}:${'HOST_PORT'}/api`,
+        url: `mongodb://${configService.get('HOST')}:${configService.get(
+          'HOST_PORT',
+        )}/api`,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
         synchronize: true,
         useNewUrlParser: true,
