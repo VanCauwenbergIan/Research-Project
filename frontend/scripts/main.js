@@ -41,6 +41,7 @@ import {
   fetchPSUs,
   fetchStorage,
 } from './Utils/requests'
+import { VRButton } from 'three/addons/webxr/VRButton.js'
 
 // DOM elements
 let htmlCanvas,
@@ -137,6 +138,12 @@ const initScene = async () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setClearColor(0xccd7d6, 1)
   renderer.physicallyCorrectLights = true
+  document.body.appendChild(VRButton.createButton(renderer))
+  renderer.xr.enabled = true
+
+  renderer.setAnimationLoop(() => {
+    tick()
+  })
 
   // addHelpers(scene)
   loadCamera()
@@ -935,7 +942,7 @@ const tick = () => {
   updateBoundingBoxes()
 
   // Loop
-  window.requestAnimationFrame(tick)
+  // window.requestAnimationFrame(tick)
 }
 
 const updateBoundingBoxes = () => {

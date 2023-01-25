@@ -53,6 +53,8 @@ services:
     networks:
       - web
     restart: unless-stopped
+    environment:
+      VITE_host: '10.0.0.51'
 
 volumes:
   dbvolume:

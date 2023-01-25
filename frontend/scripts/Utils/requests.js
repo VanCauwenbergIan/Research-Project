@@ -1,5 +1,8 @@
+const HOST = import.meta.env.VITE_host
+const URL = `http://${HOST}:3000/graphql`
+
 export const fetchAllComponents = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -343,7 +346,7 @@ export const fetchAllComponents = async () => {
 }
 
 export const fetchCases = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -428,7 +431,7 @@ export const fetchCases = async () => {
 }
 
 export const fetchCoolers = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -464,7 +467,7 @@ export const fetchCoolers = async () => {
 }
 
 export const fetchCPUs = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -518,7 +521,7 @@ export const fetchCPUs = async () => {
 }
 
 export const fetchCPUCoolers = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -557,7 +560,7 @@ export const fetchCPUCoolers = async () => {
 }
 
 export const fetchGPUs = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -599,7 +602,7 @@ export const fetchGPUs = async () => {
 }
 
 export const fetchMemory = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -636,7 +639,7 @@ export const fetchMemory = async () => {
 }
 
 export const fetchStorage = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -675,7 +678,7 @@ export const fetchStorage = async () => {
 }
 
 export const fetchMotherboards = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -751,7 +754,7 @@ export const fetchMotherboards = async () => {
 }
 
 export const fetchPSUs = async () => {
-  return fetch('http://[::1]:3000/graphql', {
+  return fetch(URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
