@@ -51,7 +51,7 @@ export const onMouseMove = (
  * General purpose functions
  */
 
-export const addMenuItems = (menu, models, cart) => {
+export const addMenuItems = (menu, models, cart, event, canvas) => {
   menu.innerHTML = ''
 
   const currentCase = cart.find((item) => item.objectType === 'case')
@@ -62,13 +62,13 @@ export const addMenuItems = (menu, models, cart) => {
 
   for (const model of models) {
     const innerHTML = `          
-    <div
+    <button disabled
       id="${model.id}"
-      class="mb-3 w-52 p-2 rounded-lg flex items-center flex-row bg-black bg-opacity-[0.12] gap-x-2"
+      class="gui-main-menu-item mb-3 w-52 p-2 rounded-lg flex items-center flex-row bg-black bg-opacity-[0.12] gap-x-2 disabled:bg-black disabled:opacity-50 disabled:bg-opacity-[0.12]"
     >
-    <img src="../../assets/images/${model.imageUrl}" class="aspect-square w-16 h-16 bg-white rounded-lg p-1" draggable="false"/>
-      <p draggable="false">${model.name}</p>
-    </div>
+      <img src="../../assets/images/${model.imageUrl}" class="aspect-square w-16 h-16 bg-white rounded-lg p-1"/>
+      <p>${model.name}</p>
+    </button>
     `
 
     switch (model.objectType) {
@@ -132,38 +132,56 @@ export const addMenuItems = (menu, models, cart) => {
         break
     }
   }
-}
 
-export const enableDragMenu = (menu) => {
-  for (const child of menu.children) {
-    child.setAttribute('draggable', true)
-    child.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', child.id)
+  const menuItems = menu.querySelectorAll('.gui-main-menu-item')
+
+  for (const item of menuItems) {
+    console.log(item)
+    item.addEventListener('click', () => {
+      console.log('click')
+      event.chosenModel = item.id
+      canvas.dispatchEvent(event)
     })
   }
 }
 
-export const disableDragMenu = (menu) => {
+// export const enableDragMenu = (menu) => {
+//   for (const child of menu.children) {
+//     child.setAttribute('draggable', true)
+//     child.addEventListener('dragstart', (e) => {
+//       e.dataTransfer.setData('text/plain', child.id)
+//     })
+//   }
+// }
+
+// export const disableDragMenu = (menu) => {
+//   for (const child of menu.children) {
+//     child.setAttribute('draggable', false)
+//   }
+// }
+
+export const enableMenu = (menu, bool) => {
   for (const child of menu.children) {
-    child.setAttribute('draggable', false)
+    child.disabled = !bool
   }
 }
 
 export const initMenuEvents = (event, canvas, cart, overlay, open, close) => {
-  canvas.addEventListener('dragover', (e) => {
-    e.preventDefault()
-  })
-  canvas.addEventListener('dragenter', (e) => {
-    e.preventDefault()
-  })
-  canvas.addEventListener('drop', (e) => {
-    e.preventDefault()
+  // canvas.addEventListener('dragover', (e) => {
+  //   e.preventDefault()
+  // })
+  // canvas.addEventListener('dragenter', (e) => {
+  //   e.preventDefault()
+  // })
+  // canvas.addEventListener('drop', (e) => {
+  //   e.preventDefault()
 
-    let data = e.dataTransfer.getData('text/plain')
+  //   let data = e.dataTransfer.getData('text/plain')
 
-    event.chosenModel = data
-    canvas.dispatchEvent(event)
-  })
+  //   event.chosenModel = data
+  //   canvas.dispatchEvent(event)
+  // })
+
   open.addEventListener('click', () => {
     cart.classList.remove('hidden')
     overlay.classList.remove('hidden')
