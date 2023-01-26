@@ -299,15 +299,16 @@ export const checkCollision = (bb2, model) => {
 
     model.position.set(center.x, center.y, center.z)
 
-    window.addEventListener('mouseup', () => {
+    window.addEventListener('pointerup', () => {
       orbitControls.instance.enabled = true
-      window.removeEventListener('mouseup', this)
+      window.removeEventListener('pointerup', this)
     })
   }
 }
 
 const onMouseDown = () => {
-  window.addEventListener('mousedown', (e) => {
+  window.addEventListener('pointerdown', (e) => {
+    console.log('pointerdown')
     refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera.instance)
 
@@ -413,7 +414,7 @@ const onMouseDown = () => {
 }
 
 const onMouseUp = () => {
-  window.addEventListener('mouseup', (e) => {
+  window.addEventListener('pointerup', (e) => {
     refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera.instance)
 

@@ -33,7 +33,7 @@ export const onMouseMove = (
   sizes,
   currentlyDraggable,
 ) => {
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('pointermove', (e) => {
     // reassigning the array won't be noticed by three.js
     currentlyDraggable.length = 0
     refreshMouse(pointer, sizes, e)
