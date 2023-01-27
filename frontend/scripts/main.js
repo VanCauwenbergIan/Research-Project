@@ -978,6 +978,7 @@ const handleStages = async (stage) => {
       loadModels(resultPsus.data.psus, psus, psusInfo)
       addMenuItems(htmlMainMenu, psusInfo, cart, newModelClicked, htmlCanvas)
       // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = psus
       currentMenuInfo = psusInfo
       htmlStage.innerHTML = 'PSU'
