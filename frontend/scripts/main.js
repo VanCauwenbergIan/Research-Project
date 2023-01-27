@@ -255,6 +255,10 @@ export const checkCollision = (bb2, model) => {
   if (bb2.intersectsBox(bb1) && !orbitControls.instance.enabled) {
     const center = bb1.getCenter(new THREE.Vector3())
     const modelInfo = currentMenuInfo.find((info) => info.id === model.name)
+    const max = bb1.max
+    const min = bb1.min
+    const sizeModel = bb2.getSize(new THREE.Vector3())
+    const currentCase = cart.find((item) => item.objectType === 'case')
 
     dragControls.instance.detach(model)
     model.isDraggable = false
@@ -294,7 +298,26 @@ export const checkCollision = (bb2, model) => {
       }
     }
 
-    model.position.set(center.x, center.y, center.z)
+    if (
+      modelInfo.objectType === 'motherboard' &&
+      currentCase.supportedMotherboardFormats.includes('atx')
+    ) {
+      // snap to top left back
+      model.position.set(
+        min.x + sizeModel.x / 2,
+        max.y - sizeModel.y / 2,
+        min.z + sizeModel.z / 2,
+      )
+    } else if (modelInfo.objectType === 'gpu') {
+      model.position.set(
+        min.x + sizeModel.x / 2,
+        max.y - sizeModel.y / 2,
+        min.z + sizeModel.z / 2,
+      )
+    } else {
+      // default snap center
+      model.position.set(center.x, center.y, center.z)
+    }
 
     window.addEventListener('pointerup', () => {
       orbitControls.instance.enabled = true
@@ -305,7 +328,6 @@ export const checkCollision = (bb2, model) => {
 
 const onMouseDown = () => {
   window.addEventListener('pointerdown', (e) => {
-    console.log('pointerdown')
     refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera.instance)
 
@@ -313,7 +335,6 @@ const onMouseDown = () => {
 
     if (object && object.isDraggable) {
       dragControls.instance.attach(object)
-      console.log('attach')
 
       const objectInfo = currentMenuInfo.find((info) => info.id === object.name)
       const currentCase = cart.find((item) => item.objectType === 'case')
@@ -433,7 +454,6 @@ const handleClick = () => {
     htmlCartClose,
   )
   htmlCanvas.addEventListener('model-clicked', (e) => {
-    console.log(e.chosenModel)
     const chosenObject = currentMenuOptions.find(
       (option) => option.name === e.chosenModel,
     )

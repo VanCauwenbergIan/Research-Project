@@ -136,9 +136,7 @@ export const addMenuItems = (menu, models, cart, event, canvas) => {
   const menuItems = menu.querySelectorAll('.gui-main-menu-item')
 
   for (const item of menuItems) {
-    console.log(item)
     item.addEventListener('click', () => {
-      console.log('click')
       event.chosenModel = item.id
       canvas.dispatchEvent(event)
     })

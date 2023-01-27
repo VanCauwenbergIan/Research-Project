@@ -54,11 +54,12 @@ services:
       - web
     restart: unless-stopped
     environment:
+      # docker instance IP
       VITE_host: '10.0.0.51'
 
 volumes:
   dbvolume:
-
+ 
 networks:
   mongo:
     driver: bridge
