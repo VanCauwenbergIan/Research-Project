@@ -10,12 +10,13 @@ import {
   addMenuItems,
   convertMouseToVector3,
   initMenuEvents,
-  enableDragMenu,
-  disableDragMenu,
+  // enableDragMenu,
+  // disableDragMenu,
   refreshMouse,
   getFirstIntersect,
   calculatePower,
   lookForOrphans,
+  enableMenu,
 } from './Utils/utils'
 import GTLFLoader from './Loaders/gltfLoader'
 import AmbientLight from './Lights/ambientLight'
@@ -121,6 +122,7 @@ let caseBB,
   psuBB
 // Events
 const newModelDraggedIn = new Event('model-dragged-in')
+const newModelClicked = new Event('model-clicked')
 // Shopping cart
 let cart = []
 
@@ -152,7 +154,7 @@ const initScene = async () => {
   loadRaycaster()
 
   initButtons()
-  handleDrag()
+  handleClick()
   goForward()
 }
 
@@ -294,15 +296,16 @@ export const checkCollision = (bb2, model) => {
 
     model.position.set(center.x, center.y, center.z)
 
-    window.addEventListener('mouseup', () => {
+    window.addEventListener('pointerup', () => {
       orbitControls.instance.enabled = true
-      window.removeEventListener('mouseup', this)
+      window.removeEventListener('pointerup', this)
     })
   }
 }
 
 const onMouseDown = () => {
-  window.addEventListener('mousedown', (e) => {
+  window.addEventListener('pointerdown', (e) => {
+    console.log('pointerdown')
     refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera.instance)
 
@@ -409,7 +412,7 @@ const onMouseDown = () => {
 }
 
 const onMouseUp = () => {
-  window.addEventListener('mouseup', (e) => {
+  window.addEventListener('pointerup', (e) => {
     refreshMouse(pointer, sizes, e)
     raycaster.setFromCamera(pointer, camera.instance)
 
@@ -420,8 +423,7 @@ const onMouseUp = () => {
     }
   })
 }
-
-const handleDrag = () => {
+const handleClick = () => {
   initMenuEvents(
     newModelDraggedIn,
     htmlCanvas,
@@ -430,7 +432,8 @@ const handleDrag = () => {
     htmlCartOpen,
     htmlCartClose,
   )
-  htmlCanvas.addEventListener('model-dragged-in', (e) => {
+  htmlCanvas.addEventListener('model-clicked', (e) => {
+    console.log(e.chosenModel)
     const chosenObject = currentMenuOptions.find(
       (option) => option.name === e.chosenModel,
     )
@@ -568,7 +571,8 @@ const handleDrag = () => {
       }
     }
 
-    disableDragMenu(htmlMainMenu)
+    // disableDragMenu(htmlMainMenu)
+    enableMenu(htmlMainMenu, false)
     enableRevertButton(true)
   })
 }
@@ -594,7 +598,8 @@ const initButtons = () => {
       }
     } else {
       scene.children.pop()
-      enableDragMenu(htmlMainMenu)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
 
       switch (currentstage) {
         case 4:
@@ -674,17 +679,20 @@ const addToCart = (item) => {
   switch (item.objectType) {
     case 'memory':
       if (currentMotherboard.memorySlots > memoryMeshes.length) {
-        enableDragMenu(htmlMainMenu)
+        // enableDragMenu(htmlMainMenu)
+        enableMenu(htmlMainMenu, true)
       }
       break
     case 'cooler':
       if (currentCase.fansBB.length > coolersMeshes.length) {
-        enableDragMenu(htmlMainMenu)
+        // enableDragMenu(htmlMainMenu)
+        enableMenu(htmlMainMenu, true)
       }
       break
     case 'storage':
       if (currentCase.drivesBB.length > storageMeshes.length) {
-        enableDragMenu(htmlMainMenu)
+        // enableDragMenu(htmlMainMenu)
+        enableMenu(htmlMainMenu, true)
       }
       break
   }
@@ -723,17 +731,20 @@ const increaseCountCart = (item) => {
   switch (item.objectType) {
     case 'memory':
       if (currentMotherboard.memorySlots > memoryMeshes.length) {
-        enableDragMenu(htmlMainMenu)
+        // enableDragMenu(htmlMainMenu)
+        enableMenu(htmlMainMenu, true)
       }
       break
     case 'cooler':
       if (currentCase.fansBB.length > coolersMeshes.length) {
-        enableDragMenu(htmlMainMenu)
+        // enableDragMenu(htmlMainMenu)
+        enableMenu(htmlMainMenu, true)
       }
       break
     case 'storage':
       if (currentCase.drivesBB.length > storageMeshes.length) {
-        enableDragMenu(htmlMainMenu)
+        // enableDragMenu(htmlMainMenu)
+        enableMenu(htmlMainMenu, true)
       }
       break
   }
@@ -756,7 +767,8 @@ const removeFromCart = () => {
 
   scene.children.pop()
   enableConfirmButton(false)
-  enableDragMenu(htmlMainMenu)
+  // enableDragMenu(htmlMainMenu)
+  enableMenu(htmlMainMenu, true)
 
   priceTotal -= removedItem.price
   wattageTotal = calculatePower(cart)
@@ -796,7 +808,8 @@ const goForward = () => {
 
   if (orphanFound) {
     scene.children.pop()
-    enableDragMenu(htmlMainMenu)
+    // enableDragMenu(htmlMainMenu)
+    enableMenu(htmlMainMenu, true)
 
     switch (currentstage) {
       case 4:
@@ -839,8 +852,9 @@ const handleStages = async (stage) => {
       const resultCases = await fetchCases()
 
       loadModels(resultCases.data.cases, cases, casesInfo)
-      addMenuItems(htmlMainMenu, casesInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, casesInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = cases
       currentMenuInfo = casesInfo
       htmlStage.innerHTML = 'Case'
@@ -849,8 +863,15 @@ const handleStages = async (stage) => {
       const resultMobo = await fetchMotherboards()
 
       loadModels(resultMobo.data.motherboards, motherboards, motherboardsInfo)
-      addMenuItems(htmlMainMenu, motherboardsInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(
+        htmlMainMenu,
+        motherboardsInfo,
+        cart,
+        newModelClicked,
+        htmlCanvas,
+      )
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = motherboards
       currentMenuInfo = motherboardsInfo
       htmlStage.innerHTML = 'Motherboard'
@@ -859,8 +880,9 @@ const handleStages = async (stage) => {
       const resultCpus = await fetchCPUs()
 
       loadModels(resultCpus.data.cpus, cpus, cpusInfo)
-      addMenuItems(htmlMainMenu, cpusInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, cpusInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = cpus
       currentMenuInfo = cpusInfo
       htmlStage.innerHTML = 'CPU'
@@ -869,8 +891,9 @@ const handleStages = async (stage) => {
       const resultMemory = await fetchMemory()
 
       loadModels(resultMemory.data.memory, memory, memoryInfo)
-      addMenuItems(htmlMainMenu, memoryInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, memoryInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = memory
       currentMenuInfo = memoryInfo
       htmlStage.innerHTML = 'Memory'
@@ -879,8 +902,15 @@ const handleStages = async (stage) => {
       const resultCpuCoolers = await fetchCPUCoolers()
 
       loadModels(resultCpuCoolers.data.cpucoolers, cpucoolers, cpucoolersInfo)
-      addMenuItems(htmlMainMenu, cpucoolersInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(
+        htmlMainMenu,
+        cpucoolersInfo,
+        cart,
+        newModelClicked,
+        htmlCanvas,
+      )
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = cpucoolers
       currentMenuInfo = cpucoolersInfo
       htmlStage.innerHTML = 'CPU Cooler'
@@ -889,8 +919,9 @@ const handleStages = async (stage) => {
       const resultGpus = await fetchGPUs()
 
       loadModels(resultGpus.data.gpus, gpus, gpusInfo)
-      addMenuItems(htmlMainMenu, gpusInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, gpusInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       currentMenuOptions = gpus
       currentMenuInfo = gpusInfo
       htmlStage.innerHTML = 'GPU'
@@ -899,8 +930,9 @@ const handleStages = async (stage) => {
       const resultStorage = await fetchStorage()
 
       loadModels(resultStorage.data.storage, storage, storageInfo)
-      addMenuItems(htmlMainMenu, storageInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, storageInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       storageMeshes = []
       storageBB = []
       currentMenuOptions = storage
@@ -911,8 +943,9 @@ const handleStages = async (stage) => {
       const resultCoolers = await fetchCoolers()
 
       loadModels(resultCoolers.data.coolers, coolers, coolersInfo)
-      addMenuItems(htmlMainMenu, coolersInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, coolersInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
+      enableMenu(htmlMainMenu, true)
       coolersMeshes = []
       coolersBB = []
       currentMenuOptions = coolers
@@ -923,8 +956,8 @@ const handleStages = async (stage) => {
       const resultPsus = await fetchPSUs()
 
       loadModels(resultPsus.data.psus, psus, psusInfo)
-      addMenuItems(htmlMainMenu, psusInfo, cart)
-      enableDragMenu(htmlMainMenu)
+      addMenuItems(htmlMainMenu, psusInfo, cart, newModelClicked, htmlCanvas)
+      // enableDragMenu(htmlMainMenu)
       currentMenuOptions = psus
       currentMenuInfo = psusInfo
       htmlStage.innerHTML = 'PSU'
