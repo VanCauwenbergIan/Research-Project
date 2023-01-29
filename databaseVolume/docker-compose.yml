@@ -54,7 +54,8 @@ services:
       - web
     restart: unless-stopped
     environment:
-      VITE_host: '10.0.0.51'
+      # backend domain
+      VITE_host: 'tea-salvation-contributing-affairs.trycloudflare.com'
 
 volumes:
   dbvolume:
