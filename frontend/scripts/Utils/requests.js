@@ -1,5 +1,5 @@
 const HOST = import.meta.env.VITE_host
-const URL = `https://${HOST}/graphql`
+const URL = `${HOST}/graphql`
 
 export const fetchAllComponents = async () => {
   return fetch(URL, {
