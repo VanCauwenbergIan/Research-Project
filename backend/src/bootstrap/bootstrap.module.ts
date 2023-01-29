@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,9 +14,13 @@ import { DataSource } from 'typeorm';
       autoSchemaFile: true,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'mongodb',
-        url: 'mongodb://localhost:27200/api',
+        url: `mongodb://${configService.get('HOST')}:${configService.get(
+          'HOST_PORT',
+        )}/api`,
         entities: [__dirname + '/../**/*.entity.{js,ts}'],
         synchronize: true,
         useNewUrlParser: true,

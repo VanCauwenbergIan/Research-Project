@@ -10,6 +10,8 @@ services:
       MONGO_INITDB_DATABASE: api
     volumes:
       - dbvolume:/data/db
+    networks:
+      - mongo
   mongo-express:
     image: mongo-express
     restart: on-failure:5
@@ -19,6 +21,47 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
     depends_on:
       - mongodb
-    
+    networks:
+      - mongo
+  backend:
+    image: 'chocoladepudding/back:latest'
+    build:
+      context: ..
+      dockerfile: ./databaseVolume/backend.Dockerfile
+    command: npm run dev-back
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+    networks:
+      - mongo
+      - web
+    restart: unless-stopped
+    environment:
+      HOST: 'mongodb'
+      HOST_PORT: '27017'
+  web:
+    image: 'chocoladepudding/web:latest'
+    build:
+      context: ..
+      dockerfile: ./databaseVolume/frontend.Dockerfile
+    command: npm run dev-front
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend
+    networks:
+      - web
+    restart: unless-stopped
+    environment:
+      # backend domain
+      VITE_host: 'tea-salvation-contributing-affairs.trycloudflare.com'
+
 volumes:
   dbvolume:
+
+networks:
+  mongo:
+    driver: bridge
+  web:
+    driver: bridge

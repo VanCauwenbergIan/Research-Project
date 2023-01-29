@@ -1,20 +1,17 @@
-import { DragControls as DragControlsThree } from 'three/examples/jsm/controls/DragControls'
+import { TransformControls } from 'three/addons/controls/TransformControls.js'
 import Controls from './controls'
 
 export default class DragControls extends Controls {
   instance
 
-  constructor(objects, camera, canvas) {
+  constructor(camera, canvas) {
     super(camera, canvas)
-    this.objects = objects
+    // this.objects = objects
     this.addDragControls()
   }
 
   addDragControls() {
-    this.instance = new DragControlsThree(
-      this.objects,
-      this.camera,
-      this.canvas,
-    )
+    this.instance = new TransformControls(this.camera, this.canvas)
+    // this.instance.transformGroup = true
   }
 }

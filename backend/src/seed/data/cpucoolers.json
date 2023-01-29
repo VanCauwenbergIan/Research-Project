@@ -13,7 +13,7 @@
     "diameter": 0.092,
     "noise": 25.4,
 
-    "socket": [
+    "supportedSockets": [
       "AM4",
       "AM5",
       "LGA 1150",
