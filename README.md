@@ -16,6 +16,9 @@ Wel raad ik aan om vanaf het begin aan al te denken aan een vaste structuur en j
 
 Voor de backend heb ik gebruik gemaakt van **node.js, specifiek nest.js, en mongoDB**.
 
+## Hoe werkt het?
+In de docs folder bevindt zich een kleine demo.
+
 ## Mogelijke uitbreidingen
 - Experimenteren met de mogelijkheden van de webXR API, hier had ik jammer genoeg geen tijd meer voor.
 - Verder uitwerking UI: bvb. als je over een component hovert krijg je meer informatie te zien.
