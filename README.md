@@ -20,5 +20,3 @@ Voor de backend heb ik gebruik gemaakt van **node.js, specifiek nest.js, en mong
 - Experimenteren met de mogelijkheden van de webXR API, hier had ik jammer genoeg geen tijd meer voor.
 - Verder uitwerking UI: bvb. als je over een component hovert krijg je meer informatie te zien.
 - Bestaande code refactoren naar een betere projectstructuur. Ook zou je de vergelijking kunnen maken met R3F en wat een betere development ervaring geeft, hoe vlot de integratie is met andere frameworks, …
-
-## Verdere resources
