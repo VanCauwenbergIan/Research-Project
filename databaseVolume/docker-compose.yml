@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
     environment:
       # backend domain
-      VITE_host: 'https://tradition-americans-attempts-warrior.trycloudflare.com'
+      VITE_host: 'http://localhost:3000'
 
 volumes:
   dbvolume:

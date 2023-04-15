@@ -208,7 +208,7 @@ export class ComponentsService {
     cpuObj.clockSpeed = updateCpuInput.clockSpeed;
     cpuObj.cacheSize = updateCpuInput.cacheSize;
     cpuObj.tdp = updateCpuInput.tdp;
-    cpuObj.coolerBB = updateCpuInput.coolerBB
+    cpuObj.coolerBB = updateCpuInput.coolerBB;
 
     return this.cpuRepository.save(cpuObj);
   }
