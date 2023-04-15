@@ -1065,6 +1065,5 @@ const updateBoundingBoxes = () => {
     // initTest()
     await initScene()
     onScreenChange(sizes, camera, renderer)
-    tick()
   })
 })()
